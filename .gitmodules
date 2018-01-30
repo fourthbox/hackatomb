@@ -1,0 +1,3 @@
+[submodule "libs/libpmg"]
+	path = libs/libpmg
+	url = git@github.com:fourthbox/libpmg.git

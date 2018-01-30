@@ -1,0 +1,19 @@
++---------------++---------------+
+|               ||               |
+| Scopakkio Fox || Caves of      |
+|               || Sbor'el'Annkr |
+| lvl:99        ||               |
+|               || floor:        |
+| [-----------] || 26            |
+| [-----------] ||               |
+|               || environment:  |
+| str:99 dex:99 || marsh         |
+|               ||               |
+| xxx:99 xxx:99 || temperature:  |
+|               || temperate     |
+| xxx:99 xxx:99 ||               |
+|               || tile:         |
+| fir  ice  fly || object1       |
+| poi  sle  par || more...       |
+|               ||               |
++---------------++---------------+

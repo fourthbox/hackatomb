@@ -1,0 +1,4 @@
+#ifndef UI_FLOATING_WINDOW_HPP_
+#define UI_FLOATING_WINDOW_HPP_
+
+#endif /* UI_FLOATING_WINDOW_HPP_ */
