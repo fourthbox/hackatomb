@@ -10,32 +10,35 @@ int main(int argc, char **argv) {
     libpmg::RndManager::seed = rand();
 
     // Initialize the builder
-    auto map {libpmg::MapBuilder()
-        
-        // Setup the map
-        .SetMapSize(kMapWidth, kMapHeight)
-        .SetMinRoomSize(4, 4)
-        .SetMaxRoomSize(12, 12)
-        .SetMaxRoomPlacementAttempts(10)
-        .SetMaxRooms(20)
-        .SetDefaultPathAlgorithm(libpmg::PathAlgorithm::ASTAR_BFS_MIX)
-        .SetDiagonalCorridors(false)
-        
-        // Initialize the map
-        .InitMap()
-        
-        // Generate the features
-        .GenerateRooms()
-        .GenerateCorridors()
-        .GenerateDoors()
-        
-        // Build the map
-        .Build()};
+    auto builder {std::make_shared<libpmg::DungeonBuilder>()};
+    
+    // Setup the map
+    builder->SetMapSize(kMapWidth, kMapHeight);
+    builder->SetMinRoomSize(4, 4);
+    builder->SetMaxRoomSize(12, 12);
+    builder->SetMaxRoomPlacementAttempts(10);
+    builder->SetMaxRooms(20);
+    builder->SetDefaultPathAlgorithm(libpmg::PathAlgorithm::ASTAR_BFS_MIX);
+    builder->SetDiagonalCorridors(false);
+    
+    // Initialize the map
+    builder->InitMap();
+    
+    // Generate the features
+    builder->GenerateRooms();
+    builder->GenerateCorridors();
+    builder->GenerateDoors();
+    
+    // Build the map
+    auto map {builder->Build()};
     
     map->Print();
     
+    // DungeonMap
+    auto dungeon_map {std::static_pointer_cast<libpmg::DungeonMap>(map)};
+    
     // Player generation
-    auto start_coords {map->room_list[0].GetRndCoords()};
+    auto start_coords {dungeon_map->room_list[0].GetRndCoords()};
     
     auto stats {Stats(5, 5, 10)};
     
@@ -51,7 +54,7 @@ int main(int argc, char **argv) {
     player->InitializeAi(std::make_shared<PlayerAi>());
     
     // Monster generation
-    auto m_start_coords {map->room_list[2].GetRndCoords()};
+    auto m_start_coords {dungeon_map->room_list[2].GetRndCoords()};
     
     auto m_stats {Stats(2, 2, 10)};
     
@@ -68,7 +71,7 @@ int main(int argc, char **argv) {
     
     Engine& eng {Engine::GetInstance()};
     
-    eng.Initialize(map,
+    eng.Initialize(dungeon_map,
                    player);
 
     eng.AddMonster(goblin);

@@ -22,7 +22,7 @@ public:
     constexpr RootConsoleManager& GetRootConsoleManager() { return root_console_manager_; }
     
     // Main functions
-    void Initialize(std::shared_ptr<libpmg::Map> map, Player_p player);
+    void Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player);
     void Update();
     void Render();
     void ComputeFov();

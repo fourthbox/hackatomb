@@ -4,9 +4,9 @@
 #include "libpmg.hpp"
 #include "libtcod.hpp"
 
-class Map : public libpmg::Map, public TCODMap {
+class Map : public libpmg::DungeonMap, public TCODMap {
 public:
-    Map(std::shared_ptr<libpmg::Map> map);
+    Map(std::shared_ptr<libpmg::DungeonMap> map);
 
     void Draw();
     bool IsInFov(size_t x, size_t y);

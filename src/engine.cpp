@@ -14,7 +14,7 @@ Engine::Engine() :
     initialized_ {false}
 {}
 
-void Engine::Initialize(std::shared_ptr<libpmg::Map> map, Player_p player) {
+void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player) {
     if (initialized_) {
         Utils::LogWarning("Engine", "Engine already initialized.");
         return;
