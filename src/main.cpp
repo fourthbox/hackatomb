@@ -7,7 +7,7 @@ int main(int argc, char **argv) {
     srand (time(NULL));
     
     // Initialize the random manager
-    libpmg::RndManager::seed = rand();
+    libpmg::RndManager::seed_ = rand();
 
     // Initialize the builder
     auto builder {std::make_shared<libpmg::DungeonBuilder>()};
@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
     auto dungeon_map {std::static_pointer_cast<libpmg::DungeonMap>(map)};
     
     // Player generation
-    auto start_coords {dungeon_map->room_list[0].GetRndCoords()};
+    auto start_coords {dungeon_map->GetRoomList()[0].GetRndCoords()};
     
     auto stats {Stats(5, 5, 10)};
     
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
     player->InitializeAi(std::make_shared<PlayerAi>());
     
     // Monster generation
-    auto m_start_coords {dungeon_map->room_list[2].GetRndCoords()};
+    auto m_start_coords {dungeon_map->GetRoomList()[2].GetRndCoords()};
     
     auto m_stats {Stats(2, 2, 10)};
     

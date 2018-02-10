@@ -464,7 +464,7 @@ bool Map::IsWall(size_t x, size_t y) {
     if (tile == nullptr)
         return false;
     
-    return tile->HasTag(libpmg::TagManager::GetInstance().wall_tag);
+    return tile->HasTag(libpmg::TagManager::GetInstance().wall_tag_);
 }
 
 bool Map::IsInFov(size_t x, size_t y) {
@@ -481,9 +481,9 @@ bool Map::IsInFov(size_t x, size_t y) {
 }
 
 void Map::SetExplored(size_t x, size_t y) {
-    GetTile(x, y)->AddTag(libpmg::TagManager::GetInstance().explored_tag);
+    GetTile(x, y)->AddTag(libpmg::TagManager::GetInstance().explored_tag_);
 }
 
 bool Map::IsExplored(size_t x, size_t y) {
-    return GetTile(x, y)->HasTag(libpmg::TagManager::GetInstance().explored_tag);
+    return GetTile(x, y)->HasTag(libpmg::TagManager::GetInstance().explored_tag_);
 }

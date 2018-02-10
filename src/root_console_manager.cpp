@@ -26,7 +26,6 @@ void RootConsoleManager::Initialize(size_t width, size_t height,
 
     // Set the font
     TCODConsole::setCustomFont("res/sborogue.png", TCOD_FONT_LAYOUT_ASCII_INROW);
-    MapCharacters();
 
     // Initialize the TCOD Console
     TCODConsole::initRoot(width,
