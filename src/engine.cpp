@@ -5,7 +5,6 @@
 #include "libtcod.hpp"
 #include "game_constants.hpp"
 #include "game_utils.hpp"
-#include "key_mapper.hpp"
 
 typedef std::shared_ptr<Actor> Actor_p;
 typedef std::shared_ptr<Map> Map_p;
@@ -20,13 +19,8 @@ void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player
         return;
     }
     
-    // Initialize Root Console Manager
-    root_console_manager_.Initialize(kRootViewWidth, kRootViewHeight,
-                                     kEnvironmentConsoleWidth, kPlayerInfoConsoleWidth,
-                                     0, kMessageLogConsoleHeight, "hackatomb");
-    
-    // Initialize the UI Manager
-    ui_manager_.Initialize();
+    InitEngine();
+    InitUi();
     
     // Initialize the map
     auto new_map {new Map(map)};
@@ -48,6 +42,44 @@ void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player
     ComputeFov();
 }
 
+void Engine::Initialize(std::shared_ptr<libpmg::WorldMap> map) {
+    if (initialized_) {
+        Utils::LogWarning("Engine", "Engine already initialized.");
+        return;
+    }
+    
+    InitEngine();
+    
+    // Add the world map
+    world_map_ = new World(map);
+    
+    // Set as initialized
+    initialized_ = true;
+}
+
+void Engine::InitEngine() {
+    if (initialized_) {
+        Utils::LogWarning("Engine", "Engine already initialized.");
+        return;
+    }
+    
+    // Initialize Root Console Manager
+    root_console_manager_.Initialize(kRootViewWidth, kRootViewHeight,
+                                     kEnvironmentConsoleWidth, kPlayerInfoConsoleWidth,
+                                     0, kMessageLogConsoleHeight, "hackatomb");
+}
+
+void Engine::InitUi() {
+    if (initialized_) {
+        Utils::LogWarning("Engine", "Engine already initialized.");
+        return;
+    }
+        
+    // Initialize the UI Manager
+    ui_manager_.Initialize();
+}
+
+
 void Engine::Update() {
     assert(initialized_);
         
@@ -55,11 +87,6 @@ void Engine::Update() {
     // Everything that needs to be done when no user action has been detected
     game_status_ = TurnPhase::IDLE;
     
-    // Action phase.
-    // The player and every actors actions are performed here
-    TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_MOUSE,
-                              &KeyMapper::LastKey,
-                              &KeyMapper::LastMousePosition);
     player_->Update();
     
     for (auto const &actor : actor_list_) {
@@ -69,6 +96,7 @@ void Engine::Update() {
 
 void Engine::Render() {
     assert(initialized_);
+    
     // Clear the screen
     root_console_manager_.Clear();
         
@@ -93,6 +121,20 @@ void Engine::Render() {
     // Draw to screen
     root_console_manager_.Render();
 }
+
+void Engine::RenderWorld() {
+    assert(initialized_);
+    
+    // Clear the screen
+    root_console_manager_.Clear();
+    
+    // Draw the map
+    world_map_->Draw();
+    
+    // Draw to screen
+    root_console_manager_.Render();
+}
+
 
 bool Engine::CanMoveToPosition(size_t x, size_t y) {
     assert(initialized_);

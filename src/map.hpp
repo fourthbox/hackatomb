@@ -20,8 +20,7 @@ private:
     
     /**
      Check if a tile is flagged as a wall.
-     
-     @param x X  coordinate
+     @param x X coordinate
      @param y Y coordinate
      @return True if the tile is a wall, false otherwise or if the tile fails the bounds check.
      */
@@ -29,8 +28,7 @@ private:
 
     /**
      Get a wall character, based on the tiles adjacent to it.
-     
-     @param x X  coordinate
+     @param x X coordinate
      @param y Y coordinate
      @return The corresponding wall char
      */

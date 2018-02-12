@@ -12,8 +12,8 @@ static const size_t kPlayerInfoConsoleWidth = 17;
 static const size_t kPlayerInfoConsoleHeight = 22;
 static const size_t kMessageLogConsoleHeight = 6;
 
-static const size_t kMapWidth = 85;
-static const size_t kMapHeight = 45;
+static const size_t kMapWidth = 100;
+static const size_t kMapHeight = 50;
 static const size_t kRootViewWidth = kMapWidth + kEnvironmentConsoleWidth + kPlayerInfoConsoleWidth;
 static const size_t kRootViewHeight = kMapHeight + kMessageLogConsoleHeight;
 

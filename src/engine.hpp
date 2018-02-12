@@ -6,6 +6,7 @@
 #include "maps_manager.hpp"
 #include "root_console_manager.hpp"
 #include "ui_manager.hpp"
+#include "world.hpp"
 
 class Engine {
 public:
@@ -19,12 +20,14 @@ public:
     
     // Getters and Setters
     constexpr void PlayerPerformedAction() { game_status_ = TurnPhase::ACTION; }
-    constexpr RootConsoleManager& GetRootConsoleManager() { return root_console_manager_; }
+    constexpr RootConsoleManager &GetRootConsoleManager() { return root_console_manager_; }
     
     // Main functions
     void Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player);
+    void Initialize(std::shared_ptr<libpmg::WorldMap> map);
     void Update();
     void Render();
+    void RenderWorld();
     void ComputeFov();
     Actor_p GetActor(size_t x, size_t y);
     void AddMonster(Actor_p monster);
@@ -50,6 +53,9 @@ private:
     MapsManager maps_manager_;
     string current_map_category_;
     short current_floor_;
+    
+    // World management
+    World *world_map_;
 
     // Ui management
     UiManager ui_manager_;
@@ -57,6 +63,9 @@ private:
     // Game management
     TurnPhase game_status_;
     RootConsoleManager root_console_manager_;
+    
+    void InitEngine();
+    void InitUi();
 };
 
 #endif /* ENGINE_HPP_ */
