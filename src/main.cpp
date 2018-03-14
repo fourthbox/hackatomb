@@ -106,30 +106,29 @@ int main(int argc, char **argv) {
     libpmg::RndManager::seed_ = rand();
 
     // DungeonMap
-//    auto dungeon_map {InitDungeon()};
-//    dungeon_map->Print();
+    auto dungeon_map {InitDungeon()};
+    dungeon_map->Print();
     
     // Initialize the world builder
-    auto world_map {InitWorld()};
+//    auto world_map {InitWorld()};
     
     // Engine initialization
     auto &eng {Engine::GetInstance()};
     
-//    SetupDungeonGame(eng, dungeon_map);
-    SetupWorldGame(eng, world_map);
-    
+    SetupDungeonGame(eng, dungeon_map);
+//    SetupWorldGame(eng, world_map);
+        
     // Game loop
     while ( !TCODConsole::isWindowClosed() ) {
 
-//        eng.Update();
-//        eng.Render();
+        eng.Update();
+        eng.Render();
         
-        eng.RenderWorld();
+//        eng.RenderWorld();
         
         TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_MOUSE,
                                   &KeyMapper::LastKey,
                                   &KeyMapper::LastMousePosition);
-
     }
 
     return 0;

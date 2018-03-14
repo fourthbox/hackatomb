@@ -67,6 +67,9 @@ void Engine::InitEngine() {
     root_console_manager_.Initialize(kRootViewWidth, kRootViewHeight,
                                      kEnvironmentConsoleWidth, kPlayerInfoConsoleWidth,
                                      0, kMessageLogConsoleHeight, "hackatomb");
+    
+    // Initialize the Maps Manager
+    maps_manager_.Initialize();
 }
 
 void Engine::InitUi() {
@@ -77,6 +80,11 @@ void Engine::InitUi() {
         
     // Initialize the UI Manager
     ui_manager_.Initialize();
+    
+    // Set the window on the root console
+    root_console_manager_.SetLeftWindow(ui_manager_.GetEnvironmentWindow());
+    root_console_manager_.SetRightWindow(ui_manager_.GetPlayerInfoWindow());
+    root_console_manager_.SetBottomWindow(ui_manager_.GetMessageLogWindow());
 }
 
 
@@ -97,14 +105,13 @@ void Engine::Update() {
 void Engine::Render() {
     assert(initialized_);
     
-    // Clear the screen
-    root_console_manager_.Clear();
-        
+    auto &main_view {root_console_manager_.GetMainView()};
+    
     // Draw the map
-    maps_manager_.Draw(current_map_category_, current_floor_);
+    maps_manager_.Draw(current_map_category_, current_floor_, main_view);
     
     // Draw the player
-    player_->Draw();
+    player_->Draw(main_view);
 
     // Draw monsters
     for (auto const &actor : actor_list_) {
@@ -112,7 +119,7 @@ void Engine::Render() {
                                   actor->GetPosition().GetY(),
                                   current_map_category_,
                                   current_floor_))
-            actor->Draw();
+            actor->Draw(main_view);
     }
 
     // Draw the Ui
@@ -126,7 +133,7 @@ void Engine::RenderWorld() {
     assert(initialized_);
     
     // Clear the screen
-    root_console_manager_.Clear();
+//    root_console_manager_.Clear();
     
     // Draw the map
     world_map_->Draw();

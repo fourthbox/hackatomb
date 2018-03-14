@@ -1,3 +1,9 @@
+/**
+ Main class responsible for the management of everything, from the start to the end of the game.
+ @file engine.hpp
+ @author pat <pat@fourthbox.com>
+ */
+
 #ifndef ENGINE_HPP_
 #define ENGINE_HPP_
 

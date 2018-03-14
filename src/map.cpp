@@ -438,20 +438,20 @@ int Map::GetWallChar(size_t x, size_t y) {
     return kCharBlock2;
 }
 
-void Map::Draw() {
+void Map::Draw(ConsoleProxy &console) {
     for (size_t x {0}; x < getWidth(); x++) {
         for (size_t y {0}; y < getHeight(); y++) {
             if (IsWall(x, y)) {
                 if (IsInFov(x, y)) {
-                    Engine::GetInstance().GetRootConsoleManager().SetChar(x, y, GetWallChar(x, y), kDefaultWallInFovColor);
+                    console.SetChar(x, y, GetWallChar(x, y), kDefaultWallInFovColor);
                 } else if (IsExplored(x, y)) {
-                    Engine::GetInstance().GetRootConsoleManager().SetChar(x, y, GetWallChar(x, y), kDefaultWallExploredColor);
+                    console.SetChar(x, y, GetWallChar(x, y), kDefaultWallExploredColor);
                 }
             } else {
                 if (IsInFov(x, y)) {
-                    Engine::GetInstance().GetRootConsoleManager().SetChar(x, y, '.', kDefaultGroundInFovColor);
+                    console.SetChar(x, y, '.', kDefaultGroundInFovColor);
                 } else if (IsExplored(x, y)) {
-                    Engine::GetInstance().GetRootConsoleManager().SetChar(x, y, '.', kDefaultGroundExploredColor);
+                    console.SetChar(x, y, '.', kDefaultGroundExploredColor);
                 }
             }
         }

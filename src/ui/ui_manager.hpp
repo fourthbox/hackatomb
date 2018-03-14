@@ -5,19 +5,23 @@
 
 class UiManager {
     
-    public :
+public :
     UiManager();
     
     void Draw();
     void Initialize();
     
-    private :
+    UiWindow& GetEnvironmentWindow();
+    UiWindow& GetPlayerInfoWindow();
+    UiWindow& GetMessageLogWindow();
+    
+private :
     bool initialized_;
     
     // Fixed windows
-    UiWindow* environment_window_;
-    UiWindow* player_info_window_;
-    UiWindow* message_log_window_;
+    UiWindow environment_window_;
+    UiWindow player_info_window_;
+    UiWindow message_log_window_;
     
     void InitializeEnvironmentWindow();
     void InitializePlayerInfoWindow();

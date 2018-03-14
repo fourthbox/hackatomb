@@ -5,16 +5,15 @@
 #include "game_constants.hpp"
 #include "game_utils.hpp"
 
-RootConsoleManager::RootConsoleManager() : initialized_ {false}
-{}
+RootConsoleManager::RootConsoleManager() :
+initialized_ {false} {
+    assert(!initialized_);
+}
 
 void RootConsoleManager::Initialize(size_t width, size_t height,
                              size_t left_offset, size_t right_offset,
                              size_t top_offset, size_t bottom_offset, std::string root_name) {
-    if (initialized_) {
-        Utils::LogWarning("RootConsoleManager", "Root Console already initialized.");
-        return;
-    }
+    assert (!initialized_);
     
     // Set fields
     width_ = width;
@@ -35,20 +34,10 @@ void RootConsoleManager::Initialize(size_t width, size_t height,
     // Map missing characters
     MapCharacters();
     
+    // Initialize the main view console
+    main_view_.Initialize(kMapWidth, kMapHeight);
+    
     initialized_ = true;
-}
-
-void RootConsoleManager::SetChar(size_t x, size_t y, int sprite, TCODColor color) {
-    assert(initialized_);
-    
-    TCODConsole::root->setChar(x + left_offset_, y + top_offset_, sprite);
-    TCODConsole::root->setCharForeground(x + left_offset_, y + top_offset_, color);
-}
-
-void RootConsoleManager::SetBackground(size_t x, size_t y, TCODColor color) {
-    assert(initialized_);
-    
-    TCODConsole::root->setCharBackground(x + left_offset_, y + top_offset_, color);
 }
 
 void RootConsoleManager::Clear() {
@@ -59,15 +48,57 @@ void RootConsoleManager::Clear() {
 
 void RootConsoleManager::Render() {
     assert(initialized_);
+    
+    // Clear the screen
+    Clear();
+    
+    // Blit the consoles on the root console
+    TCODConsole::blit(main_view_.console_, 0, 0, 0, 0,
+                      TCODConsole::root, kEnvironmentConsoleWidth, 0);
+    
+    // Blit the windows on the windows on the root console
+    TCODConsole::blit(left_window_->console_, 0, 0, 0, 0,
+                      TCODConsole::root, 0, 0);
+
+    TCODConsole::blit(right_window_->console_, 0, 0, 0, 0,
+                      TCODConsole::root, TCODConsole::root->getWidth() - kPlayerInfoConsoleWidth, 0);
+
+    TCODConsole::blit(bottom_window_->console_, 0, 0, 0, 0,
+                      TCODConsole::root, 0, TCODConsole::root->getHeight() - kMessageLogConsoleHeight);
 
     TCODConsole::flush();
 }
 
 void RootConsoleManager::MapCharacters() {
+    assert(!initialized_);
+    
     TCODConsole::mapAsciiCodeToFont(kCharDoubleLineOpenNorth, 11, 13);
     TCODConsole::mapAsciiCodeToFont(kCharDoubleLineOpenEast, 14, 13);
     TCODConsole::mapAsciiCodeToFont(kCharDoubleLineOpenSouth, 13, 13);
     TCODConsole::mapAsciiCodeToFont(kCharDoubleLineOpenWest, 12, 13);
     TCODConsole::mapAsciiCodeToFont(kCharDoubleLineCenter, 15, 13);
+}
+
+void RootConsoleManager::SetLeftWindow(UiWindow &window) {
+    assert(initialized_);
     
+    left_window_ = &window;
+}
+
+void RootConsoleManager::SetRightWindow(UiWindow &window) {
+    assert(initialized_);
+    
+    right_window_ = &window;
+}
+
+void RootConsoleManager::SetBottomWindow(UiWindow &window) {
+    assert(initialized_);
+    
+    bottom_window_ = &window;
+}
+
+ConsoleProxy& RootConsoleManager::GetMainView() {
+    assert(initialized_);
+    
+    return main_view_;
 }

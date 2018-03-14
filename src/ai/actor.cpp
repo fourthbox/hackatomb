@@ -23,8 +23,8 @@ void Actor::InitializeAi(Ai_p ai) {
     ai_->Initialize(shared_from_this());
 }
 
-void Actor::Draw() {
-    Engine::GetInstance().GetRootConsoleManager().SetChar(x_, y_, sprite_, color_);
+void Actor::Draw(ConsoleProxy &console) {
+    console.SetChar(x_, y_, sprite_, color_);
 }
 
 void Actor::Update() {

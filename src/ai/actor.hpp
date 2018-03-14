@@ -4,6 +4,7 @@
 #include <string>
 
 #include "ai.hpp"
+#include "console_proxy.hpp"
 #include "game_globals.hpp"
 #include "libtcod.hpp"
 #include "map_builder.hpp"
@@ -17,7 +18,7 @@ public:
     void InitializeAi(Ai_p ai);
     
     void Update();
-    void Draw();
+    void Draw(ConsoleProxy &console);
     
     bool Interact(std::shared_ptr<Actor> owner);
     
