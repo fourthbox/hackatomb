@@ -1,7 +1,6 @@
 #ifndef MAP_HPP_
 #define MAP_HPP_
 
-#include "console_proxy.hpp"
 #include "libpmg.hpp"
 #include "libtcod.hpp"
 
@@ -9,7 +8,7 @@ class Map : public libpmg::DungeonMap, public TCODMap {
 public:
     Map(std::shared_ptr<libpmg::DungeonMap> map);
 
-    void Draw(ConsoleProxy &console);
+    void Draw(std::shared_ptr<TCODConsole> console);
     bool IsInFov(size_t x, size_t y);
     
 private:

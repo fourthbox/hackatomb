@@ -11,7 +11,6 @@
 #include <string>
 #include <unordered_map>
 
-#include "console_proxy.hpp"
 #include "player.hpp"
 #include "map.hpp"
 #include "map_builder.hpp"
@@ -19,11 +18,10 @@
 class MapsManager {
 public:
     MapsManager();
-    ~MapsManager();
     void Initialize();
-    void Draw(string map_category, short floor, ConsoleProxy &console);
+    void Draw(string map_category, short floor, std::shared_ptr<TCODConsole> console);
 
-    void AddMapToMaster(Map *map, string map_category, short floor = -1);
+    void AddMapToMaster(std::unique_ptr<Map> map, string map_category, short floor = -1);
     bool CanMoveToPosition(size_t x, size_t y, string map_category, short floor);
     void ComputeFov(Player_p player, string map_category, short floor);
     bool IsInFov(size_t x, size_t y, string map_category, short floor);
@@ -32,7 +30,7 @@ public:
 private:
     bool initialized_;
 
-    std::unordered_map< string, std::map<size_t, Map*> > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */
+    std::unordered_map<string, std::map< size_t, std::unique_ptr<Map> > > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */
 
 };
 #endif /* MAPS_MANAGER_HPP_ */

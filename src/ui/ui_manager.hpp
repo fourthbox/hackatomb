@@ -6,23 +6,19 @@
 class UiManager {
     
 public :
+    std::shared_ptr<UiWindow> environment_window_;
+    std::shared_ptr<UiWindow> player_info_window_;
+    std::shared_ptr<UiWindow> message_log_window_;
+
     UiManager();
     
     void Draw();
     void Initialize();
     
-    UiWindow& GetEnvironmentWindow();
-    UiWindow& GetPlayerInfoWindow();
-    UiWindow& GetMessageLogWindow();
-    
 private :
     bool initialized_;
     
     // Fixed windows
-    UiWindow environment_window_;
-    UiWindow player_info_window_;
-    UiWindow message_log_window_;
-    
     void InitializeEnvironmentWindow();
     void InitializePlayerInfoWindow();
     void InitializeMessageLogWindow();

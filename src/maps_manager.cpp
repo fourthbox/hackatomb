@@ -9,25 +9,18 @@ typedef std::shared_ptr<Actor> Actor_p;
 
 using std::string;
 
-MapsManager::~MapsManager() {
-    for (auto const &maps_map : master_maps_holder_) {
-        for (auto const &map : maps_map.second)
-            delete (map.second);
-    }
-}
-
 MapsManager::MapsManager()
 : initialized_ {false} {
 }
 
 // If floor is -1, it will assign the map with the lowest floor, and append it to the map
-void MapsManager::AddMapToMaster(Map *map, string map_category, short floor) {
+void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, string map_category, short floor) {
     assert(floor >= -1);
     
     if (floor == -1) {
-        master_maps_holder_[map_category][master_maps_holder_[map_category].size()] = map;
+        master_maps_holder_[map_category][master_maps_holder_[map_category].size()] = std::move(map);
     } else {
-        master_maps_holder_[map_category][floor] = map;
+        master_maps_holder_[map_category][floor] = std::move(map);
     }
 }
 
@@ -37,7 +30,7 @@ bool MapsManager::CanMoveToPosition(size_t x, size_t y, string map_category, sho
     return master_maps_holder_[map_category][floor]->isWalkable(x, y);
 }
 
-void MapsManager::Draw(string map_category, short floor, ConsoleProxy &console) {
+void MapsManager::Draw(string map_category, short floor, std::shared_ptr<TCODConsole> console) {
     assert(initialized_ &&
            master_maps_holder_.count(map_category) > 0 && master_maps_holder_[map_category].count(floor) >0);
     

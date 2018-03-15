@@ -8,6 +8,8 @@
 RootConsoleManager::RootConsoleManager() :
 initialized_ {false} {
     assert(!initialized_);
+    
+    main_view_ = std::make_shared<TCODConsole>(kMapWidth, kMapHeight);
 }
 
 void RootConsoleManager::Initialize(size_t width, size_t height,
@@ -34,9 +36,6 @@ void RootConsoleManager::Initialize(size_t width, size_t height,
     // Map missing characters
     MapCharacters();
     
-    // Initialize the main view console
-    main_view_.Initialize(kMapWidth, kMapHeight);
-    
     initialized_ = true;
 }
 
@@ -53,17 +52,17 @@ void RootConsoleManager::Render() {
     Clear();
     
     // Blit the consoles on the root console
-    TCODConsole::blit(main_view_.console_, 0, 0, 0, 0,
+    TCODConsole::blit(main_view_.get(), 0, 0, 0, 0,
                       TCODConsole::root, kEnvironmentConsoleWidth, 0);
     
     // Blit the windows on the windows on the root console
-    TCODConsole::blit(left_window_->console_, 0, 0, 0, 0,
+    TCODConsole::blit(left_window_->console_.get(), 0, 0, 0, 0,
                       TCODConsole::root, 0, 0);
 
-    TCODConsole::blit(right_window_->console_, 0, 0, 0, 0,
+    TCODConsole::blit(right_window_->console_.get(), 0, 0, 0, 0,
                       TCODConsole::root, TCODConsole::root->getWidth() - kPlayerInfoConsoleWidth, 0);
 
-    TCODConsole::blit(bottom_window_->console_, 0, 0, 0, 0,
+    TCODConsole::blit(bottom_window_->console_.get(), 0, 0, 0, 0,
                       TCODConsole::root, 0, TCODConsole::root->getHeight() - kMessageLogConsoleHeight);
 
     TCODConsole::flush();
@@ -79,26 +78,21 @@ void RootConsoleManager::MapCharacters() {
     TCODConsole::mapAsciiCodeToFont(kCharDoubleLineCenter, 15, 13);
 }
 
-void RootConsoleManager::SetLeftWindow(UiWindow &window) {
+void RootConsoleManager::SetLeftWindow(std::shared_ptr<UiWindow> window) {
     assert(initialized_);
     
-    left_window_ = &window;
+    left_window_ = window;
 }
 
-void RootConsoleManager::SetRightWindow(UiWindow &window) {
+void RootConsoleManager::SetRightWindow(std::shared_ptr<UiWindow> window) {
     assert(initialized_);
     
-    right_window_ = &window;
+    right_window_ = window;
 }
 
-void RootConsoleManager::SetBottomWindow(UiWindow &window) {
+void RootConsoleManager::SetBottomWindow(std::shared_ptr<UiWindow> window) {
     assert(initialized_);
     
-    bottom_window_ = &window;
+    bottom_window_ = window;
 }
 
-ConsoleProxy& RootConsoleManager::GetMainView() {
-    assert(initialized_);
-    
-    return main_view_;
-}

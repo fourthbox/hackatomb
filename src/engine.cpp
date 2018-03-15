@@ -23,14 +23,14 @@ void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player
     InitUi();
     
     // Initialize the map
-    auto new_map {new Map(map)};
+    auto new_map {std::make_unique<Map>(map)};
     
     // Configure the map keys
     current_map_category_ = "main_dungeon";
     current_floor_ = 0;
 
     // Add first map to dungeon
-    maps_manager_.AddMapToMaster(new_map, current_map_category_, current_floor_);
+    maps_manager_.AddMapToMaster(std::move(new_map), current_map_category_, current_floor_);
     
     // Add the player
     this->player_ = player;
@@ -51,7 +51,7 @@ void Engine::Initialize(std::shared_ptr<libpmg::WorldMap> map) {
     InitEngine();
     
     // Add the world map
-    world_map_ = new World(map);
+    world_map_ = std::make_unique<World>(map);
     
     // Set as initialized
     initialized_ = true;
@@ -82,9 +82,9 @@ void Engine::InitUi() {
     ui_manager_.Initialize();
     
     // Set the window on the root console
-    root_console_manager_.SetLeftWindow(ui_manager_.GetEnvironmentWindow());
-    root_console_manager_.SetRightWindow(ui_manager_.GetPlayerInfoWindow());
-    root_console_manager_.SetBottomWindow(ui_manager_.GetMessageLogWindow());
+    root_console_manager_.SetLeftWindow(ui_manager_.environment_window_);
+    root_console_manager_.SetRightWindow(ui_manager_.player_info_window_);
+    root_console_manager_.SetBottomWindow(ui_manager_.message_log_window_);
 }
 
 
@@ -105,13 +105,11 @@ void Engine::Update() {
 void Engine::Render() {
     assert(initialized_);
     
-    auto &main_view {root_console_manager_.GetMainView()};
-    
     // Draw the map
-    maps_manager_.Draw(current_map_category_, current_floor_, main_view);
+    maps_manager_.Draw(current_map_category_, current_floor_, root_console_manager_.main_view_);
     
     // Draw the player
-    player_->Draw(main_view);
+    player_->Draw(root_console_manager_.main_view_);
 
     // Draw monsters
     for (auto const &actor : actor_list_) {
@@ -119,7 +117,7 @@ void Engine::Render() {
                                   actor->GetPosition().GetY(),
                                   current_map_category_,
                                   current_floor_))
-            actor->Draw(main_view);
+            actor->Draw(root_console_manager_.main_view_);
     }
 
     // Draw the Ui

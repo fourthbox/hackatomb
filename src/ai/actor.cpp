@@ -23,8 +23,9 @@ void Actor::InitializeAi(Ai_p ai) {
     ai_->Initialize(shared_from_this());
 }
 
-void Actor::Draw(ConsoleProxy &console) {
-    console.SetChar(x_, y_, sprite_, color_);
+void Actor::Draw(std::shared_ptr<TCODConsole> console) {
+    console->setChar(x_, y_, sprite_);
+    console->setCharForeground(x_, y_, color_);
 }
 
 void Actor::Update() {

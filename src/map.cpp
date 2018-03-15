@@ -438,20 +438,24 @@ int Map::GetWallChar(size_t x, size_t y) {
     return kCharBlock2;
 }
 
-void Map::Draw(ConsoleProxy &console) {
+void Map::Draw(std::shared_ptr<TCODConsole> console) {
     for (size_t x {0}; x < getWidth(); x++) {
         for (size_t y {0}; y < getHeight(); y++) {
             if (IsWall(x, y)) {
                 if (IsInFov(x, y)) {
-                    console.SetChar(x, y, GetWallChar(x, y), kDefaultWallInFovColor);
+                    console->setChar(x, y, GetWallChar(x, y));
+                    console->setCharForeground(x, y, kDefaultWallInFovColor);
                 } else if (IsExplored(x, y)) {
-                    console.SetChar(x, y, GetWallChar(x, y), kDefaultWallExploredColor);
+                    console->setChar(x, y, GetWallChar(x, y));
+                    console->setCharForeground(x, y, kDefaultWallExploredColor);
                 }
             } else {
                 if (IsInFov(x, y)) {
-                    console.SetChar(x, y, '.', kDefaultGroundInFovColor);
+                    console->setChar(x, y, '.');
+                    console->setCharForeground(x, y, kDefaultGroundInFovColor);
                 } else if (IsExplored(x, y)) {
-                    console.SetChar(x, y, '.', kDefaultGroundExploredColor);
+                    console->setChar(x, y, '.');
+                    console->setCharForeground(x, y, kDefaultGroundExploredColor);
                 }
             }
         }

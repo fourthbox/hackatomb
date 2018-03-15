@@ -23,13 +23,9 @@ void UiWindow::Initialize(size_t width, size_t height, string name, std::initial
     }
     
     // Initialize the console
-    console_ = new TCODConsole(width_, height_);
+    console_ = std::make_unique<TCODConsole>(width_, height_);
     
     initialized_ = true;
-}
-
-UiWindow::~UiWindow() {
-    delete console_;
 }
 
 void UiWindow::Draw() {

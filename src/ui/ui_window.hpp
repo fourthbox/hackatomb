@@ -15,18 +15,16 @@ struct UiLabel {
         x_ {x},
         y_ {y},
         text_ {text},
-        id_ {id}
-    {}
+        id_ {id} {
+        }
 };
 
 class UiWindow {
 public:
-    TCODConsole* console_;
+    std::unique_ptr<TCODConsole> console_;
 
     UiWindow();
-    ~UiWindow();
     void Initialize(size_t width, size_t height, std::string name = "", std::initializer_list<UiLabel> labels = {});
-    
     void Draw();
     
 private:

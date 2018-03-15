@@ -11,11 +11,12 @@
 
 #include "libtcod.hpp"
 
-#include "console_proxy.hpp"
 #include "ui_window.hpp"
 
 class RootConsoleManager {
 public:
+    std::shared_ptr<TCODConsole> main_view_;  /**< The console upon which the main view will be drawn. */
+
     RootConsoleManager();
     void Initialize(size_t width, size_t height,
                     size_t left_offset, size_t right_offset,
@@ -23,17 +24,14 @@ public:
                     std::string root_name);
     void Render();
     
-    ConsoleProxy& GetMainView();
-    void SetLeftWindow(UiWindow &window);
-    void SetRightWindow(UiWindow &window);
-    void SetBottomWindow(UiWindow &window);
+    void SetLeftWindow(std::shared_ptr<UiWindow> window);
+    void SetRightWindow(std::shared_ptr<UiWindow> window);
+    void SetBottomWindow(std::shared_ptr<UiWindow> window);
     
 private:
     bool initialized_;
     size_t width_, height_, left_offset_, right_offset_, top_offset_, bottom_offset_;
-    UiWindow *left_window_, *right_window_, *bottom_window_;
-    
-    ConsoleProxy main_view_;  /**< The console upon which the main view will be drawn. */
+    std::shared_ptr<UiWindow> left_window_, right_window_, bottom_window_;
     
     void MapCharacters();
     void Clear();

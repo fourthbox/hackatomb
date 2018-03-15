@@ -61,7 +61,7 @@ private:
     short current_floor_;
     
     // World management
-    World *world_map_;
+    std::unique_ptr<World> world_map_;
 
     // Ui management
     UiManager ui_manager_;
