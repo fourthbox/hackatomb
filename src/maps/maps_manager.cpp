@@ -3,18 +3,11 @@
 #include "game_utils.hpp"
 #include "libtcod.hpp"
 
-#include <cassert>
-
 typedef std::shared_ptr<Actor> Actor_p;
 
 using std::string;
 
-MapsManager::MapsManager()
-    : initialized_ {false} {
-    assert (!initialized_);
-}
-
-void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, string map_category, short floor) {
+void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, string &map_category, short floor) {
     assert(floor >= -1);
     
     if (floor == -1) {
@@ -24,27 +17,30 @@ void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, string map_category, 
     }
 }
 
-bool MapsManager::CanMoveToPosition(size_t x, size_t y, string map_category, short floor) {
-    assert(master_maps_holder_.count(map_category) > 0 && master_maps_holder_[map_category].count(floor) > 0);
+bool MapsManager::CanMoveToPosition(size_t x, size_t y) {
+    assert(master_maps_holder_.count(current_map_category_) > 0 &&
+           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
     
-    return master_maps_holder_[map_category][floor]->isWalkable(x, y);
+    return master_maps_holder_[current_map_category_][current_floor_]->isWalkable(x, y);
 }
 
-void MapsManager::Draw(string map_category, short floor, std::shared_ptr<TCODConsole> console) {
+void MapsManager::Draw(std::shared_ptr<TCODConsole> console) {
     assert(initialized_ &&
-           master_maps_holder_.count(map_category) > 0 && master_maps_holder_[map_category].count(floor) >0);
+           master_maps_holder_.count(current_map_category_) > 0 &&
+           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
     
     // Draw the current map
-    master_maps_holder_[map_category][floor]->Draw(console);
+    master_maps_holder_[current_map_category_][current_floor_]->Draw(console);
 
 }
 
-void MapsManager::ComputeFov(Player_p player, string map_category, short floor) {
-    assert(master_maps_holder_.count(map_category) > 0 && master_maps_holder_[map_category].count(floor) >0);
+void MapsManager::ComputeFov(Player_p player) {
+    assert(master_maps_holder_.count(current_map_category_) > 0 &&
+           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
 
-    master_maps_holder_[map_category][floor]->computeFov(player->GetPosition().GetX(),
-                                                         player->GetPosition().GetY(),
-                                                         player->GetFovRadius());
+    master_maps_holder_[current_map_category_][current_floor_]->computeFov(player->GetPosition().GetX(),
+                                                                           player->GetPosition().GetY(),
+                                                                           player->GetFovRadius());
 }
 
 void MapsManager::Initialize() {
@@ -53,9 +49,9 @@ void MapsManager::Initialize() {
     initialized_ = true;
 }
 
-bool MapsManager::IsInFov(size_t x, size_t y, string map_category, short floor) {
-    assert(master_maps_holder_.count(map_category) > 0 && master_maps_holder_[map_category].count(floor) >0);
+bool MapsManager::IsInFov(size_t x, size_t y) {
+    assert(master_maps_holder_.count(current_map_category_) > 0 &&
+           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
     
-    return master_maps_holder_[map_category][floor]->IsInFov(x, y);
+    return master_maps_holder_[current_map_category_][current_floor_]->IsInFov(x, y);
 }
-

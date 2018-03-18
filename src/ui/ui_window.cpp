@@ -1,13 +1,6 @@
 #include "ui_window.hpp"
 
-#include <cassert>
-
 using std::string;
-
-UiWindow::UiWindow() :
-initialized_ {false} {
-    assert(!initialized_);
-}
 
 void UiWindow::Initialize(size_t width, size_t height, string name, std::initializer_list<UiLabel> labels) {
     assert(!initialized_);

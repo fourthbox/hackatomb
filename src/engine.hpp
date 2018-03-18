@@ -18,10 +18,8 @@
  The main class. It must be initialized before every operation, because it will initialize every needed component.
  Update() and Render() will updare and render every needed component.
  */
-class Engine {
+class Engine : public InitiableObject{
 public:
-    Engine();
-
     // Getters and Setters
 //    constexpr void PlayerPerformedAction() { game_status_ = TurnPhase::ACTION; }
     
@@ -58,16 +56,12 @@ public:
     };
     
 private:
-    bool initialized_;  /**< Utility switch for initialization security checks. */
-    
     // Entities management
     Player_p player_;                   /**< Pointer to the player. */
     std::vector<Actor_p> actor_list_;   /**< List of pointers to every actor, excluding the player. */
     
     // Map management
     MapsManager maps_manager_;          /**< The manager for the maps used in the game */
-    std::string current_map_category_;   // TODO: to redesign. Dungeon type (enum)?
-    short current_floor_;               /**< Current floor */
     
     // World management
     std::unique_ptr<World> world_map_;  /**< Pointer to the current world map */

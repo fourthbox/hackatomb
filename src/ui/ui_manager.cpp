@@ -1,13 +1,8 @@
 #include "ui_manager.hpp"
 
-#include <cassert>
-
 #include "game_constants.hpp"
 
-UiManager::UiManager() :
-initialized_ {false} {
-    assert(!initialized_);
-    
+UiManager::UiManager() {
     environment_window_ = std::make_shared<UiWindow>();
     player_info_window_ = std::make_shared<UiWindow>();
     message_log_window_ = std::make_shared<UiWindow>();

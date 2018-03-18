@@ -6,12 +6,13 @@
 #ifndef UI_MANAGER_HPP_
 #define UI_MANAGER_HPP_
 
+#include "initiable_object.hpp"
 #include "ui_window.hpp"
 
 /**
  This class manages all the fixed and floating windows.
  */
-class UiManager {
+class UiManager : public InitiableObject {
     
 public :
     std::shared_ptr<UiWindow> environment_window_;
@@ -31,8 +32,6 @@ public :
     void Draw();
     
 private :
-    bool initialized_;  /**< Utility switch for initialization security checks. */
-    
     /**
      Initialize the environment window.
      */

@@ -8,6 +8,7 @@
 
 #include <string>
 
+#include "initiable_object.hpp"
 #include "libpmg.hpp"
 #include "libtcod.hpp"
 
@@ -35,7 +36,7 @@ struct Stats {
 /**
  This class represent an intelligent entity on a map
  */
-class Actor {
+class Actor : public InitiableObject {
 public:    
     /**
      Initialize this instance.
@@ -74,9 +75,6 @@ public:
 //    void ApplyDmg(size_t dmg);
 //    void Die();
     
-protected:
-    bool initialized_;      /**< Utility switch for initialization security checks. */
-
 private:
     size_t x_, y_;      /**< Location on the current map. */
     uint floor_;        /**< Current floor. */

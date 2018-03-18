@@ -9,11 +9,6 @@
 typedef std::shared_ptr<Actor> Actor_p;
 typedef std::shared_ptr<Map> Map_p;
 
-Engine::Engine() :
-    initialized_ {false} {
-        assert(!initialized_);
-    }
-
 void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player) {
     if (initialized_) {
         Utils::LogWarning("Engine", "Engine already initialized.");
@@ -28,11 +23,14 @@ void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player
     auto new_map {std::make_unique<Map>(map)};
     
     // Configure the map keys
-    current_map_category_ = "main_dungeon";
-    current_floor_ = 0;
+    std::string current_map_category {"main_dungeon"};
+    auto current_floor {0};
 
     // Add first map to dungeon
-    maps_manager_.AddMapToMaster(std::move(new_map), current_map_category_, current_floor_);
+    maps_manager_.AddMapToMaster(std::move(new_map), current_map_category, current_floor);
+    // Set the map manager to be in the current map
+    maps_manager_.current_map_category_ = current_map_category;
+    maps_manager_.current_floor_ = current_floor;
     
     // Add the player
     this->player_ = player;
@@ -106,17 +104,14 @@ void Engine::Render() {
     assert(initialized_);
     
     // Draw the map
-    maps_manager_.Draw(current_map_category_, current_floor_, root_console_manager_.main_view_);
+    maps_manager_.Draw(root_console_manager_.main_view_);
     
     // Draw the player
     player_->Draw(root_console_manager_.main_view_);
 
     // Draw monsters
     for (auto const &actor : actor_list_) {
-        if (maps_manager_.IsInFov(actor->GetPosition().GetX(),
-                                  actor->GetPosition().GetY(),
-                                  current_map_category_,
-                                  current_floor_))
+        if (maps_manager_.IsInFov(actor->GetPosition().GetX(), actor->GetPosition().GetY()))
             actor->Draw(root_console_manager_.main_view_);
     }
 
@@ -149,7 +144,7 @@ void Engine::RenderWorld() {
 void Engine::InitFov() {
     assert(initialized_);
 
-    maps_manager_.ComputeFov(player_, current_map_category_, current_floor_);
+    maps_manager_.ComputeFov(player_);
 }
 
 //Actor_p Engine::GetActor(size_t x, size_t y) {

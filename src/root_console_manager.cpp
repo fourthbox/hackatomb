@@ -1,14 +1,9 @@
 #include "root_console_manager.hpp"
 
-#include <cassert>
-
 #include "game_constants.hpp"
 #include "game_utils.hpp"
 
-RootConsoleManager::RootConsoleManager() :
-initialized_ {false} {
-    assert(!initialized_);
-    
+RootConsoleManager::RootConsoleManager() {
     main_view_ = std::make_shared<TCODConsole>(kMapWidth, kMapHeight);
     left_window_ = nullptr;
     right_window_ = nullptr;

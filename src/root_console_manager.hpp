@@ -15,7 +15,7 @@
 /**
  Class that manages the initialization and rendering of the root console.
  */
-class RootConsoleManager {
+class RootConsoleManager : public InitiableObject {
 public:
     std::shared_ptr<TCODConsole> main_view_;  /**< The console upon which the main view will be drawn. */
 
@@ -53,7 +53,6 @@ public:
     void SetBottomWindow(std::shared_ptr<UiWindow> window);
     
 private:
-    bool initialized_;      /**< Utility switch for initialization security checks. */
     size_t width_, height_;     /**< Size of the root console. */
     std::shared_ptr<UiWindow> left_window_, right_window_, bottom_window_;   /**< Pointers to the fixed windows. */
     

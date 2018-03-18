@@ -6,6 +6,7 @@
 #ifndef UI_WINDOW_HPP_
 #define UI_WINDOW_HPP_
 
+#include "initiable_object.hpp"
 #include "libtcod.hpp"
 
 #include <memory>
@@ -30,11 +31,9 @@ struct UiLabel {
 /**
  This class represent a drawable window.
  */
-class UiWindow {
+class UiWindow : public InitiableObject {
 public:
     std::unique_ptr<TCODConsole> console_;  /**< Console upon which the window is drawn. */
-
-    UiWindow();
     
     /**
      Initialize the Window, the console and the static labels.
@@ -51,7 +50,6 @@ public:
     void Draw();
     
 private:
-    bool initialized_;      /**< Utility switch for initialization security checks. */
     size_t width_, height_; /**< Size fo the window. */
     std::string name_;      /**< Name that appean on top of the window. */
     
