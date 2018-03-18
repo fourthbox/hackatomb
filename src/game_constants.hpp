@@ -1,3 +1,9 @@
+/**
+ Class containing all the constants needed.
+ @file game_constants.hpp
+ @author pat <pat@fourthbox.com>
+ */
+
 #ifndef GAME_CONSTANTS_HPP_
 #define GAME_CONSTANTS_HPP_
 

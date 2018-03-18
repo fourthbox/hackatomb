@@ -1,5 +1,4 @@
 /**
- This class manages the initialization, draw and management of the root console
  @file root_console_manager.hpp
  @author pat <pat@fourthbox.com>
  */
@@ -13,27 +12,59 @@
 
 #include "ui_window.hpp"
 
+/**
+ Class that manages the initialization and rendering of the root console.
+ */
 class RootConsoleManager {
 public:
     std::shared_ptr<TCODConsole> main_view_;  /**< The console upon which the main view will be drawn. */
 
     RootConsoleManager();
-    void Initialize(size_t width, size_t height,
-                    size_t left_offset, size_t right_offset,
-                    size_t top_offset, size_t bottom_offset,
-                    std::string root_name);
+    
+    /**
+     Initialize this instance of the class.
+     @param width Width of the root console.
+     @param height Height of the root console.
+     @param root_name Name of the window.
+     */
+    void Initialize(size_t width, size_t height, std::string root_name);
+    
+    /**
+     Blit the consoles onto the root console.
+     */
     void Render();
     
+    /**
+     Set left_window_ to point to the specific window.
+     @param window A pointer to the window.
+     */
     void SetLeftWindow(std::shared_ptr<UiWindow> window);
+    
+    /**
+     Set right_window_ to point to the specific window.
+     @param window A pointer to the window.
+     */
     void SetRightWindow(std::shared_ptr<UiWindow> window);
+    
+    /**
+     Set bottom_window_ to point to the specific window.
+     @param window A pointer to the window.
+     */
     void SetBottomWindow(std::shared_ptr<UiWindow> window);
     
 private:
-    bool initialized_;
-    size_t width_, height_, left_offset_, right_offset_, top_offset_, bottom_offset_;
-    std::shared_ptr<UiWindow> left_window_, right_window_, bottom_window_;
+    bool initialized_;      /**< Utility switch for initialization security checks. */
+    size_t width_, height_;     /**< Size of the root console. */
+    std::shared_ptr<UiWindow> left_window_, right_window_, bottom_window_;   /**< Pointers to the fixed windows. */
     
+    /**
+     Map non-default characters to specific char codes.
+     */
     void MapCharacters();
+    
+    /**
+     Clears the console.
+     */
     void Clear();
 
 };

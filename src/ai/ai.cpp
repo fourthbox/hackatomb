@@ -60,23 +60,23 @@ void PlayerAi::Update() {
             break;
     }
     
-    if (x != 0 || y != 0) {
-        Engine::GetInstance().PlayerPerformedAction();
-        if (MoveOrInteract(actor_->GetPosition().GetX() + x, actor_->GetPosition().GetY() + y))
-            Engine::GetInstance().ComputeFov();
-    }
+//    if (x != 0 || y != 0) {
+//        Engine::GetInstance().PlayerPerformedAction();
+//        if (MoveOrInteract(actor_->GetPosition().GetX() + x, actor_->GetPosition().GetY() + y))
+//            Engine::GetInstance().InitFov();
+//    }
 }
 
 bool PlayerAi::MoveOrInteract(int x, int y) {
     assert(actor_ != nullptr);
     
-    if (!Engine::GetInstance().CanMoveToPosition(x, y))
-        return false;
-    
-    if (auto obstacle {Engine::GetInstance().GetActor(x, y)}; obstacle != nullptr) {
-        obstacle->Interact(actor_);
-        return false;
-    }
+//    if (!Engine::GetInstance().CanMoveToPosition(x, y))
+//        return false;
+//    
+//    if (auto obstacle {Engine::GetInstance().GetActor(x, y)}; obstacle != nullptr) {
+//        obstacle->Interact(actor_);
+//        return false;
+//    }
     
     actor_->SetPosition(x, y);
 

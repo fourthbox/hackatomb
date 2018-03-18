@@ -10,20 +10,17 @@ initialized_ {false} {
     assert(!initialized_);
     
     main_view_ = std::make_shared<TCODConsole>(kMapWidth, kMapHeight);
+    left_window_ = nullptr;
+    right_window_ = nullptr;
+    bottom_window_ = nullptr;
 }
 
-void RootConsoleManager::Initialize(size_t width, size_t height,
-                             size_t left_offset, size_t right_offset,
-                             size_t top_offset, size_t bottom_offset, std::string root_name) {
+void RootConsoleManager::Initialize(size_t width, size_t height, std::string root_name) {
     assert (!initialized_);
     
     // Set fields
     width_ = width;
     height_ = height;
-    left_offset_ = left_offset;
-    right_offset_ = right_offset;
-    top_offset_ = top_offset;
-    bottom_offset_ = bottom_offset;
 
     // Set the font
     TCODConsole::setCustomFont("res/sborogue.png", TCOD_FONT_LAYOUT_ASCII_INROW);
@@ -46,7 +43,7 @@ void RootConsoleManager::Clear() {
 }
 
 void RootConsoleManager::Render() {
-    assert(initialized_);
+    assert(initialized_ && right_window_ && left_window_ && bottom_window_);
     
     // Clear the screen
     Clear();

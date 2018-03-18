@@ -10,8 +10,9 @@ typedef std::shared_ptr<Actor> Actor_p;
 typedef std::shared_ptr<Map> Map_p;
 
 Engine::Engine() :
-    initialized_ {false}
-{}
+    initialized_ {false} {
+        assert(!initialized_);
+    }
 
 void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player) {
     if (initialized_) {
@@ -19,6 +20,7 @@ void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player
         return;
     }
     
+    // Initialize components
     InitEngine();
     InitUi();
     
@@ -39,7 +41,7 @@ void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player
     initialized_ = true;
 
     // Compute fov the first time
-    ComputeFov();
+    InitFov();
 }
 
 void Engine::Initialize(std::shared_ptr<libpmg::WorldMap> map) {
@@ -64,9 +66,7 @@ void Engine::InitEngine() {
     }
     
     // Initialize Root Console Manager
-    root_console_manager_.Initialize(kRootViewWidth, kRootViewHeight,
-                                     kEnvironmentConsoleWidth, kPlayerInfoConsoleWidth,
-                                     0, kMessageLogConsoleHeight, "hackatomb");
+    root_console_manager_.Initialize(kRootViewWidth, kRootViewHeight, "hackatomb");
     
     // Initialize the Maps Manager
     maps_manager_.Initialize();
@@ -123,7 +123,7 @@ void Engine::Render() {
     // Draw the Ui
     ui_manager_.Draw();
     
-    // Draw to screen
+    // Blit consoles to screen to screen
     root_console_manager_.Render();
 }
 
@@ -140,29 +140,28 @@ void Engine::RenderWorld() {
     root_console_manager_.Render();
 }
 
+//bool Engine::CanMoveToPosition(size_t x, size_t y) {
+//    assert(initialized_);
+//
+//    return maps_manager_.CanMoveToPosition(x, y, current_map_category_, current_floor_);
+//}
 
-bool Engine::CanMoveToPosition(size_t x, size_t y) {
-    assert(initialized_);
-
-    return maps_manager_.CanMoveToPosition(x, y, current_map_category_, current_floor_);
-}
-
-void Engine::ComputeFov() {
+void Engine::InitFov() {
     assert(initialized_);
 
     maps_manager_.ComputeFov(player_, current_map_category_, current_floor_);
 }
 
-Actor_p Engine::GetActor(size_t x, size_t y) {
-    assert(initialized_);
-
-    for (auto const &actor : actor_list_) {
-        if (actor->GetPosition().GetX() == x && actor->GetPosition().GetY() == y)
-            return actor;
-    }
-    
-    return nullptr;
-}
+//Actor_p Engine::GetActor(size_t x, size_t y) {
+//    assert(initialized_);
+//
+//    for (auto const &actor : actor_list_) {
+//        if (actor->GetPosition().GetX() == x && actor->GetPosition().GetY() == y)
+//            return actor;
+//    }
+//
+//    return nullptr;
+//}
 
 void Engine::AddMonster(Actor_p monster) {
     assert(initialized_);

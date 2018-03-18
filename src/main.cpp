@@ -113,7 +113,7 @@ int main(int argc, char **argv) {
 //    auto world_map {InitWorld()};
     
     // Engine initialization
-    auto &eng {Engine::GetInstance()};
+    auto eng = Engine();
     
     SetupDungeonGame(eng, dungeon_map);
 //    SetupWorldGame(eng, world_map);

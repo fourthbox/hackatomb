@@ -1,8 +1,16 @@
+/**
+ @file ui_window.hpp
+ @author pat <pat@fourthbox.com>
+ */
+
 #ifndef UI_MANAGER_HPP_
 #define UI_MANAGER_HPP_
 
 #include "ui_window.hpp"
 
+/**
+ This class manages all the fixed and floating windows.
+ */
 class UiManager {
     
 public :
@@ -12,15 +20,32 @@ public :
 
     UiManager();
     
-    void Draw();
+    /**
+     Initializes the fixed windows.
+     */
     void Initialize();
     
-private :
-    bool initialized_;
+    /**
+     Draw the windows on the consoles.
+     */
+    void Draw();
     
-    // Fixed windows
+private :
+    bool initialized_;  /**< Utility switch for initialization security checks. */
+    
+    /**
+     Initialize the environment window.
+     */
     void InitializeEnvironmentWindow();
+    
+    /**
+     Initialize the player info window.
+     */
     void InitializePlayerInfoWindow();
+    
+    /**
+     Initialize the message log window.
+     */
     void InitializeMessageLogWindow();
 
 };

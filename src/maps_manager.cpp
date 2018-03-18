@@ -10,10 +10,10 @@ typedef std::shared_ptr<Actor> Actor_p;
 using std::string;
 
 MapsManager::MapsManager()
-: initialized_ {false} {
+    : initialized_ {false} {
+    assert (!initialized_);
 }
 
-// If floor is -1, it will assign the map with the lowest floor, and append it to the map
 void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, string map_category, short floor) {
     assert(floor >= -1);
     
