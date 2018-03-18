@@ -68,6 +68,9 @@ void Engine::InitEngine() {
     
     // Initialize the Maps Manager
     maps_manager_.Initialize();
+    
+    // Initialize the Actor Manager
+    actor_manager_.Initialize();
 }
 
 void Engine::InitUi() {
@@ -95,9 +98,7 @@ void Engine::Update() {
     
     player_->Update();
     
-    for (auto const &actor : actor_list_) {
-        actor->Update();
-    }
+    actor_manager_.Update();
 }
 
 void Engine::Render() {
@@ -110,7 +111,8 @@ void Engine::Render() {
     player_->Draw(root_console_manager_.main_view_);
 
     // Draw monsters
-    for (auto const &actor : actor_list_) {
+    
+    for (auto const &actor : actor_manager_.GetActorList()) {
         if (maps_manager_.IsInFov(actor->GetPosition().GetX(), actor->GetPosition().GetY()))
             actor->Draw(root_console_manager_.main_view_);
     }
@@ -159,7 +161,5 @@ void Engine::InitFov() {
 //}
 
 void Engine::AddMonster(Actor_p monster) {
-    assert(initialized_);
-
-    actor_list_.push_back(monster);
+    assert(initialized_ && actor_manager_.AddActor(monster));
 }

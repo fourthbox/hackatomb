@@ -37,6 +37,8 @@ struct Stats {
  This class represent an intelligent entity on a map
  */
 class Actor : public InitiableObject {
+    friend class ActorManager;
+    
 public:    
     /**
      Initialize this instance.
@@ -58,14 +60,6 @@ public:
     void Draw(std::shared_ptr<TCODConsole> console);
     
     /**
-     Sets the position upon which the actor will be.
-     There are no checks whether the actor can actually be here.
-     @param x The X coordinate.
-     @param y The Y coordinate.
-     */
-    void SetPosition(size_t x, size_t y);
-    
-    /**
      Gets the current position of the actor.
      @return A libpmg::Location containing the coordinates on the current map.
      */
@@ -78,6 +72,7 @@ public:
 private:
     size_t x_, y_;      /**< Location on the current map. */
     uint floor_;        /**< Current floor. */
+    std::string map_category_; /**< Current map category */
     int sprite_;        /**< Character used to represent this actor. */
     TCODColor color_;   /**< Color used to represent this actor. */
     std::string name_;       /**< Name of this actor. */

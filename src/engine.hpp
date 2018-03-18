@@ -7,6 +7,7 @@
 #ifndef ENGINE_HPP_
 #define ENGINE_HPP_
 
+#include "actor_manager.hpp"
 #include "player.hpp"
 #include "map_builder.hpp"
 #include "maps_manager.hpp"
@@ -58,7 +59,7 @@ public:
 private:
     // Entities management
     Player_p player_;                   /**< Pointer to the player. */
-    std::vector<Actor_p> actor_list_;   /**< List of pointers to every actor, excluding the player. */
+    ActorManager actor_manager_;        /**< Manager for all actors of the loaded game */
     
     // Map management
     MapsManager maps_manager_;          /**< The manager for the maps used in the game */

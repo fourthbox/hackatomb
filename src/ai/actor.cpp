@@ -22,13 +22,6 @@ void Actor::Draw(std::shared_ptr<TCODConsole> console) {
     console->setCharForeground(x_, y_, color_);
 }
 
-void Actor::SetPosition(size_t x, size_t y) {
-    assert(initialized_);
-
-    x_ = x;
-    y_ = y;
-}
-
 libpmg::Location Actor::GetPosition() {
     assert(initialized_);
     
