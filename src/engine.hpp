@@ -66,7 +66,7 @@ private:
     
     // Map management
     MapsManager maps_manager_;          /**< The manager for the maps used in the game */
-    string current_map_category_;   // TODO: to redesign. Dungeon type (enum)?
+    std::string current_map_category_;   // TODO: to redesign. Dungeon type (enum)?
     short current_floor_;               /**< Current floor */
     
     // World management

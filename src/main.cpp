@@ -2,6 +2,9 @@
 #include "game_constants.hpp"
 #include "key_mapper.hpp"
 #include "libpmg.hpp"
+#include "monster.hpp"
+
+using namespace std;
 
 std::shared_ptr<libpmg::DungeonMap> InitDungeon() {
     // Initialize the dungeon builder
@@ -33,37 +36,36 @@ void SetupDungeonGame(Engine &eng, std::shared_ptr<libpmg::DungeonMap> dungeon_m
     auto start_coords {dungeon_map->GetRoomList()[0].GetRndCoords()};
     
     auto stats {Stats(5, 5, 10)};
-    
+
     string name {"hero"};
-    
-    auto player {std::make_shared<Player>(Player(start_coords.first,
-                                                 start_coords.second,
-                                                 '@',
-                                                 name,
-                                                 TCODColor::white,
-                                                 stats))};
-    
-    player->InitializeAi(std::make_shared<PlayerAi>());
-    
+
+    auto player {std::make_shared<Player>()};
+
+    player->Initialize(start_coords.first,
+                       start_coords.second,
+                       '@',
+                       name,
+                       TCODColor::white,
+                       stats);
+
     // Monster generation
     auto m_start_coords {dungeon_map->GetRoomList()[2].GetRndCoords()};
     
     auto m_stats {Stats(2, 2, 10)};
-    
+
     string m_name {"goblin"};
-    
-    auto goblin {std::make_shared<Player>(Player(m_start_coords.first,
-                                                 m_start_coords.second,
-                                                 'g',
-                                                 m_name,
-                                                 TCODColor::green,
-                                                 m_stats))};
-    
-    goblin->InitializeAi(std::make_shared<MonsterAi>());
-    
+
+    auto goblin {std::make_shared<Monster>()};
+    goblin->Initialize(m_start_coords.first,
+                       m_start_coords.second,
+                       'g',
+                       m_name,
+                       TCODColor::green,
+                       m_stats);
+
     eng.Initialize(dungeon_map,
                    player);
-    
+
     // Add a monster to the dungeon
     eng.AddMonster(goblin);
 }

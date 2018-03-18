@@ -1,12 +1,20 @@
 #include "player.hpp"
 
+#include <cassert>
+
 #include "game_constants.hpp"
 
-Player::Player(size_t x, size_t y, int ch, string &name, const TCODColor &col, Stats &stats) :
-    Actor {x, y, ch, name, col, stats},
-    fov_radius_ {kDefaultFovRadius}
-{}
+Player::Player() :
+fov_radius_ {kDefaultFovRadius} {
+    assert(!initialized_);
+}
 
-int Player::GetFovRadius() {    
+void Player::Update() {
+    assert(initialized_);
+}
+
+int Player::GetFovRadius() {
+    assert(initialized_);
+
     return fov_radius_;
 }
