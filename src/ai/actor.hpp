@@ -33,6 +33,8 @@ struct Stats {
 
 };
 
+class ActionManager;
+
 /**
  This class represent an intelligent entity on a map
  */
@@ -48,8 +50,9 @@ public:
      @param name The name of the actor.
      @param color The color to represent this actor.
      @param stats The stats for this actor.
+     @param action_manager A pointer to the ActionManager.
      */
-    void Initialize(size_t x, size_t y, const int &sprite, std::string &name, const TCODColor &color, const Stats &stats);
+    void Initialize(size_t x, size_t y, const int &sprite, std::string &name, const TCODColor &color, const Stats &stats, std::shared_ptr<ActionManager> action_manager);
     
     virtual void Update() = 0;
     
@@ -69,13 +72,15 @@ public:
 //    void ApplyDmg(size_t dmg);
 //    void Die();
     
-private:
+protected:
+    std::shared_ptr<ActionManager> action_manager_;  /**< Pointer to the ActionManager */
+    
     size_t x_, y_;      /**< Location on the current map. */
     uint floor_;        /**< Current floor. */
     std::string map_category_; /**< Current map category */
     int sprite_;        /**< Character used to represent this actor. */
     TCODColor color_;   /**< Color used to represent this actor. */
-    std::string name_;       /**< Name of this actor. */
+    std::string name_;  /**< Name of this actor. */
     Stats stats_;       /**< Statsof this actor. */
 };
 

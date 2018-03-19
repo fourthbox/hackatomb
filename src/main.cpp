@@ -46,7 +46,8 @@ void SetupDungeonGame(Engine &eng, std::shared_ptr<libpmg::DungeonMap> dungeon_m
                        '@',
                        name,
                        TCODColor::white,
-                       stats);
+                       stats,
+                       eng.GetActionManager());
 
     // Monster generation
     auto m_start_coords {dungeon_map->GetRoomList()[2].GetRndCoords()};
@@ -61,7 +62,8 @@ void SetupDungeonGame(Engine &eng, std::shared_ptr<libpmg::DungeonMap> dungeon_m
                        'g',
                        m_name,
                        TCODColor::green,
-                       m_stats);
+                       m_stats,
+                       eng.GetActionManager());
 
     eng.Initialize(dungeon_map,
                    player);

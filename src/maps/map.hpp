@@ -6,8 +6,8 @@
 #ifndef MAP_HPP_
 #define MAP_HPP_
 
-#include "libpmg.hpp"
 #include "libtcod.hpp"
+#include "libpmg.hpp"
 
 /**
  Class responsible for the management of a hackatomb dungeon Map.

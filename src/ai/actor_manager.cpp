@@ -2,8 +2,6 @@
 
 #include "game_utils.hpp"
 
-typedef std::shared_ptr<Actor> p_Actor;
-
 using std::string;
 
 void ActorManager::Initialize() {
@@ -11,12 +9,10 @@ void ActorManager::Initialize() {
     initialized_ = true;
 }
 
-p_Actor ActorManager::GetActorByCoordinates(size_t x, size_t y, string &map_category, short floor) {
+Actor_p ActorManager::GetActorByCoordinates(size_t x, size_t y) {
     assert(initialized_);
     for (auto const &actor : actor_list_) {
-        if (actor->map_category_ == map_category &&
-            actor->floor_ == floor &&
-            actor->x_ == x && actor->y_ == y) {
+        if (actor->x_ == x && actor->y_ == y) {
 //            if (map_category.empty() && )
         }
     }
@@ -32,13 +28,13 @@ void ActorManager::Update() {
     }
 }
 
-std::vector<p_Actor>& ActorManager::GetActorList() {
+std::vector<Actor_p>& ActorManager::GetActorList() {
     assert(initialized_);
     
     return actor_list_;
 }
 
-bool ActorManager::AddActor(std::shared_ptr<Actor> new_actor) {
+bool ActorManager::AddActor(Actor_p new_actor) {
     assert(initialized_);
     
     for (auto const &actor : actor_list_) {

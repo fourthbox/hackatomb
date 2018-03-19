@@ -22,11 +22,9 @@ public:
      Unless specified, it looks on the current floor only.
      @param x The X coordinate.
      @param y The Y coordinate.
-     @param map_category The map category upon which the actor is.
-     @param floor The floor category upon which the actor is.
      @return A pointer to the actor if an actor is find, nullptr otherwise.
      */
-    std::shared_ptr<Actor> GetActorByCoordinates(std::size_t x, std::size_t y, std::string &map_category, short floor);
+    std::shared_ptr<Actor> GetActorByCoordinates(std::size_t x, std::size_t y);
     
     std::vector<std::shared_ptr<Actor>>& GetActorList();
     

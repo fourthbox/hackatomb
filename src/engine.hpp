@@ -7,10 +7,11 @@
 #ifndef ENGINE_HPP_
 #define ENGINE_HPP_
 
+#include "action_manager.hpp"
 #include "actor_manager.hpp"
-#include "player.hpp"
-#include "map_builder.hpp"
+#include "libpmg.hpp"
 #include "maps_manager.hpp"
+#include "player.hpp"
 #include "root_console_manager.hpp"
 #include "ui_manager.hpp"
 #include "world.hpp"
@@ -21,6 +22,7 @@
  */
 class Engine : public InitiableObject{
 public:
+    Engine();
     // Getters and Setters
 //    constexpr void PlayerPerformedAction() { game_status_ = TurnPhase::ACTION; }
     
@@ -48,21 +50,15 @@ public:
     void AddMonster(Actor_p monster);   //TODO: temporary design
 //    bool CanMoveToPosition(size_t x, size_t y);
     
-    /**
-     Enumerator that defines the phases of the turn.
-     */
-    enum struct TurnPhase {
-        IDLE,   /**< The game is idle. Waiting for a player input to procede. */
-        ACTION  /**< The player has performed an action. Every actor will perform an action. */
-    };
+    std::shared_ptr<ActionManager> GetActionManager() { return action_manager_; } // TODO: TEMP FOR DEBUG PURPOSES
     
 private:
     // Entities management
     Player_p player_;                   /**< Pointer to the player. */
-    ActorManager actor_manager_;        /**< Manager for all actors of the loaded game */
+    std::shared_ptr<ActorManager> actor_manager_;        /**< Manager for all actors of the loaded game */
     
     // Map management
-    MapsManager maps_manager_;          /**< The manager for the maps used in the game */
+    std::shared_ptr<MapsManager> maps_manager_;          /**< The manager for the maps used in the game */
     
     // World management
     std::unique_ptr<World> world_map_;  /**< Pointer to the current world map */
@@ -73,6 +69,7 @@ private:
     // Game management
     TurnPhase game_status_;             /**< Keeps track of the current TurnPhase */
     RootConsoleManager root_console_manager_;   /**< Manager for the root console. It is responsable for drawing every console on the main one */
+    std::shared_ptr<ActionManager> action_manager_;
     
     /**
      Initialize the components for the engine.

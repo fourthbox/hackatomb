@@ -1,13 +1,13 @@
 #include "engine.hpp"
 
-#include <cassert>
-
-#include "libtcod.hpp"
 #include "game_constants.hpp"
 #include "game_utils.hpp"
 
-typedef std::shared_ptr<Actor> Actor_p;
-typedef std::shared_ptr<Map> Map_p;
+Engine::Engine() {
+    action_manager_ = std::make_shared<ActionManager>();
+    actor_manager_ = std::make_shared<ActorManager>();
+    maps_manager_ = std::make_shared<MapsManager>();
+}
 
 void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player) {
     if (initialized_) {
@@ -27,13 +27,15 @@ void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player
     auto current_floor {0};
 
     // Add first map to dungeon
-    maps_manager_.AddMapToMaster(std::move(new_map), current_map_category, current_floor);
+    maps_manager_->AddMapToMaster(std::move(new_map), current_map_category, current_floor);
     // Set the map manager to be in the current map
-    maps_manager_.current_map_category_ = current_map_category;
-    maps_manager_.current_floor_ = current_floor;
+    maps_manager_->current_map_category_ = current_map_category;
+    maps_manager_->current_floor_ = current_floor;
     
     // Add the player
     this->player_ = player;
+    
+    action_manager_->Initialize(actor_manager_, maps_manager_);
     
     // Set as initialized
     initialized_ = true;
@@ -67,10 +69,10 @@ void Engine::InitEngine() {
     root_console_manager_.Initialize(kRootViewWidth, kRootViewHeight, "hackatomb");
     
     // Initialize the Maps Manager
-    maps_manager_.Initialize();
+    maps_manager_->Initialize();
     
     // Initialize the Actor Manager
-    actor_manager_.Initialize();
+    actor_manager_->Initialize();
 }
 
 void Engine::InitUi() {
@@ -98,22 +100,22 @@ void Engine::Update() {
     
     player_->Update();
     
-    actor_manager_.Update();
+    actor_manager_->Update();
 }
 
 void Engine::Render() {
     assert(initialized_);
     
     // Draw the map
-    maps_manager_.Draw(root_console_manager_.main_view_);
+    maps_manager_->Draw(root_console_manager_.main_view_);
     
     // Draw the player
     player_->Draw(root_console_manager_.main_view_);
 
     // Draw monsters
     
-    for (auto const &actor : actor_manager_.GetActorList()) {
-        if (maps_manager_.IsInFov(actor->GetPosition().GetX(), actor->GetPosition().GetY()))
+    for (auto const &actor : actor_manager_->GetActorList()) {
+        if (maps_manager_->IsInFov(actor->GetPosition().GetX(), actor->GetPosition().GetY()))
             actor->Draw(root_console_manager_.main_view_);
     }
 
@@ -146,7 +148,7 @@ void Engine::RenderWorld() {
 void Engine::InitFov() {
     assert(initialized_);
 
-    maps_manager_.ComputeFov(player_);
+    maps_manager_->ComputeFov(player_);
 }
 
 //Actor_p Engine::GetActor(size_t x, size_t y) {
@@ -161,5 +163,5 @@ void Engine::InitFov() {
 //}
 
 void Engine::AddMonster(Actor_p monster) {
-    assert(initialized_ && actor_manager_.AddActor(monster));
+    assert(initialized_ && actor_manager_->AddActor(monster));
 }

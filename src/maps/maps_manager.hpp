@@ -11,9 +11,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "player.hpp"
 #include "map.hpp"
-#include "map_builder.hpp"
+#include "player.hpp"
 
 /**
  Class responsable for the management and initialization of every dungeon map.

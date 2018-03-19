@@ -3,10 +3,10 @@
  @author pat <pat@fourthbox.com>
  */
 
-#include "actor.hpp"
-
 #ifndef MONSTER_HPP_
 #define MONSTER_HPP_
+
+#include "actor.hpp"
 
 class Monster : public Actor {
 public:
