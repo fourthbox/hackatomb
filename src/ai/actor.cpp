@@ -28,24 +28,3 @@ libpmg::Location Actor::GetPosition() {
     
     return libpmg::Location(x_, y_);
 }
-
-//size_t Actor::GetAtk() {
-//    return stats_.atk_;
-//}
-//
-//size_t Actor::GetDef() {
-//    return stats_.def_;
-//}
-//
-//void Actor::ApplyDmg(size_t dmg) {
-//    stats_.current_hp_ -= dmg;
-//
-//    if (stats_.current_hp_ <= 0)
-//        Die();
-//}
-//
-//void Actor::Die() {
-//    sprite_ = '%';
-//    color_ = TCODColor::darkRed;
-//}
-

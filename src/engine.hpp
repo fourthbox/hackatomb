@@ -23,8 +23,6 @@
 class Engine : public InitiableObject{
 public:
     Engine();
-    // Getters and Setters
-//    constexpr void PlayerPerformedAction() { game_status_ = TurnPhase::ACTION; }
     
     /**
      Initialize every component of this class. Add the first map to the MapsManager and place the player into the map.
@@ -46,9 +44,7 @@ public:
     void Render();
     void RenderWorld(); // TODO: temporary design
     
-//    Actor_p GetActor(size_t x, size_t y);
     void AddMonster(Actor_p monster);   //TODO: temporary design
-//    bool CanMoveToPosition(size_t x, size_t y);
     
     std::shared_ptr<ActionManager> GetActionManager() { return action_manager_; } // TODO: TEMP FOR DEBUG PURPOSES
     
@@ -70,21 +66,6 @@ private:
     TurnPhase game_status_;             /**< Keeps track of the current TurnPhase */
     RootConsoleManager root_console_manager_;   /**< Manager for the root console. It is responsable for drawing every console on the main one */
     std::shared_ptr<ActionManager> action_manager_;
-    
-    /**
-     Initialize the components for the engine.
-     */
-    void InitEngine();
-    
-    /**
-     Initialize the components for the UI.
-     */
-    void InitUi();
-    
-    /**
-     Initialize the Fov, by executing it.
-     */
-    void InitFov();
 };
 
 #endif /* ENGINE_HPP_ */

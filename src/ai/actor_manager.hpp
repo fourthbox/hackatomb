@@ -24,16 +24,28 @@ public:
      @param y The Y coordinate.
      @return A pointer to the actor if an actor is find, nullptr otherwise.
      */
-    std::shared_ptr<Actor> GetActorByCoordinates(std::size_t x, std::size_t y);
+    Actor_p GetActorByCoordinates(size_t x, size_t y);
     
+    /**
+     Get the list of all the loaded actors.
+     @return A vector of pointers to the actors.
+     */
     std::vector<std::shared_ptr<Actor>>& GetActorList();
     
-    bool AddActor(std::shared_ptr<Actor> new_actor);
+    /**
+     Add an actor to the actor list performing a check for dupluicates.
+     @param new_actor A pointer to the actor to add.
+     @return True if the Actor was succesfully added, false otherwise.
+     */
+    bool AddActor(Actor_p new_actor);
 
+    /**
+     Call for Update() on every actor in actor_list_
+     */
     void Update();
     
 private:
-    std::vector<std::shared_ptr<Actor>> actor_list_;    /**< List containing all the actors in the loaded game */
+    std::vector<Actor_p> actor_list_;    /**< List containing all the actors in the loaded game */
     
 };
 
