@@ -1,8 +1,9 @@
 #include "engine.hpp"
 #include "game_constants.hpp"
-#include "key_mapper.hpp"
 #include "libpmg.hpp"
 #include "monster.hpp"
+
+#include <iostream>
 
 using namespace std;
 
@@ -104,6 +105,15 @@ void SetupWorldGame(Engine &eng, std::shared_ptr<libpmg::WorldMap> world_map) {
 
 int main(int argc, char **argv) {
 
+//    shared_ptr<Player> play1 {make_shared<Player>()};
+//    shared_ptr<Player> play11 = play1;
+//    shared_ptr<Player> play2 {make_shared<Player>()};
+//
+//    cout << "play1 == play11 " << (play1 == play11 ? "true" : "false" ) << endl;
+//    cout << "play1 == play2 " << (play1 == play2 ? "true" : "false" ) << endl;
+//
+//    return 0;
+    
     srand (time(NULL));
     
     // Initialize the random manager
@@ -130,9 +140,6 @@ int main(int argc, char **argv) {
         
 //        eng.RenderWorld();
         
-        TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_MOUSE,
-                                  &KeyMapper::LastKey,
-                                  &KeyMapper::LastMousePosition);
     }
 
     return 0;

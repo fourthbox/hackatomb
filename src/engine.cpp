@@ -9,6 +9,9 @@ Engine::Engine() {
     maps_manager_ = std::make_shared<MapsManager>();
 }
 
+#include <iostream>
+using namespace std;
+
 void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player) {
     if (initialized_) {
         Utils::LogWarning("Engine", "Engine already initialized.");
@@ -46,9 +49,13 @@ void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player
     maps_manager_->current_floor_ = current_floor;
     
     // Add the player
-    this->player_ = player;
+    player_ = player;
     
+    // Initialize the Action Manager
     action_manager_->Initialize(actor_manager_, maps_manager_);
+    
+    // Initialize Input Manager
+    input_manager_.Initialize(player_);
     
     // Compute fov the first time
     maps_manager_->ComputeFov(player_);
@@ -78,6 +85,8 @@ void Engine::Update() {
     // Idle phase.
     // Everything that needs to be done when no user action has been detected
     game_status_ = TurnPhase::IDLE;
+        
+    input_manager_.Update();
     
     player_->Update();
     
@@ -94,7 +103,6 @@ void Engine::Render() {
     player_->Draw(root_console_manager_.main_view_);
 
     // Draw monsters
-    
     for (auto const &actor : actor_manager_->GetActorList()) {
         if (maps_manager_->IsInFov(actor->GetPosition().GetX(), actor->GetPosition().GetY()))
             actor->Draw(root_console_manager_.main_view_);

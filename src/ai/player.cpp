@@ -2,53 +2,53 @@
 
 #include "action_manager.hpp"
 #include "game_constants.hpp"
-#include "key_mapper.hpp"
 
 Player::Player() :
 fov_radius_ {kDefaultFovRadius} {
     assert(!initialized_);
+    
+    action_ = Action::NONE;
 }
 
 void Player::Update() {
     assert(initialized_);
     
-    auto action { KeyMapper::GetActionByKey() };
     size_t x {0};
     size_t y {0};
         
-    switch(action) {
-        case KeyMapper::Action::MOVE_N:
+    switch(action_) {
+        case Action::MOVE_N:
             y--;
             break;
             
-        case KeyMapper::Action::MOVE_NE:
+        case Action::MOVE_NE:
             y--;
             x++;
             break;
             
-        case KeyMapper::Action::MOVE_E:
+        case Action::MOVE_E:
             x++;
             break;
             
-        case KeyMapper::Action::MOVE_SE:
+        case Action::MOVE_SE:
             y++;
             x++;
             break;
             
-        case KeyMapper::Action::MOVE_S:
+        case Action::MOVE_S:
             y++;
             break;
 
-        case KeyMapper::Action::MOVE_SW:
+        case Action::MOVE_SW:
             y++;
             x--;
             break;
             
-        case KeyMapper::Action::MOVE_W:
+        case Action::MOVE_W:
             x--;
             break;
             
-        case KeyMapper::Action::MOVE_NW:
+        case Action::MOVE_NW:
             y--;
             x--;
             break;
@@ -69,4 +69,10 @@ int Player::GetFovRadius() {
     assert(initialized_);
 
     return fov_radius_;
+}
+
+void Player::SetAction(Action action) {
+    assert(initialized_);
+
+    action_ = action;
 }

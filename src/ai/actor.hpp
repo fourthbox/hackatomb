@@ -67,7 +67,7 @@ public:
      @return A libpmg::Location containing the coordinates on the current map.
      */
     libpmg::Location GetPosition();
-    
+        
 protected:
     std::shared_ptr<ActionManager> action_manager_;  /**< Pointer to the ActionManager */
     

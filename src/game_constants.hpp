@@ -52,4 +52,14 @@ static const int kCharDoubleLineCross = TCOD_CHAR_DCROSS;
 
 static const int kCharBlock2 = TCOD_CHAR_BLOCK2;
 
+// Keyboard controls
+static const char kMoveNorth = 'k';
+static const char kMoveNorthEast = 'u';
+static const char kMoveEast = 'l';
+static const char kMoveSouthEast = 'n';
+static const char kMoveSouth = 'j';
+static const char kMoveSouthWest = 'b';
+static const char kMoveWest = 'h';
+static const char kMoveNorthWest = 'y';
+
 #endif /* GAME_CONSTANTS_HPP_ */
