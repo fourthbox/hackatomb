@@ -11,8 +11,10 @@
 #include <string>
 #include <unordered_map>
 
+#include "initiable_object.hpp"
 #include "map.hpp"
-#include "player.hpp"
+
+class Player;
 
 /**
  Class responsable for the management and initialization of every dungeon map.
@@ -56,7 +58,7 @@ public:
      Compute the field of view of the specified actor.
      @param player The player.
      */
-    void ComputeFov(Player_p player);
+    void ComputeFov(std::shared_ptr<Player> player);
     
     /**
      Check whether the specified position is in the field of view or not.

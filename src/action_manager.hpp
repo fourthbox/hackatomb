@@ -10,6 +10,21 @@
 #include "maps_manager.hpp"
 
 /**
+ Enumerator that holds the possible actions performable by an actor
+ */
+enum struct Action {
+    NONE,
+    MOVE_N,
+    MOVE_NE,
+    MOVE_E,
+    MOVE_SE,
+    MOVE_S,
+    MOVE_SW,
+    MOVE_W,
+    MOVE_NW
+};
+
+/**
  Enumerator that defines the phases of the turn.
  */
 enum struct TurnPhase {

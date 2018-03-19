@@ -11,18 +11,6 @@
 #include "initiable_object.hpp"
 #include "libtcod.hpp"
 
-enum struct Action {
-    NONE,
-    MOVE_N,
-    MOVE_NE,
-    MOVE_E,
-    MOVE_SE,
-    MOVE_S,
-    MOVE_SW,
-    MOVE_W,
-    MOVE_NW
-};
-
 class Player;
 
 class InputManager : public InitiableObject {

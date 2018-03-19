@@ -6,8 +6,7 @@
 #ifndef PLAYER_HPP_
 #define PLAYER_HPP_
 
-#include "actor.hpp"
-#include "input_manager.hpp"
+#include "action_manager.hpp"
 
 /**
  This class extends Actor with the functionalities that are unique to the player

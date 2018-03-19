@@ -1,9 +1,9 @@
 #include "maps_manager.hpp"
+
 #include "game_constants.hpp"
 #include "game_utils.hpp"
 #include "libtcod.hpp"
-
-typedef std::shared_ptr<Actor> Actor_p;
+#include "player.hpp"
 
 using std::string;
 

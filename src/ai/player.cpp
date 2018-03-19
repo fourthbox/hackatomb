@@ -1,6 +1,5 @@
 #include "player.hpp"
 
-#include "action_manager.hpp"
 #include "game_constants.hpp"
 
 Player::Player() :

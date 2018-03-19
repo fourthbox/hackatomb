@@ -9,6 +9,7 @@
 
 #include "action_manager.hpp"
 #include "actor_manager.hpp"
+#include "input_manager.hpp"
 #include "libpmg.hpp"
 #include "maps_manager.hpp"
 #include "player.hpp"
