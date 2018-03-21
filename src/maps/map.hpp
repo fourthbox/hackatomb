@@ -75,4 +75,8 @@ private:
     int GetWallChar(size_t x, size_t y);
 };
 
+typedef std::shared_ptr<Map> Map_p;
+typedef std::pair<size_t, size_t> Coordinate;
+typedef std::shared_ptr<std::pair<size_t, size_t>> Coordinate_p;
+
 #endif /* MAP_HPP_ */

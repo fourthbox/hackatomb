@@ -13,6 +13,8 @@
 
 class Player;
 
+/**
+ */
 class InputManager : public InitiableObject {
 public:
     void Initialize(std::shared_ptr<Player> player);

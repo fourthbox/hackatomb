@@ -9,9 +9,6 @@ Engine::Engine() {
     maps_manager_ = std::make_shared<MapsManager>();
 }
 
-#include <iostream>
-using namespace std;
-
 void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player) {
     if (initialized_) {
         Utils::LogWarning("Engine", "Engine already initialized.");

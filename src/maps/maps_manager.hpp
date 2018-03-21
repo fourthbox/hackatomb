@@ -69,7 +69,8 @@ public:
     bool IsInFov(size_t x, size_t y);
     
 private:
-    std::unordered_map<std::string, std::map< size_t, std::unique_ptr<Map> > > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */
+    std::unordered_map<std::string, std::map< size_t, Map_p> > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */
 
 };
+
 #endif /* MAPS_MANAGER_HPP_ */
