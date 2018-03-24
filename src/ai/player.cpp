@@ -58,6 +58,7 @@ void Player::Update() {
     
     if (x != 0 || y != 0) {
         if (action_manager_->CanMove(x_ + x, y_ + y)) {
+            action_manager_->Moved();
             x_ += x;
             y_ += y;
         }

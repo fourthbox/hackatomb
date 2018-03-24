@@ -7,7 +7,7 @@
 
 using std::string;
 
-void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, string &map_category, short floor) {
+void MapsManager::AddMapToMaster(Map_p map, string &map_category, short floor) {
     assert(floor >= -1);
     
     if (floor == -1) {
@@ -38,8 +38,8 @@ void MapsManager::ComputeFov(Player_p player) {
     assert(master_maps_holder_.count(current_map_category_) > 0 &&
            master_maps_holder_[current_map_category_].count(current_floor_) > 0);
 
-    master_maps_holder_[current_map_category_][current_floor_]->computeFov(player->GetPosition().GetX(),
-                                                                           player->GetPosition().GetY(),
+    master_maps_holder_[current_map_category_][current_floor_]->computeFov(player->GetPosition().first,
+                                                                           player->GetPosition().second,
                                                                            player->GetFovRadius());
 }
 

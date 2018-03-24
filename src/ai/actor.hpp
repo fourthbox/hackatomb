@@ -9,7 +9,6 @@
 #include <string>
 
 #include "initiable_object.hpp"
-#include "libpmg.hpp"
 #include "libtcod.hpp"
 
 /**
@@ -34,6 +33,7 @@ struct Stats {
 };
 
 class ActionManager;
+class ActorManager;
 
 /**
  This class represent an intelligent entity on a map
@@ -64,12 +64,16 @@ public:
     
     /**
      Gets the current position of the actor.
-     @return A libpmg::Location containing the coordinates on the current map.
+     @return A pair containing the coordinates on the current map.
      */
-    libpmg::Location GetPosition();
+    std::pair<size_t, size_t> GetPosition();
+    
+    // This is only a temporary solution, because the actor manager should manage the initialization and instantiation of the actors, passing itself as a parameter.
+    void SetActorManager(std::shared_ptr<ActorManager> am) {actor_manager_ = am;}
         
 protected:
     std::shared_ptr<ActionManager> action_manager_;  /**< Pointer to the ActionManager */
+    std::shared_ptr<ActorManager> actor_manager_;
     
     size_t x_, y_;      /**< Location on the current map. */
     uint floor_;        /**< Current floor. */

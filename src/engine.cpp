@@ -33,29 +33,29 @@ void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player
     root_console_manager_.SetBottomWindow(ui_manager_.message_log_window_);
 
     // Initialize the map
-    auto new_map {std::make_unique<Map>(map)};
+    auto new_map {std::make_shared<Map>(map)};
     
     // Configure the map keys
     std::string current_map_category {"main_dungeon"};
     auto current_floor {0};
 
     // Add first map to dungeon
-    maps_manager_->AddMapToMaster(std::move(new_map), current_map_category, current_floor);
+    maps_manager_->AddMapToMaster(new_map, current_map_category, current_floor);
     // Set the map manager to be in the current map
     maps_manager_->current_map_category_ = current_map_category;
     maps_manager_->current_floor_ = current_floor;
     
     // Add the player
-    player_ = player;
+    actor_manager_->AddPlayer(player);
     
     // Initialize the Action Manager
     action_manager_->Initialize(actor_manager_, maps_manager_);
     
     // Initialize Input Manager
-    input_manager_.Initialize(player_);
+    input_manager_.Initialize(player);
     
     // Compute fov the first time
-    maps_manager_->ComputeFov(player_);
+    maps_manager_->ComputeFov(player);
 
     // Set as initialized
     initialized_ = true;
@@ -81,13 +81,14 @@ void Engine::Update() {
         
     // Idle phase.
     // Everything that needs to be done when no user action has been detected
-    game_status_ = TurnPhase::IDLE;
-        
+    action_manager_->StartTurn();
+
     input_manager_.Update();
     
-    player_->Update();
+    actor_manager_->GetPlayer()->Update();
     
-    actor_manager_->Update();
+    if (action_manager_->GetTurnPhase() == TurnPhase::ACTION)
+        actor_manager_->Update();
 }
 
 void Engine::Render() {
@@ -97,11 +98,11 @@ void Engine::Render() {
     maps_manager_->Draw(root_console_manager_.main_view_);
     
     // Draw the player
-    player_->Draw(root_console_manager_.main_view_);
+    actor_manager_->GetPlayer()->Draw(root_console_manager_.main_view_);
 
     // Draw monsters
     for (auto const &actor : actor_manager_->GetActorList()) {
-        if (maps_manager_->IsInFov(actor->GetPosition().GetX(), actor->GetPosition().GetY()))
+        if (maps_manager_->IsInFov(actor->GetPosition().first, actor->GetPosition().second))
             actor->Draw(root_console_manager_.main_view_);
     }
 

@@ -12,10 +12,16 @@ void ActionManager::Initialize(std::shared_ptr<ActorManager> actor_manager, std:
     initialized_ = true;
 }
 
-void ActionManager::Moved(Actor_p actor) {
+void ActionManager::Moved() {
     assert(initialized_);
     
     current_turn_phase_ = TurnPhase::ACTION;
+}
+
+void ActionManager::StartTurn() {
+    assert(initialized_);
+    
+    current_turn_phase_ = TurnPhase::IDLE;
 }
 
 bool ActionManager::CanMove(size_t x, size_t y) {
@@ -34,5 +40,11 @@ bool ActionManager::CanInteract(size_t x, size_t y) {
     assert(initialized_);
     
     return true;
+}
+
+TurnPhase ActionManager::GetTurnPhase() {
+    assert(initialized_);
+
+    return current_turn_phase_;
 }
 

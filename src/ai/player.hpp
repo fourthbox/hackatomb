@@ -30,7 +30,7 @@ public:
      Set the action the player must perform
      */
     void SetAction(Action action);
-    
+            
 private:
     int fov_radius_;    /**< The field of view of the player */
     

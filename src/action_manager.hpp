@@ -71,9 +71,12 @@ public:
     
     /**
      Signals that an actor moved in the specified position, setting the current_turn_phase_ to ACTION.
-     @param actor A pointer to the actor.
      */
-    void Moved(std::shared_ptr<Actor> actor);
+    void Moved();
+    
+    void StartTurn();
+    
+    TurnPhase GetTurnPhase();
     
 private:
     TurnPhase current_turn_phase_;                  /**< Keeps the current turn phase */

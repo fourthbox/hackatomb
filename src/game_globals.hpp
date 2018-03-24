@@ -13,4 +13,9 @@
 #define DEPRECATED_ [[deprecated]]
 #endif
 
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
 #endif /* GAME_GLOBALS_HPP_ */

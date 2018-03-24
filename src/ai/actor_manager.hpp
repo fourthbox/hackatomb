@@ -10,11 +10,14 @@
 
 #include "actor.hpp"
 
+class Player;
+
 /**
  This class is responsable for the maangement and initialization of every actor in the loaded game.
  */
-class ActorManager : public InitiableObject{
+class ActorManager : public InitiableObject, public std::enable_shared_from_this<ActorManager> {
 public:
+    ActorManager();
     void Initialize();
 
     /**
@@ -38,14 +41,18 @@ public:
      @return True if the Actor was succesfully added, false otherwise.
      */
     bool AddActor(Actor_p new_actor);
+    
+    void AddPlayer(std::shared_ptr<Player> player);
+    std::shared_ptr<Player> GetPlayer();
 
     /**
      Call for Update() on every actor in actor_list_
      */
     void Update();
-    
+        
 private:
     std::vector<Actor_p> actor_list_;    /**< List containing all the actors in the loaded game */
+    std::shared_ptr<Player> player_;                   /**< Pointer to the player. */
     
 };
 

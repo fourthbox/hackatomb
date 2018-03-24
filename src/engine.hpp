@@ -48,10 +48,10 @@ public:
     void AddMonster(Actor_p monster);   //TODO: temporary design
     
     std::shared_ptr<ActionManager> GetActionManager() { return action_manager_; } // TODO: TEMP FOR DEBUG PURPOSES
+    Map_p GetCurrentMap() { return maps_manager_->GetCurrentMap(); } // TODO: TEMP FOR DEBUG PURPOSES
     
 private:
     // Entities management
-    Player_p player_;                   /**< Pointer to the player. */
     std::shared_ptr<ActorManager> actor_manager_;        /**< Manager for all actors of the loaded game */
     
     // Map management
@@ -64,7 +64,6 @@ private:
     UiManager ui_manager_;              /**< The manager for everything UI */
     
     // Game management
-    TurnPhase game_status_;             /**< Keeps track of the current TurnPhase */
     RootConsoleManager root_console_manager_;   /**< Manager for the root console. It is responsable for drawing every console on the main one */
     std::shared_ptr<ActionManager> action_manager_; /**< Manager for every movement, attack or interaction done by an actor */
     InputManager input_manager_;        /**< Manager for keyboard and mouse inputs */

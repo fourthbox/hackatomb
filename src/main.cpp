@@ -57,6 +57,9 @@ void SetupDungeonGame(Engine &eng, std::shared_ptr<libpmg::DungeonMap> dungeon_m
 
     string m_name {"goblin"};
 
+    eng.Initialize(dungeon_map,
+                   player);
+
     auto goblin {std::make_shared<Monster>()};
     goblin->Initialize(m_start_coords.first,
                        m_start_coords.second,
@@ -64,10 +67,8 @@ void SetupDungeonGame(Engine &eng, std::shared_ptr<libpmg::DungeonMap> dungeon_m
                        m_name,
                        TCODColor::green,
                        m_stats,
-                       eng.GetActionManager());
-
-    eng.Initialize(dungeon_map,
-                   player);
+                       eng.GetActionManager(),
+                       eng.GetCurrentMap());
 
     // Add a monster to the dungeon
     eng.AddMonster(goblin);

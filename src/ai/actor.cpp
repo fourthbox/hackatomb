@@ -23,8 +23,8 @@ void Actor::Draw(std::shared_ptr<TCODConsole> console) {
     console->setCharForeground(x_, y_, color_);
 }
 
-libpmg::Location Actor::GetPosition() {
+std::pair<size_t, size_t> Actor::GetPosition() {
     assert(initialized_);
     
-    return libpmg::Location(x_, y_);
+    return std::make_pair(x_, y_);
 }

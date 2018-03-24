@@ -7,6 +7,7 @@
 
 class PathFinder : public InitiableObject {
 public:
+    PathFinder();
     void Initialize(Map_p map);
     Coordinate_p Walk(size_t from_x, size_t from_y, size_t to_x, size_t to_y, size_t steps = 1);
     

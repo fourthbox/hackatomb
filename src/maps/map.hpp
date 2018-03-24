@@ -36,6 +36,14 @@ public:
      */
     bool IsInFov(size_t x, size_t y);
     
+    /**
+     Check if a tile is flagged as a wall.
+     @param x X coordinate
+     @param y Y coordinate
+     @return True if the tile is a wall, false otherwise or if the tile fails the bounds check.
+     */
+    bool IsWall(size_t x, size_t y);
+    
 private:
     /**
      Bakes the libpmg map into the libtcod map.
@@ -59,20 +67,13 @@ private:
     bool IsExplored(size_t x, size_t y);
     
     /**
-     Check if a tile is flagged as a wall.
-     @param x X coordinate
-     @param y Y coordinate
-     @return True if the tile is a wall, false otherwise or if the tile fails the bounds check.
-     */
-    bool IsWall(size_t x, size_t y);
-
-    /**
      Get a wall character, based on the tiles adjacent to it.
      @param x X coordinate
      @param y Y coordinate
      @return The corresponding wall char
      */
     int GetWallChar(size_t x, size_t y);
+    
 };
 
 typedef std::shared_ptr<Map> Map_p;
