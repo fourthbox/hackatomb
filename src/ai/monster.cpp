@@ -5,10 +5,17 @@
 void Monster::Update() {
     assert(initialized_);
     
-    auto location {path_finder_.Walk(x_,
-                                     y_,
-                                     actor_manager_->GetPlayer()->GetPosition().first,
-                                     actor_manager_->GetPlayer()->GetPosition().second)};
+    auto px = actor_manager_->GetPlayer()->GetPosition().first;
+    auto py = actor_manager_->GetPlayer()->GetPosition().second;
+    
+    // Computer fov for the monster
+    maps_manager_->ComputeFov(shared_from_this());
+    
+    // If the hero is not in range, don't do anything
+    if (!maps_manager_->IsInFov(px, py))
+        return;
+    
+    auto location {path_finder_.Walk(x_, y_, px, py)};
     
     if (location == nullptr)
         return;

@@ -95,7 +95,7 @@ void Engine::Render() {
     assert(initialized_);
     
     // Draw the map
-    maps_manager_->Draw(root_console_manager_.main_view_);
+    maps_manager_->Draw(root_console_manager_.main_view_, actor_manager_->GetPlayer());
     
     // Draw the player
     actor_manager_->GetPlayer()->Draw(root_console_manager_.main_view_);
@@ -104,6 +104,10 @@ void Engine::Render() {
     for (auto const &actor : actor_manager_->GetActorList()) {
         if (maps_manager_->IsInFov(actor->GetPosition().first, actor->GetPosition().second))
             actor->Draw(root_console_manager_.main_view_);
+#if CHEAT_NO_FOV_
+        else
+            actor->Draw(root_console_manager_.main_view_);
+#endif
     }
 
     // Draw the Ui

@@ -34,7 +34,7 @@ public:
      @param y The y coordinate.
      @return True if is in fov, false otherwise.
      */
-    bool IsInFov(size_t x, size_t y);
+    bool IsInFov(size_t x, size_t y, bool updateMapVisibility = false);
     
     /**
      Check if a tile is flagged as a wall.

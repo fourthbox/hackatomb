@@ -36,7 +36,7 @@ void SetupDungeonGame(Engine &eng, libpmg::DungeonMap *dungeon_map) {
     // Player generation
     auto start_coords {dungeon_map->GetRoomList()[0].GetRndCoords()};
     
-    auto stats {Stats(5, 5, 10)};
+    auto stats {Stats(5, 5, 10, 10)};
 
     string name {"hero"};
 
@@ -54,7 +54,7 @@ void SetupDungeonGame(Engine &eng, libpmg::DungeonMap *dungeon_map) {
     // Monster generation
     auto m_start_coords {dungeon_map->GetRoomList()[2].GetRndCoords()};
     
-    auto m_stats {Stats(2, 2, 10)};
+    auto m_stats {Stats(2, 2, 10, 10)};
 
     string m_name {"goblin"};
 

@@ -9,7 +9,7 @@
 #include "actor.hpp"
 #include "path_finder.hpp"
 
-class Monster : public Actor {
+class Monster : public Actor, public std::enable_shared_from_this<Monster> {
 public:
     /**
      Update the player based on the action.

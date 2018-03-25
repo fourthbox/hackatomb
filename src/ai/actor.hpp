@@ -19,15 +19,17 @@ struct Stats {
     int def_;
     int max_hp_;
     int current_hp_;
+    int fov_;
     
     Stats() {
     }
     
-    Stats (int atk, int def, int max_hp) :
+    Stats (int atk, int def, int max_hp, int fov) :
     atk_ {atk},
     def_ {def},
     max_hp_ {max_hp},
-    current_hp_ {max_hp} {
+    current_hp_ {max_hp},
+    fov_ {fov} {
     }
 
 };
@@ -68,6 +70,8 @@ public:
      @return A pair containing the coordinates on the current map.
      */
     std::pair<size_t, size_t> GetPosition();
+    
+    int GetFovRadius();
     
     // This is only a temporary solution, because the actor manager should manage the initialization and instantiation of the actors, passing itself as a parameter.
     void SetActorManager(std::shared_ptr<ActorManager> am) {actor_manager_ = am;}

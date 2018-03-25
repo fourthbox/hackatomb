@@ -14,7 +14,7 @@
 #include "initiable_object.hpp"
 #include "map.hpp"
 
-class Player;
+class Actor;
 
 /**
  Class responsable for the management and initialization of every dungeon map.
@@ -34,7 +34,7 @@ public:
      Draws a specific Map on a specific console.
      @param console The console upon which to draw the map.
      */
-    void Draw(std::shared_ptr<TCODConsole> console);
+    void Draw(std::shared_ptr<TCODConsole> console, std::shared_ptr<Actor> actor);
 
     /**
      It will add the map to the map holder. There's no check for duplicates, and maps can override existing slots.
@@ -58,15 +58,16 @@ public:
      Compute the field of view of the specified actor.
      @param player The player.
      */
-    void ComputeFov(std::shared_ptr<Player> player);
+    void ComputeFov(std::shared_ptr<Actor> actor);
     
     /**
      Check whether the specified position is in the field of view or not.
      @param x The X coordinate.
      @param y The Y coordinate.
+     @param update_map_visibility If true, will update the tiles of the map that are in the fov
      @return True if the specified position is in the field of view, false otherwise.
      */
-    bool IsInFov(size_t x, size_t y);
+    bool IsInFov(size_t x, size_t y, bool update_map_visibility = false);
     
     std::unique_ptr<TCODPath> AllocatePathFromCurrentFloor(ITCODPathCallback const *callback, float diagonal_cost);
     

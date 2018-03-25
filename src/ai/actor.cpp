@@ -19,6 +19,12 @@ void Actor::Initialize(size_t x, size_t y, const int &sprite, std::string &name,
     initialized_ = true;
 }
 
+int Actor::GetFovRadius() {
+    assert(initialized_);
+    
+    return stats_.fov_;
+}
+
 void Actor::Draw(std::shared_ptr<TCODConsole> console) {
     assert(initialized_);
 

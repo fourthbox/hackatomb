@@ -65,12 +65,6 @@ void Player::Update() {
     }
 }
 
-int Player::GetFovRadius() {
-    assert(initialized_);
-
-    return fov_radius_;
-}
-
 void Player::SetAction(Action action) {
     assert(initialized_);
 
