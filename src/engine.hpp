@@ -30,8 +30,8 @@ public:
      @param map The first map to add to the MapsManager
      @param player The player
      */
-    void Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player);
-    void Initialize(std::shared_ptr<libpmg::WorldMap> map); // TODO: this is just temporary
+    void Initialize(libpmg::DungeonMap &map, Player_p player);
+//    void Initialize(std::unique_ptr<libpmg::WorldMap> map); // TODO: this is just temporary
     
     /**
      At the beginning of the function the game is put in an TurnPhase::IDLE state. Then the Update() for the player is called.
@@ -47,15 +47,15 @@ public:
     
     void AddMonster(Actor_p monster);   //TODO: temporary design
     
-    std::shared_ptr<ActionManager> GetActionManager() { return action_manager_; } // TODO: TEMP FOR DEBUG PURPOSES
-    Map_p GetCurrentMap() { return maps_manager_->GetCurrentMap(); } // TODO: TEMP FOR DEBUG PURPOSES
+    ActionManager_p GetActionManager() { return action_manager_; } // TODO: TEMP FOR DEBUG PURPOSES
+    MapsManager_p GetMapsManager() { return maps_manager_; } // TODO: TEMP FOR DEBUG PURPOSES
     
 private:
     // Entities management
-    std::shared_ptr<ActorManager> actor_manager_;        /**< Manager for all actors of the loaded game */
+    ActorManager_p actor_manager_;        /**< Manager for all actors of the loaded game */
     
     // Map management
-    std::shared_ptr<MapsManager> maps_manager_;          /**< The manager for the maps used in the game */
+    MapsManager_p maps_manager_;          /**< The manager for the maps used in the game */
     
     // World management
     std::unique_ptr<World> world_map_;  /**< Pointer to the current world map */
@@ -65,7 +65,7 @@ private:
     
     // Game management
     RootConsoleManager root_console_manager_;   /**< Manager for the root console. It is responsable for drawing every console on the main one */
-    std::shared_ptr<ActionManager> action_manager_; /**< Manager for every movement, attack or interaction done by an actor */
+    ActionManager_p action_manager_; /**< Manager for every movement, attack or interaction done by an actor */
     InputManager input_manager_;        /**< Manager for keyboard and mouse inputs */
 };
 

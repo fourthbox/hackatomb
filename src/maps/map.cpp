@@ -5,7 +5,7 @@
 #include "engine.hpp"
 #include "game_constants.hpp"
 
-Map::Map(std::shared_ptr<libpmg::DungeonMap> map) :
+Map::Map(libpmg::DungeonMap &map) :
     libpmg::DungeonMap {map},
     TCODMap {(int)configs_->map_width_, (int)configs_->map_height_}
 {

@@ -3,18 +3,16 @@
 
 #include "initiable_object.hpp"
 #include "libtcod.hpp"
-#include "map.hpp"
+#include "maps_manager.hpp"
 
 class PathFinder : public InitiableObject {
 public:
-    PathFinder();
-    void Initialize(Map_p map);
+    void Initialize(MapsManager_p map);
     Coordinate_p Walk(size_t from_x, size_t from_y, size_t to_x, size_t to_y, size_t steps = 1);
     
 private:
-    std::shared_ptr<TCODPath> current_path_;
+    std::unique_ptr<TCODPath> current_path_;
 
-    void SetMap(Map_p map);
     bool ComputePath(size_t from_x, size_t from_y, size_t to_x, size_t to_y);
 };
 

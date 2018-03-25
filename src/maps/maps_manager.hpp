@@ -42,7 +42,7 @@ public:
      @param map_category The map category this map belongs to.
      @param floor The floor this map belongs to. If floor is -1, it will assign the map with the lowest floor, and append it to the map golder. Default value: -1.
      */
-    void AddMapToMaster(Map_p map, std::string &map_category, short floor = -1);
+    void AddMapToMaster(std::unique_ptr<Map> map, std::string &map_category, short floor = -1);
     
     /**
      Check whether the specified position is walkable or not.
@@ -68,11 +68,15 @@ public:
      */
     bool IsInFov(size_t x, size_t y);
     
-    Map_p GetCurrentMap() { return master_maps_holder_[current_map_category_][current_floor_]; } //todo: this is temporary for bedugging purposes
+    std::unique_ptr<TCODPath> AllocatePathFromCurrentFloor(ITCODPathCallback const *callback, float diagonal_cost);
+    
+//    Map_p GetCurrentMap() { return master_maps_holder_[current_map_category_][current_floor_]; } //todo: this is temporary for bedugging purposes
     
 private:
-    std::unordered_map<std::string, std::map< size_t, Map_p> > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */
+    std::unordered_map<std::string, std::map< size_t, std::unique_ptr<Map>> > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */
 
 };
+
+typedef std::shared_ptr<MapsManager> MapsManager_p;
 
 #endif /* MAPS_MANAGER_HPP_ */

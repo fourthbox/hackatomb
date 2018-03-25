@@ -19,7 +19,7 @@ public:
      Initializes the Map, starting from a libpmg::DungeonMap.
      @param map A pointer to the map which parameters will be copied into this instance.
      */
-    Map(std::shared_ptr<libpmg::DungeonMap> map);
+    Map(libpmg::DungeonMap &map);
 
     /**
      Draws the contents of the Map on a TCODConsole.
@@ -76,7 +76,7 @@ private:
     
 };
 
-typedef std::shared_ptr<Map> Map_p;
+//typedef std::shared_ptr<Map> Map_p;
 typedef std::pair<size_t, size_t> Coordinate;
 typedef std::shared_ptr<std::pair<size_t, size_t>> Coordinate_p;
 

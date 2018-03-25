@@ -1,8 +1,10 @@
 #include "actor.hpp"
 
+#include "action_manager.hpp"
+
 using std::string;
 
-void Actor::Initialize(size_t x, size_t y, const int &sprite, std::string &name, const TCODColor &color, const Stats &stats, std::shared_ptr<ActionManager> action_manager) {
+void Actor::Initialize(size_t x, size_t y, const int &sprite, std::string &name, const TCODColor &color, const Stats &stats, ActionManager_p action_manager, MapsManager_p maps_manager) {
     assert(!initialized_);
     
     x_ = x;
@@ -12,6 +14,7 @@ void Actor::Initialize(size_t x, size_t y, const int &sprite, std::string &name,
     color_ = color;
     stats_ = stats;
     action_manager_ = action_manager;
+    maps_manager_ = maps_manager;
     
     initialized_ = true;
 }

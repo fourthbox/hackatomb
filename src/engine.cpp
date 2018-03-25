@@ -9,7 +9,7 @@ Engine::Engine() {
     maps_manager_ = std::make_shared<MapsManager>();
 }
 
-void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player) {
+void Engine::Initialize(libpmg::DungeonMap &map, Player_p player) {
     if (initialized_) {
         Utils::LogWarning("Engine", "Engine already initialized.");
         return;
@@ -33,14 +33,14 @@ void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player
     root_console_manager_.SetBottomWindow(ui_manager_.message_log_window_);
 
     // Initialize the map
-    auto new_map {std::make_shared<Map>(map)};
+    auto new_map {std::make_unique<Map>(map)};
     
     // Configure the map keys
     std::string current_map_category {"main_dungeon"};
     auto current_floor {0};
 
     // Add first map to dungeon
-    maps_manager_->AddMapToMaster(new_map, current_map_category, current_floor);
+    maps_manager_->AddMapToMaster(std::move(new_map), current_map_category, current_floor);
     // Set the map manager to be in the current map
     maps_manager_->current_map_category_ = current_map_category;
     maps_manager_->current_floor_ = current_floor;
@@ -61,20 +61,20 @@ void Engine::Initialize(std::shared_ptr<libpmg::DungeonMap> map, Player_p player
     initialized_ = true;
 }
 
-void Engine::Initialize(std::shared_ptr<libpmg::WorldMap> map) {
-    if (initialized_) {
-        Utils::LogWarning("Engine", "Engine already initialized.");
-        return;
-    }
-    
-//    InitEngine();
+//void Engine::Initialize(std::shared_ptr<libpmg::WorldMap> map) {
+//    if (initialized_) {
+//        Utils::LogWarning("Engine", "Engine already initialized.");
+//        return;
+//    }
 //
-//    // Add the world map
-//    world_map_ = std::make_unique<World>(map);
-    
-    // Set as initialized
-    initialized_ = true;
-}
+////    InitEngine();
+////
+////    // Add the world map
+////    world_map_ = std::make_unique<World>(map);
+//    
+//    // Set as initialized
+//    initialized_ = true;
+//}
 
 void Engine::Update() {
     assert(initialized_);

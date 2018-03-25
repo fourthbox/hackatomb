@@ -25,9 +25,9 @@ public:
      @param color The color to represent this actor.
      @param stats The stats for this actor.
      @param action_manager A pointer to the ActionManager.
-     @param map A pointer to the map, needed by the pathfinder.
+     @param maps_manager A pointer to the MapManager.
      */
-    void Initialize(size_t x, size_t y, const int &sprite, std::string &name, const TCODColor &color, const Stats &stats, std::shared_ptr<ActionManager> action_manager, Map_p map);
+    void Initialize(size_t x, size_t y, const int &sprite, std::string &name, const TCODColor &color, const Stats &stats, std::shared_ptr<ActionManager> action_manager, MapsManager_p maps_manager);
 
 private:
     PathFinder path_finder_;

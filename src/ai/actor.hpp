@@ -34,6 +34,7 @@ struct Stats {
 
 class ActionManager;
 class ActorManager;
+class MapsManager;
 
 /**
  This class represent an intelligent entity on a map
@@ -52,7 +53,7 @@ public:
      @param stats The stats for this actor.
      @param action_manager A pointer to the ActionManager.
      */
-    void Initialize(size_t x, size_t y, const int &sprite, std::string &name, const TCODColor &color, const Stats &stats, std::shared_ptr<ActionManager> action_manager);
+    void Initialize(size_t x, size_t y, const int &sprite, std::string &name, const TCODColor &color, const Stats &stats, std::shared_ptr<ActionManager> action_manager, std::shared_ptr<MapsManager> maps_manager);
     
     virtual void Update() = 0;
     
@@ -72,8 +73,9 @@ public:
     void SetActorManager(std::shared_ptr<ActorManager> am) {actor_manager_ = am;}
         
 protected:
-    std::shared_ptr<ActionManager> action_manager_;  /**< Pointer to the ActionManager */
-    std::shared_ptr<ActorManager> actor_manager_;
+    std::shared_ptr<ActionManager> action_manager_;     /**< Pointer to the ActionManager */
+    std::shared_ptr<ActorManager> actor_manager_;       /**< Pointer to the ActionManaer */
+    std::shared_ptr<MapsManager> maps_manager_;         /**< Pointer to the MapsManager */
     
     size_t x_, y_;      /**< Location on the current map. */
     uint floor_;        /**< Current floor. */

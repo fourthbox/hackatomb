@@ -7,32 +7,32 @@
 
 using namespace std;
 
-std::shared_ptr<libpmg::DungeonMap> InitDungeon() {
+libpmg::DungeonMap* InitDungeon() {
     // Initialize the dungeon builder
-    auto dungeon_builder {std::make_shared<libpmg::DungeonBuilder>()};
+    auto dungeon_builder {libpmg::DungeonBuilder()};
     
     // Setup the map
-    dungeon_builder->SetMapSize(kMapWidth, kMapHeight);
-    dungeon_builder->SetMinRoomSize(4, 4);
-    dungeon_builder->SetMaxRoomSize(12, 12);
-    dungeon_builder->SetMaxRoomPlacementAttempts(10);
-    dungeon_builder->SetMaxRooms(20);
-    dungeon_builder->SetDefaultPathAlgorithm(libpmg::PathAlgorithm::ASTAR_BFS_MIX);
-    dungeon_builder->SetDiagonalCorridors(false);
+    dungeon_builder.SetMapSize(kMapWidth, kMapHeight);
+    dungeon_builder.SetMinRoomSize(4, 4);
+    dungeon_builder.SetMaxRoomSize(12, 12);
+    dungeon_builder.SetMaxRoomPlacementAttempts(10);
+    dungeon_builder.SetMaxRooms(10);
+    dungeon_builder.SetDefaultPathAlgorithm(libpmg::PathAlgorithm::ASTAR_BFS_MIX);
+    dungeon_builder.SetDiagonalCorridors(false);
     
     // Initialize the map
-    dungeon_builder->InitMap();
+    dungeon_builder.InitMap();
     
     // Generate the features
-    dungeon_builder->GenerateRooms();
-    dungeon_builder->GenerateCorridors();
-    dungeon_builder->GenerateDoors();
+    dungeon_builder.GenerateRooms();
+    dungeon_builder.GenerateCorridors();
+    dungeon_builder.GenerateDoors();
     
     // DungeonMap
-    return std::static_pointer_cast<libpmg::DungeonMap>(dungeon_builder->Build());
+    return (libpmg::DungeonMap*) dungeon_builder.Build().release();
 }
 
-void SetupDungeonGame(Engine &eng, std::shared_ptr<libpmg::DungeonMap> dungeon_map) {
+void SetupDungeonGame(Engine &eng, libpmg::DungeonMap *dungeon_map) {
     // Player generation
     auto start_coords {dungeon_map->GetRoomList()[0].GetRndCoords()};
     
@@ -48,7 +48,8 @@ void SetupDungeonGame(Engine &eng, std::shared_ptr<libpmg::DungeonMap> dungeon_m
                        name,
                        TCODColor::white,
                        stats,
-                       eng.GetActionManager());
+                       eng.GetActionManager(),
+                       eng.GetMapsManager());
 
     // Monster generation
     auto m_start_coords {dungeon_map->GetRoomList()[2].GetRndCoords()};
@@ -57,8 +58,7 @@ void SetupDungeonGame(Engine &eng, std::shared_ptr<libpmg::DungeonMap> dungeon_m
 
     string m_name {"goblin"};
 
-    eng.Initialize(dungeon_map,
-                   player);
+    eng.Initialize(*dungeon_map, player);
 
     auto goblin {std::make_shared<Monster>()};
     goblin->Initialize(m_start_coords.first,
@@ -68,7 +68,7 @@ void SetupDungeonGame(Engine &eng, std::shared_ptr<libpmg::DungeonMap> dungeon_m
                        TCODColor::green,
                        m_stats,
                        eng.GetActionManager(),
-                       eng.GetCurrentMap());
+                       eng.GetMapsManager());
 
     // Add a monster to the dungeon
     eng.AddMonster(goblin);
@@ -96,25 +96,16 @@ std::shared_ptr<libpmg::WorldMap> InitWorld() {
     world_builder->GenerateHeightMap();
     world_builder->ApplyHeightMap();
     
-    // DungeonMap
-    return std::static_pointer_cast<libpmg::WorldMap>(world_builder->Build());
+    // WorldMap
+//    return std::make_unique<libpmg::WorldMap>( std::move(world_builder->Build().release()) );
+    return nullptr;
 }
 
-void SetupWorldGame(Engine &eng, std::shared_ptr<libpmg::WorldMap> world_map) {
-    eng.Initialize(world_map);
+void SetupWorldGame(Engine &eng, std::unique_ptr<libpmg::WorldMap> world_map) {
+//    eng.Initialize(std::move(world_map));
 }
 
 int main(int argc, char **argv) {
-
-//    shared_ptr<Player> play1 {make_shared<Player>()};
-//    shared_ptr<Player> play11 = play1;
-//    shared_ptr<Player> play2 {make_shared<Player>()};
-//
-//    cout << "play1 == play11 " << (play1 == play11 ? "true" : "false" ) << endl;
-//    cout << "play1 == play2 " << (play1 == play2 ? "true" : "false" ) << endl;
-//
-//    return 0;
-    
     srand (time(NULL));
     
     // Initialize the random manager

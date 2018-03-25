@@ -56,4 +56,6 @@ private:
     
 };
 
+typedef std::shared_ptr<ActorManager> ActorManager_p;
+
 #endif /* ACTOR_MANAGER_HPP_ */

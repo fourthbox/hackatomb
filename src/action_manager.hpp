@@ -84,4 +84,6 @@ private:
     std::shared_ptr<MapsManager> maps_manager_;     /**< Pointer to the MapsManager */
 };
 
+typedef std::shared_ptr<ActionManager> ActionManager_p;
+
 #endif /* ACTION_MANAGER_HPP_ */

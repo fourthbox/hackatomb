@@ -7,7 +7,7 @@
 
 using std::string;
 
-void MapsManager::AddMapToMaster(Map_p map, string &map_category, short floor) {
+void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, string &map_category, short floor) {
     assert(floor >= -1);
     
     if (floor == -1) {
@@ -50,8 +50,20 @@ void MapsManager::Initialize() {
 }
 
 bool MapsManager::IsInFov(size_t x, size_t y) {
+    assert(initialized_);
+
     assert(master_maps_holder_.count(current_map_category_) > 0 &&
            master_maps_holder_[current_map_category_].count(current_floor_) > 0);
     
     return master_maps_holder_[current_map_category_][current_floor_]->IsInFov(x, y);
+}
+
+std::unique_ptr<TCODPath> MapsManager::AllocatePathFromCurrentFloor(ITCODPathCallback const *callback, float diagonal_cost) {
+    assert(initialized_);
+    
+    return std::make_unique<TCODPath>(master_maps_holder_[current_map_category_][current_floor_]->getWidth(),
+                                      master_maps_holder_[current_map_category_][current_floor_]->getHeight(),
+                                      callback,
+                                      master_maps_holder_[current_map_category_][current_floor_].get(),
+                                      diagonal_cost);
 }
