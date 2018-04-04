@@ -2,8 +2,7 @@
 
 #include "game_constants.hpp"
 
-Player::Player() :
-fov_radius_ {kDefaultFovRadius} {
+Player::Player() {
     assert(!initialized_);
     
     action_ = Action::NONE;

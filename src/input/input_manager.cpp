@@ -41,6 +41,10 @@ void InputManager::Update() {
         case kMoveNorthWest:
             player_->SetAction(Action::MOVE_NW);
             break;
+        case 'q':
+            player_->maps_manager_->SetAllExplored();
+            player_->actor_manager_->SetAllMonstersVisible();
+            break;
         default:
             player_->SetAction(Action::NONE);
             break;

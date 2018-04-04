@@ -442,11 +442,7 @@ void Map::Draw(std::shared_ptr<TCODConsole> console) {
     for (size_t x {0}; x < getWidth(); x++) {
         for (size_t y {0}; y < getHeight(); y++) {
             if (IsWall(x, y)) {
-#if CHEAT_NO_FOV_
-                if (true) {
-#else
                 if (IsInFov(x, y)) {
-#endif
                     console->setChar(x, y, GetWallChar(x, y));
                     console->setCharForeground(x, y, kDefaultWallInFovColor);
                 } else if (IsExplored(x, y)) {
@@ -454,11 +450,7 @@ void Map::Draw(std::shared_ptr<TCODConsole> console) {
                     console->setCharForeground(x, y, kDefaultWallExploredColor);
                 }
             } else {
-#if CHEAT_NO_FOV_
-                if (true) {
-#else
                 if (IsInFov(x, y)) {
-#endif
                     console->setChar(x, y, '.');
                     console->setCharForeground(x, y, kDefaultGroundInFovColor);
                 } else if (IsExplored(x, y)) {
@@ -479,11 +471,9 @@ bool Map::IsWall(size_t x, size_t y) {
     return tile->HasTag(libpmg::TagManager::GetInstance().wall_tag_);
 }
 
-bool Map::IsInFov(size_t x, size_t y, bool updateMapVisibility) {
+bool Map::IsInFov(size_t x, size_t y) {
     if (isInFov(x, y)) {
-        if (updateMapVisibility)
-            SetExplored(x, y);
-        
+        SetExplored(x, y);
         return true;
     }
     
@@ -497,3 +487,16 @@ void Map::SetExplored(size_t x, size_t y) {
 bool Map::IsExplored(size_t x, size_t y) {
     return GetTile(x, y)->HasTag(libpmg::TagManager::GetInstance().explored_tag_);
 }
+
+void Map::SetAllExplored() {
+    for (size_t x {0}; x < getWidth(); x++) {
+        for (size_t y {0}; y < getHeight(); y++) {
+            SetExplored(x, y);
+        }
+    }
+}
+
+void Map::DrawAllActors() {
+//    master_maps_holder_[current_map_category_][current_floor_]->DrawAllActors();
+}
+

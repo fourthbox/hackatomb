@@ -2,6 +2,7 @@
 
 #include "game_constants.hpp"
 #include "game_utils.hpp"
+#include "monster.hpp"
 
 Engine::Engine() {
     action_manager_ = std::make_shared<ActionManager>();
@@ -101,13 +102,9 @@ void Engine::Render() {
     actor_manager_->GetPlayer()->Draw(root_console_manager_.main_view_);
 
     // Draw monsters
-    for (auto const &actor : actor_manager_->GetActorList()) {
-        if (maps_manager_->IsInFov(actor->GetPosition().first, actor->GetPosition().second))
-            actor->Draw(root_console_manager_.main_view_);
-#if CHEAT_NO_FOV_
-        else
-            actor->Draw(root_console_manager_.main_view_);
-#endif
+    for (auto const &monster : actor_manager_->GetMonsterList()) {
+        if (monster->IsVisible() || maps_manager_->IsInFov(monster->GetPosition().first, monster->GetPosition().second))
+            monster->Draw(root_console_manager_.main_view_);
     }
 
     // Draw the Ui

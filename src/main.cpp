@@ -54,7 +54,7 @@ void SetupDungeonGame(Engine &eng, libpmg::DungeonMap *dungeon_map) {
     // Monster generation
     auto m_start_coords {dungeon_map->GetRoomList()[2].GetRndCoords()};
     
-    auto m_stats {Stats(2, 2, 10, 10)};
+    auto m_stats {Stats(2, 2, 10, 20)};
 
     string m_name {"goblin"};
 

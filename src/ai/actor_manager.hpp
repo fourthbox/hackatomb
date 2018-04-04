@@ -10,6 +10,7 @@
 
 #include "actor.hpp"
 
+class Monster;
 class Player;
 
 /**
@@ -30,10 +31,10 @@ public:
     Actor_p GetActorByCoordinates(size_t x, size_t y);
     
     /**
-     Get the list of all the loaded actors.
-     @return A vector of pointers to the actors.
+     Get the list of all the loaded monsters.
+     @return A vector of pointers to the monsters.
      */
-    std::vector<std::shared_ptr<Actor>>& GetActorList();
+    std::vector<std::shared_ptr<Monster>> GetMonsterList();
     
     /**
      Add an actor to the actor list performing a check for dupluicates.
@@ -49,6 +50,8 @@ public:
      Call for Update() on every actor in actor_list_
      */
     void Update();
+    
+    void SetAllMonstersVisible();
         
 private:
     std::vector<Actor_p> actor_list_;    /**< List containing all the actors in the loaded game */

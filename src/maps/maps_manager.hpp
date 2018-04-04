@@ -64,14 +64,13 @@ public:
      Check whether the specified position is in the field of view or not.
      @param x The X coordinate.
      @param y The Y coordinate.
-     @param update_map_visibility If true, will update the tiles of the map that are in the fov
      @return True if the specified position is in the field of view, false otherwise.
      */
-    bool IsInFov(size_t x, size_t y, bool update_map_visibility = false);
+    bool IsInFov(size_t x, size_t y);
     
     std::unique_ptr<TCODPath> AllocatePathFromCurrentFloor(ITCODPathCallback const *callback, float diagonal_cost);
     
-//    Map_p GetCurrentMap() { return master_maps_holder_[current_map_category_][current_floor_]; } //todo: this is temporary for bedugging purposes
+    void SetAllExplored();
     
 private:
     std::unordered_map<std::string, std::map< size_t, std::unique_ptr<Map>> > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */

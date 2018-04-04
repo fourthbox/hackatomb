@@ -52,13 +52,13 @@ void MapsManager::Initialize() {
     initialized_ = true;
 }
 
-bool MapsManager::IsInFov(size_t x, size_t y, bool updateMapVisibility) {
+bool MapsManager::IsInFov(size_t x, size_t y) {
     assert(initialized_);
 
     assert(master_maps_holder_.count(current_map_category_) > 0 &&
            master_maps_holder_[current_map_category_].count(current_floor_) > 0);
     
-    return master_maps_holder_[current_map_category_][current_floor_]->IsInFov(x, y, updateMapVisibility);
+    return master_maps_holder_[current_map_category_][current_floor_]->IsInFov(x, y);
 }
 
 std::unique_ptr<TCODPath> MapsManager::AllocatePathFromCurrentFloor(ITCODPathCallback const *callback, float diagonal_cost) {
@@ -70,3 +70,8 @@ std::unique_ptr<TCODPath> MapsManager::AllocatePathFromCurrentFloor(ITCODPathCal
                                       master_maps_holder_[current_map_category_][current_floor_].get(),
                                       diagonal_cost);
 }
+
+void MapsManager::SetAllExplored() {
+    master_maps_holder_[current_map_category_][current_floor_]->SetAllExplored();
+}
+

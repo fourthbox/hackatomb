@@ -23,8 +23,6 @@ static const size_t kMapHeight = 50;
 static const size_t kRootViewWidth = kMapWidth + kEnvironmentConsoleWidth + kPlayerInfoConsoleWidth;
 static const size_t kRootViewHeight = kMapHeight + kMessageLogConsoleHeight;
 
-static const int kDefaultFovRadius = 10;
-
 // Characher mappings
 static const int kCharEmpty = 0;
 static const int kCharBulletSquare = TCOD_CHAR_BULLET_SQUARE;

@@ -27,6 +27,20 @@ void Monster::Update() {
 void Monster::Initialize(size_t x, size_t y, const int &sprite, std::string &name, const TCODColor &color, const Stats &stats, ActionManager_p action_manager, MapsManager_p maps_manager) {
     assert(!initialized_);
     
+    is_always_visible_ = false;
+    
     Actor::Initialize(x, y, sprite, name, color, stats, action_manager, maps_manager);
     path_finder_.Initialize(maps_manager);
+}
+
+bool Monster::IsVisible() {
+    assert(initialized_);
+    
+    return is_always_visible_;
+}
+
+void Monster::SetAlwaysVisible(bool is_visible) {
+    assert(initialized_);
+    
+    is_always_visible_ = is_visible;
 }

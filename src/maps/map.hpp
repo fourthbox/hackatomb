@@ -14,27 +14,14 @@
  It extends functionalities both from an libpmg DungeonMap, and from a TCODMap.
  */
 class Map : public libpmg::DungeonMap, public TCODMap {
+    friend class MapsManager;
+    
 public:
     /**
      Initializes the Map, starting from a libpmg::DungeonMap.
      @param map A pointer to the map which parameters will be copied into this instance.
      */
     Map(libpmg::DungeonMap &map);
-
-    /**
-     Draws the contents of the Map on a TCODConsole.
-     @param console Pointer to the TCODConsole upon which to draw the contents of the Map.
-     */
-    void Draw(std::shared_ptr<TCODConsole> console);
-    
-    /**
-     Checks wheter the specified coordinate is inside the field of view.
-     If the debug flag CHEAT_NO_FOV_ is set, if will always return true.
-     @param x The x coordinate.
-     @param y The y coordinate.
-     @return True if is in fov, false otherwise.
-     */
-    bool IsInFov(size_t x, size_t y, bool updateMapVisibility = false);
     
     /**
      Check if a tile is flagged as a wall.
@@ -45,6 +32,20 @@ public:
     bool IsWall(size_t x, size_t y);
     
 private:
+    /**
+     Draws the contents of the Map on a TCODConsole.
+     @param console Pointer to the TCODConsole upon which to draw the contents of the Map.
+     */
+    void Draw(std::shared_ptr<TCODConsole> console);
+    
+    /**
+     Checks wheter the specified coordinate is inside the field of view.
+     @param x The x coordinate.
+     @param y The y coordinate.
+     @return True if is in fov, false otherwise.
+     */
+    bool IsInFov(size_t x, size_t y);
+    
     /**
      Bakes the libpmg map into the libtcod map.
      */
@@ -74,6 +75,8 @@ private:
      */
     int GetWallChar(size_t x, size_t y);
     
+    void SetAllExplored();
+    void DrawAllActors();
 };
 
 //typedef std::shared_ptr<Map> Map_p;

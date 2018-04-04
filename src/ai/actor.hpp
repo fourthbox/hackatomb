@@ -44,7 +44,10 @@ class MapsManager;
 class Actor : public InitiableObject {
     friend class ActorManager;
     
-public:    
+public:
+    std::shared_ptr<MapsManager> maps_manager_;         /**< TEMPORARY */
+    std::shared_ptr<ActorManager> actor_manager_;       /**< TEMPORARY */
+
     /**
      Initialize this instance.
      @param x The X coordinate.
@@ -78,8 +81,8 @@ public:
         
 protected:
     std::shared_ptr<ActionManager> action_manager_;     /**< Pointer to the ActionManager */
-    std::shared_ptr<ActorManager> actor_manager_;       /**< Pointer to the ActionManaer */
-    std::shared_ptr<MapsManager> maps_manager_;         /**< Pointer to the MapsManager */
+//    std::shared_ptr<ActorManager> actor_manager_;       /**< Pointer to the ActionManaer */
+//    std::shared_ptr<MapsManager> maps_manager_;         /**< Pointer to the MapsManager */
     
     size_t x_, y_;      /**< Location on the current map. */
     uint floor_;        /**< Current floor. */

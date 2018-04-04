@@ -14,12 +14,6 @@
 class Player : public Actor {
 public:
     Player();
-
-    /**
-     Get the field of view for this player.
-     @return The field of view.
-     */
-    int GetFovRadius();
     
     /**
      Update the player based on the action.
@@ -31,9 +25,7 @@ public:
      */
     void SetAction(Action action);
             
-private:
-    int fov_radius_;    /**< The field of view of the player */
-    
+private:    
     Action action_;     /**< The action the player must perform this turn */
 };
 

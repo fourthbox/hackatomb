@@ -1,6 +1,7 @@
 #include "actor_manager.hpp"
 
 #include "game_utils.hpp"
+#include "monster.hpp"
 #include "player.hpp"
 
 using std::string;
@@ -33,10 +34,18 @@ void ActorManager::Update() {
     }
 }
 
-std::vector<Actor_p>& ActorManager::GetActorList() {
+std::vector<Monster_p> ActorManager::GetMonsterList() {
     assert(initialized_);
     
-    return actor_list_;
+    std::vector<Monster_p> monster_list;
+    
+    for (auto const &actor : actor_list_) {
+        auto monster {std::dynamic_pointer_cast<Monster>(actor)};
+        if (monster != nullptr)
+            monster_list.push_back(monster);
+    }
+
+    return monster_list;
 }
 
 bool ActorManager::AddActor(Actor_p new_actor) {
@@ -68,3 +77,14 @@ std::shared_ptr<Player> ActorManager::GetPlayer() {
     
     return player_;
 }
+
+void ActorManager::SetAllMonstersVisible() {
+    assert(initialized_);
+    
+    auto monster_list {GetMonsterList()};
+
+    for (auto const &monster : monster_list) {
+        monster->SetAlwaysVisible(true);
+    }
+}
+
