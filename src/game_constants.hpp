@@ -7,6 +7,8 @@
 #ifndef GAME_CONSTANTS_HPP_
 #define GAME_CONSTANTS_HPP_
 
+#include "libtcod.hpp"
+
 static const TCOD_color_t kDefaultGroundInFovColor {TCOD_light_sepia};
 static const TCOD_color_t kDefaultGroundExploredColor {TCOD_darkest_sepia};
 static const TCOD_color_t kDefaultWallInFovColor {TCOD_light_grey};
@@ -49,6 +51,10 @@ static const int kCharDoubleLineCenter = 230;
 static const int kCharDoubleLineCross = TCOD_CHAR_DCROSS;
 
 static const int kCharBlock2 = TCOD_CHAR_BLOCK2;
+
+static const int kCharFloor = '.';
+static const int kCharClosedDoor = '+';
+static const int kCharOpenDoor = '/';
 
 // Keyboard controls
 static const char kMoveNorth = 'k';

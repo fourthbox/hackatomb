@@ -37,7 +37,7 @@ public:
     
 private:
     std::vector<Tile_p> map_;
-    std::shared_ptr<libpmg::MapConfigs> map_configs_;
+    libpmg::MapConfigs map_configs_;
     
     /**
      Draws the contents of the Map on a TCODConsole.

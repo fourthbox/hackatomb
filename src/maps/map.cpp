@@ -3,7 +3,8 @@
 #include <cassert>
 
 #include "engine.hpp"
-#include "game_constants.hpp"
+#include "game_globals.hpp"
+#include "game_utils.hpp"
 
 Map::Map(libpmg::DungeonMap &map) :
 TCODMap {(int)map.GetConfigs()->map_width_, (int)map.GetConfigs()->map_height_} {
@@ -20,9 +21,25 @@ void Map::DigTcodMap() {
 }
 
 void Map::DigPmgMap(libpmg::DungeonMap &map) {
-    map_configs_ = map.GetConfigs();
+    map_configs_ = *map.GetConfigs();
+    
     for (auto const &tile : map.GetMap()) {
-        map_.push_back(std::make_shared<Tile>(tile));
+        
+        if (tile->HasTag(libpmg::TagManager::GetInstance().wall_tag_)) {
+            auto new_tile {std::make_shared<WallTile>(tile)};
+            //            new_tile->wall_char_ = GetWallChar(tile->GetX(), tile->GetY());
+            new_tile->wall_char_ = '#';
+            //temp
+            map_.push_back(new_tile);
+
+        } else if (tile->HasTag(libpmg::TagManager::GetInstance().door_tag_)) {
+            map_.push_back(std::make_shared<DoorTile>(tile));
+        } else if (tile->HasTag(libpmg::TagManager::GetInstance().floor_tag_)) {
+            map_.push_back(std::make_shared<EmptyTile>(tile));
+        } else {
+            Utils::LogError("Map", "Unrecognized tag.");
+            abort();
+        }
     }
 }
 
@@ -471,27 +488,41 @@ int Map::GetWallChar(size_t x, size_t y) {
 }
 
 void Map::Draw(std::shared_ptr<TCODConsole> console) {
+    
+    for (auto const &tile : map_) {
+        tile->Draw(console, IsInFov(tile->GetX(), tile->GetY()));
+    }
+    
+    return;
+    
     for (size_t x {0}; x < getWidth(); x++) {
         for (size_t y {0}; y < getHeight(); y++) {
+            
             // Wall
             if (IsWall(x, y)) {
                 if (IsInFov(x, y)) {
-                    console->setChar(x, y, GetWallChar(x, y));
+                    console->setChar(x, y, GetTile(x, y)->GetChar());
                     console->setCharForeground(x, y, kDefaultWallInFovColor);
                 } else if (IsExplored(x, y)) {
-                    console->setChar(x, y, GetWallChar(x, y));
+                    console->setChar(x, y, GetTile(x, y)->GetChar());
                     console->setCharForeground(x, y, kDefaultWallExploredColor);
                 }
             } else if (HasDoor(x, y)) {
                 // Door
-                
+                if (IsInFov(x, y)) {
+                    console->setChar(x, y, GetTile(x, y)->GetChar());
+                    console->setCharForeground(x, y, kDefaultWallInFovColor);
+                } else if (IsExplored(x, y)) {
+                    console->setChar(x, y, GetTile(x, y)->GetChar());
+                    console->setCharForeground(x, y, kDefaultWallExploredColor);
+                }
             } else {
                 // Empty
                 if (IsInFov(x, y)) {
-                    console->setChar(x, y, '.');
+                    console->setChar(x, y, GetTile(x, y)->GetChar());
                     console->setCharForeground(x, y, kDefaultGroundInFovColor);
                 } else if (IsExplored(x, y)) {
-                    console->setChar(x, y, '.');
+                    console->setChar(x, y, GetTile(x, y)->GetChar());
                     console->setCharForeground(x, y, kDefaultGroundExploredColor);
                 }
             }
@@ -505,7 +536,7 @@ bool Map::IsWall(size_t x, size_t y) {
     if (tile == nullptr)
         return false;
     
-    return tile->HasTag(libpmg::TagManager::GetInstance().wall_tag_);
+    return (tile->GetType() == TileType::WALL_);
 }
 
 bool Map::HasDoor(size_t x, size_t y) {
@@ -514,7 +545,7 @@ bool Map::HasDoor(size_t x, size_t y) {
     if (tile == nullptr)
         return false;
     
-    return tile->HasTag(libpmg::TagManager::GetInstance().door_tag_);
+    return (tile->GetType() == TileType::DOOR_);
 }
 
 bool Map::IsInFov(size_t x, size_t y) {
@@ -527,26 +558,22 @@ bool Map::IsInFov(size_t x, size_t y) {
 }
 
 Tile_p Map::GetTile(size_t x, size_t y) {
-    assert(map_configs_ != nullptr);
-
     if (!BoundsCheck(x, y))
         return nullptr;
     
-    return map_[y * map_configs_->map_width_ + x];
+    return map_[y * map_configs_.map_width_ + x];
 }
 
-bool Map::BoundsCheck(std::size_t x, std::size_t y) {
-    assert(map_configs_ != nullptr);
-    
-    return x < map_configs_->map_width_ && y < map_configs_->map_height_;
+bool Map::BoundsCheck(std::size_t x, std::size_t y) {    
+    return x < map_configs_.map_width_ && y < map_configs_.map_height_;
 }
 
 void Map::SetExplored(size_t x, size_t y) {
-    GetTile(x, y)->AddTag(libpmg::TagManager::GetInstance().explored_tag_);
+    GetTile(x, y)->Explore();
 }
 
 bool Map::IsExplored(size_t x, size_t y) {
-    return GetTile(x, y)->HasTag(libpmg::TagManager::GetInstance().explored_tag_);
+    return GetTile(x, y)->IsExplored();
 }
 
 void Map::SetAllExplored() {
