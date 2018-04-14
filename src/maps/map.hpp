@@ -8,17 +8,19 @@
 
 #include "libtcod.hpp"
 #include "libpmg.hpp"
+#include "tile.hpp"
 
 /**
  Class responsible for the management of a hackatomb dungeon Map.
  It extends functionalities both from an libpmg DungeonMap, and from a TCODMap.
  */
-class Map : public libpmg::DungeonMap, public TCODMap {
+class Map : public TCODMap {
     friend class MapsManager;
     
 public:
     /**
      Initializes the Map, starting from a libpmg::DungeonMap.
+     Deallocates the original vector of Tiles inside DungeonMap, and then fills map_.
      @param map A pointer to the map which parameters will be copied into this instance.
      */
     Map(libpmg::DungeonMap &map);
@@ -32,6 +34,9 @@ public:
     bool IsWall(size_t x, size_t y);
     
 private:
+    std::vector<Tile_p> map_;
+    std::shared_ptr<libpmg::MapConfigs> map_configs_;
+    
     /**
      Draws the contents of the Map on a TCODConsole.
      @param console Pointer to the TCODConsole upon which to draw the contents of the Map.
@@ -49,7 +54,9 @@ private:
     /**
      Bakes the libpmg map into the libtcod map.
      */
-    void Dig();
+    void DigTcodMap();
+    
+    void DigPmgMap(libpmg::DungeonMap &map);
     
     // Getters and setters
     /**
@@ -75,11 +82,15 @@ private:
      */
     int GetWallChar(size_t x, size_t y);
     
+    Tile_p GetTile(size_t x, size_t y);
+    
+    std::vector<Tile_p> GetNeighbors(Tile_p tile);
+    
+    bool BoundsCheck(std::size_t x, std::size_t y);
+    
     void SetAllExplored();
-    void DrawAllActors();
 };
 
-//typedef std::shared_ptr<Map> Map_p;
 typedef std::pair<size_t, size_t> Coordinate;
 typedef std::shared_ptr<std::pair<size_t, size_t>> Coordinate_p;
 

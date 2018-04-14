@@ -6,13 +6,13 @@
 #include "game_constants.hpp"
 
 Map::Map(libpmg::DungeonMap &map) :
-    libpmg::DungeonMap {map},
-    TCODMap {(int)configs_->map_width_, (int)configs_->map_height_}
+    TCODMap {(int)map.GetConfigs()->map_width_, (int)map.GetConfigs()->map_height_}
 {
-    Dig();
+    DigPmgMap(map);
+    DigTcodMap();
 }
 
-void Map::Dig() {
+void Map::DigTcodMap() {
     for (auto x {0}; x < getWidth(); x++) {
         for (auto y {0}; y < getHeight(); y++) {
             setProperties(x, y, !IsWall(x, y), !IsWall(x, y));
@@ -20,12 +20,45 @@ void Map::Dig() {
     }
 }
 
+void Map::DigPmgMap(libpmg::DungeonMap &map) {
+    map_configs_ = map.GetConfigs();
+    for (auto const &tile : map.GetMap()) {
+        map_.push_back(std::make_shared<Tile>(tile));
+    }
+}
+
+std::vector<Tile_p> Map::GetNeighbors(Tile_p tile) {
+    size_t x, y;
+    std::tie(x, y) = tile->GetXY();
+    std::vector<Tile_p> vec;
+    
+    if (auto tile {GetTile(x, y-1)}; tile != nullptr)
+        vec.push_back(tile);
+    if (auto tile {GetTile(x+1, y)}; tile != nullptr)
+        vec.push_back(tile);
+    if (auto tile {GetTile(x, y+1)}; tile != nullptr)
+        vec.push_back(tile);
+    if (auto tile {GetTile(x-1, y)}; tile != nullptr)
+        vec.push_back(tile);
+    
+    if (auto tile {GetTile(x-1, y-1)}; tile != nullptr)
+        vec.push_back(tile);
+    if (auto tile {GetTile(x+1, y+1)}; tile != nullptr)
+        vec.push_back(tile);
+    if (auto tile {GetTile(x-1, y+1)}; tile != nullptr)
+        vec.push_back(tile);
+    if (auto tile {GetTile(x+1, y-1)}; tile != nullptr)
+        vec.push_back(tile);
+    
+    return vec;
+}
+
 int Map::GetWallChar(size_t x, size_t y) {
     assert(IsWall(x, y));
     
     // Count wall tiles
     auto wall_count {0};
-    for (auto const &neigh : GetNeighbors(GetTile(x, y), libpmg::MoveDirections::EIGHT_DIRECTIONAL)) {
+    for (auto const &neigh : GetNeighbors(GetTile(x, y))) {
         if (IsWall(neigh->GetX(), neigh->GetY()))
             wall_count++;
     }
@@ -480,6 +513,21 @@ bool Map::IsInFov(size_t x, size_t y) {
     return false;
 }
 
+Tile_p Map::GetTile(size_t x, size_t y) {
+    assert(map_configs_ != nullptr);
+
+    if (!BoundsCheck(x, y))
+        return nullptr;
+    
+    return map_[y * map_configs_->map_width_ + x];
+}
+
+bool Map::BoundsCheck(std::size_t x, std::size_t y) {
+    assert(map_configs_ != nullptr);
+    
+    return x < map_configs_->map_width_ && y < map_configs_->map_height_;
+}
+
 void Map::SetExplored(size_t x, size_t y) {
     GetTile(x, y)->AddTag(libpmg::TagManager::GetInstance().explored_tag_);
 }
@@ -494,9 +542,5 @@ void Map::SetAllExplored() {
             SetExplored(x, y);
         }
     }
-}
-
-void Map::DrawAllActors() {
-//    master_maps_holder_[current_map_category_][current_floor_]->DrawAllActors();
 }
 
