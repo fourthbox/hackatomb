@@ -6,6 +6,9 @@
 class Tile : public libpmg::Tile {
 public:
     Tile(std::shared_ptr<libpmg::Tile> other);
+    
+    bool IsWall();
+    bool HasDoor();
 };
 
 typedef std::shared_ptr<Tile> Tile_p;

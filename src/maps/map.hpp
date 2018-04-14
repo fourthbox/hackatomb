@@ -33,6 +33,8 @@ public:
      */
     bool IsWall(size_t x, size_t y);
     
+    bool HasDoor(size_t x, size_t y);
+    
 private:
     std::vector<Tile_p> map_;
     std::shared_ptr<libpmg::MapConfigs> map_configs_;

@@ -6,8 +6,7 @@
 #include "game_constants.hpp"
 
 Map::Map(libpmg::DungeonMap &map) :
-    TCODMap {(int)map.GetConfigs()->map_width_, (int)map.GetConfigs()->map_height_}
-{
+TCODMap {(int)map.GetConfigs()->map_width_, (int)map.GetConfigs()->map_height_} {
     DigPmgMap(map);
     DigTcodMap();
 }
@@ -474,6 +473,7 @@ int Map::GetWallChar(size_t x, size_t y) {
 void Map::Draw(std::shared_ptr<TCODConsole> console) {
     for (size_t x {0}; x < getWidth(); x++) {
         for (size_t y {0}; y < getHeight(); y++) {
+            // Wall
             if (IsWall(x, y)) {
                 if (IsInFov(x, y)) {
                     console->setChar(x, y, GetWallChar(x, y));
@@ -482,7 +482,11 @@ void Map::Draw(std::shared_ptr<TCODConsole> console) {
                     console->setChar(x, y, GetWallChar(x, y));
                     console->setCharForeground(x, y, kDefaultWallExploredColor);
                 }
+            } else if (HasDoor(x, y)) {
+                // Door
+                
             } else {
+                // Empty
                 if (IsInFov(x, y)) {
                     console->setChar(x, y, '.');
                     console->setCharForeground(x, y, kDefaultGroundInFovColor);
@@ -502,6 +506,15 @@ bool Map::IsWall(size_t x, size_t y) {
         return false;
     
     return tile->HasTag(libpmg::TagManager::GetInstance().wall_tag_);
+}
+
+bool Map::HasDoor(size_t x, size_t y) {
+    auto tile {GetTile(x, y)};
+    
+    if (tile == nullptr)
+        return false;
+    
+    return tile->HasTag(libpmg::TagManager::GetInstance().door_tag_);
 }
 
 bool Map::IsInFov(size_t x, size_t y) {
