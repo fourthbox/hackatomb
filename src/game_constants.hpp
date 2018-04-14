@@ -9,11 +9,12 @@
 
 #include "libtcod.hpp"
 
-static const TCOD_color_t kDefaultGroundInFovColor {TCOD_light_sepia};
-static const TCOD_color_t kDefaultGroundExploredColor {TCOD_darkest_sepia};
-static const TCOD_color_t kDefaultWallInFovColor {TCOD_light_grey};
-static const TCOD_color_t kDefaultWallExploredColor {TCOD_darkest_grey};
+// Colors
+static const TCOD_color_t kDefaultGroundColor {TCOD_light_grey};
+static const TCOD_color_t kDefaultWallColor {TCOD_darker_grey};
+static const TCOD_color_t kDefaultDoorColor {TCOD_sepia};
 
+// Frame Sizes
 static const size_t kEnvironmentConsoleWidth = 17;
 static const size_t kEnvironmentConsoleHeight = 15;
 static const size_t kPlayerInfoConsoleWidth = 17;

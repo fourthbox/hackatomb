@@ -32,8 +32,11 @@ public:
      @return True if the tile is a wall, false otherwise or if the tile fails the bounds check.
      */
     bool IsWall(size_t x, size_t y);
+    bool IsWall(Tile_p tile);
     
     bool HasDoor(size_t x, size_t y);
+    
+    std::vector<Tile_p> GetNeighbors(Tile *tile);
     
 private:
     std::vector<Tile_p> map_;
@@ -85,8 +88,6 @@ private:
     int GetWallChar(size_t x, size_t y);
     
     Tile_p GetTile(size_t x, size_t y);
-    
-    std::vector<Tile_p> GetNeighbors(Tile_p tile);
     
     bool BoundsCheck(std::size_t x, std::size_t y);
     
