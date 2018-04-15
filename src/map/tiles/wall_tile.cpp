@@ -23,419 +23,135 @@ void WallTile::Initialize(Map *map) {
 int WallTile::GetChar() {
     assert(initialized_);
     
-    // Count wall tiles
-    auto wall_count {0};
-    for (auto const &neigh : map_->GetNeighbors(this)) {
-        if (map_->IsWall(neigh))
-            wall_count++;
-    }
+    auto bitmask_cmp = [&] (char const &neighbors, char const &figure) -> bool {
+        return (neighbors & figure) == figure;
+    };
     
-    assert (wall_count <= 8);
+    auto x {GetX()}, y {GetY()};
+    char neighbors =
+    (map_->IsWall(x-1, y-1)?TOP_LEFT_:0) |      (map_->IsWall(x, y-1)?TOP_:0) |         (map_->IsWall(x+1, y-1)?TOP_RIGHT_:0) |
+    (map_->IsWall(x-1, y)?LEFT_:0) |                                                    (map_->IsWall(x+1, y)?RIGHT_:0) |
+    (map_->IsWall(x-1, y+1)?BOTTOM_LEFT_:0) |   (map_->IsWall(x, y+1)?BOTTOM_:0) |      (map_->IsWall(x+1, y+1)?BOTTOM_RIGHT_:0);
     
-    auto x = GetX(), y = GetY();
-    
-    // Block check
-    if (wall_count == 8)
+    // 8
+    if (bitmask_cmp(neighbors, kFullBlock))
         return kCharBlock2;
-    // Center block
-    if (wall_count == 0)
-        return kCharDoubleLineCenter;
-    if (wall_count == 1) {
-        /**
-         ...    .#.     ...     ...
-         #X.    .X.     .X#     .X.
-         ...    ...     ...     .#.
-         */
-        
-        if (map_->IsWall(x-1, y))
-            return kCharDoubleLineOpenEast;
-        
-        if (map_->IsWall(x, y-1))
-            return kCharDoubleLineOpenSouth;
-        
-        if (map_->IsWall(x+1, y))
-            return kCharDoubleLineOpenWest;
-        
-        if (map_->IsWall(x, y+1))
-            return kCharDoubleLineOpenNorth;
-        
-        /**
-         #..    ..#     ...     ...
-         .X.    .X.     .X.     .X.
-         ...    ...     ..#     #..
-         */
-        
-        return kCharDoubleLineCenter;
-    }
-    if (wall_count == 2) {
-        
-        /**
-         .#.        ...
-         .X.        #X#
-         .#.        ...
-         */
-        
-        if (map_->IsWall(x, y+1) && map_->IsWall(x, y-1))
-            return kCharDoubleLineVertical;
-        
-        if (map_->IsWall(x+1, y) && map_->IsWall(x-1, y))
-            return kCharDoubleLineHorizontal;
-        
-        /**
-         .#.        .#.     ...     ...
-         .X#        #X.     #X.     .X#
-         ...        ...     .#.     .#.
-         */
-        
-        if (map_->IsWall(x+1, y) && map_->IsWall(x, y-1))
-            return kCharDoubleLineCornerSouthWest;
-        
-        if (map_->IsWall(x+1, y) && map_->IsWall(x, y+1) )
-            return kCharDoubleLineCornerNorthWest;
-        
-        if (map_->IsWall(x-1, y) && map_->IsWall(x, y-1))
-            return kCharDoubleLineCornerSouthEast;
-        
-        if (map_->IsWall(x-1, y) && map_->IsWall(x, y+1))
-            return kCharDoubleLineCornerNorthEast;
-        
-        /**
-         ...    .#.     ...     ...
-         #X.    .X.     .X#     .X.
-         ...    ...     ...     .#.
-         */
-        
-        if (map_->IsWall(x-1, y))
-            return kCharDoubleLineOpenEast;
-        
-        if (map_->IsWall(x, y-1))
-            return kCharDoubleLineOpenSouth;
-        
-        if (map_->IsWall(x+1, y))
-            return kCharDoubleLineOpenWest;
-        
-        if (map_->IsWall(x, y+1))
-            return kCharDoubleLineOpenNorth;
-        
-    }
-    if (wall_count == 3) {
-        /**
-         .#.        .#.     ...     .#.
-         .X#        #X.     #X#     #X#
-         .#.        .#.     .#.     ...
-         */
-        
-        if (map_->IsWall(x, y-1) && map_->IsWall(x+1, y) && map_->IsWall(x, y+1))
-            return kCharDoubleLineTeeEast;
-        
-        if (map_->IsWall(x, y-1) && map_->IsWall(x-1, y) && map_->IsWall(x, y+1))
-            return kCharDoubleLineTeeWest;
-        
-        if (map_->IsWall(x-1, y) && map_->IsWall(x+1, y) && map_->IsWall(x, y+1))
-            return kCharDoubleLineTeeSouth;
-        
-        if (map_->IsWall(x, y-1) && map_->IsWall(x-1, y) && map_->IsWall(x+1, y))
-            return kCharDoubleLineTeeNorth;
-        
-        /**
-         .#.        ...
-         .X.        #X#
-         .#.        ...
-         */
-        
-        if (map_->IsWall(x, y+1) && map_->IsWall(x, y-1))
-            return kCharDoubleLineVertical;
-        
-        if (map_->IsWall(x+1, y) && map_->IsWall(x-1, y))
-            return kCharDoubleLineHorizontal;
-        
-        /**
-         .#.        .#.     ...     ...
-         .X#        #X.     #X.     .X#
-         ...        ...     .#.     .#.
-         */
-        
-        if (map_->IsWall(x+1, y) && map_->IsWall(x, y-1))
-            return kCharDoubleLineCornerSouthWest;
-        
-        if (map_->IsWall(x+1, y) && map_->IsWall(x, y+1))
-            return kCharDoubleLineCornerNorthWest;
-        
-        if (map_->IsWall(x-1, y) && map_->IsWall(x, y-1))
-            return kCharDoubleLineCornerSouthEast;
-        
-        if (map_->IsWall(x-1, y) && map_->IsWall(x, y+1))
-            return kCharDoubleLineCornerNorthEast;
-        
-        /**
-         ...    .#.     ...     ...
-         #X.    .X.     .X#     .X.
-         ...    ...     ...     .#.
-         */
-        
-        if (map_->IsWall(x-1, y))
-            return kCharDoubleLineOpenEast;
-        
-        if (map_->IsWall(x, y-1))
-            return kCharDoubleLineOpenSouth;
-        
-        if (map_->IsWall(x+1, y))
-            return kCharDoubleLineOpenWest;
-        
-        if (map_->IsWall(x, y+1))
-            return kCharDoubleLineOpenNorth;
-        
-    }
-    if (wall_count == 4)
-    {
-        /**
-         .#.
-         #X#
-         .#.
-         */
-        
-        if (map_->IsWall(x, y-1) &&
-            map_->IsWall(x-1, y) &&
-            map_->IsWall(x+1, y) &&
-            map_->IsWall(x, y+1))
-            return kCharDoubleLineCross;
-        
-        /**
-         .#.        .#.     ...     .#.
-         .X#        #X.     #X#     #X#
-         .#.        .#.     .#.     ...
-         */
-        
-        if (map_->IsWall(x+1, y) && map_->IsWall(x, y+1) && map_->IsWall(x, y-1))
-            return kCharDoubleLineTeeEast;
-        
-        if (map_->IsWall(x-1, y) && map_->IsWall(x, y-1) && map_->IsWall(x, y+1))
-            return kCharDoubleLineTeeWest;
-        
-        if (map_->IsWall(x-1, y) && map_->IsWall(x+1, y) && map_->IsWall(x, y+1))
-            return kCharDoubleLineTeeSouth;
-        
-        if (map_->IsWall(x-1, y) && map_->IsWall(x+1, y) && map_->IsWall(x, y-1))
-            return kCharDoubleLineTeeNorth;
-        
-        /**
-         .#.        ...
-         .X.        #X#
-         .#.        ...
-         */
-        
-        if (map_->IsWall(x, y+1) && map_->IsWall(x, y-1))
-            return kCharDoubleLineVertical;
-        
-        if (map_->IsWall(x+1, y) && map_->IsWall(x-1, y))
-            return kCharDoubleLineHorizontal;
-        
-        /**
-         .#.        .#.     ...     ...
-         .X#        #X.     #X.     .X#
-         ...        ...     .#.     .#.
-         */
-        
-        if (map_->IsWall(x+1, y) && map_->IsWall(x, y-1))
-            return kCharDoubleLineCornerSouthWest;
-        
-        if (map_->IsWall(x+1, y) && map_->IsWall(x, y+1))
-            return kCharDoubleLineCornerNorthWest;
-        
-        if (map_->IsWall(x-1, y) && map_->IsWall(x, y-1))
-            return kCharDoubleLineCornerSouthEast;
-        
-        if (map_->IsWall(x-1, y) && map_->IsWall(x, y+1))
-            return kCharDoubleLineCornerNorthEast;
-        
-    }
-    if (wall_count == 5)
-    {
-        /**
-         .#.        .#.     ...     ...
-         .X#        #X.     #X.     .X#
-         ...        ...     .#.     .#.
-         */
-        
-        if (!map_->IsWall(x-1, y) && !map_->IsWall(x, y+1))
-            return kCharDoubleLineCornerSouthWest;
-        
-        if (!map_->IsWall(x-1, y) && !map_->IsWall(x, y-1))
-            return kCharDoubleLineCornerNorthWest;
-        
-        if (!map_->IsWall(x+1, y) && !map_->IsWall(x, y+1))
-            return kCharDoubleLineCornerSouthEast;
-        
-        if (!map_->IsWall(x+1, y) && !map_->IsWall(x, y-1))
-            return kCharDoubleLineCornerNorthEast;
-        
-        /**
-         ###        ###     .#.        .#.
-         .X#        #X.     .X#        #X.
-         .#.        .#.     ###        ###
-         */
-        
-        if (!map_->IsWall(x-1, y) && !map_->IsWall(x-1, y+1) && !map_->IsWall(x+1, y+1))
-            return kCharDoubleLineTeeEast;
-        
-        if (!map_->IsWall(x+1, y) && !map_->IsWall(x-1, y+1) && !map_->IsWall(x+1, y+1))
-            return kCharDoubleLineTeeWest;
-        
-        if (!map_->IsWall(x-1, y-1) && !map_->IsWall(x+1, y-1) && !map_->IsWall(x-1, y))
-            return kCharDoubleLineTeeEast;
-        
-        if (!map_->IsWall(x-1, y-1) && !map_->IsWall(x+1, y-1) && !map_->IsWall(x+1, y))
-            return kCharDoubleLineTeeWest;
-        
-        /**
-         ##.        #..     .##        ..#
-         #X#        #X#     #X#        #X#
-         #..        ##.     ..#        .##
-         */
-        
-        if (!map_->IsWall(x+1, y-1) && !map_->IsWall(x, y+1) && !map_->IsWall(x+1, y+1))
-            return kCharDoubleLineTeeNorth;
-        
-        if (!map_->IsWall(x, y-1) && !map_->IsWall(x+1, y-1) && !map_->IsWall(x+1, y+1))
-            return kCharDoubleLineTeeSouth;
-        
-        if (!map_->IsWall(x-1, y-1) && !map_->IsWall(x-1, y+1) && !map_->IsWall(x, y+1))
-            return kCharDoubleLineTeeNorth;
-        
-        if (!map_->IsWall(x-1, y-1) && !map_->IsWall(x, y-1) && !map_->IsWall(x-1, y+1))
-            return kCharDoubleLineTeeSouth;
-        
-        /**
-         ##.        .##     ...        ###
-         #X.        .X#     #X#        #X#
-         ##.        .##     ###        ...
-         */
-        
-        if (!map_->IsWall(x+1, y-1) && !map_->IsWall(x+1, y) && !map_->IsWall(x+1, y+1))
-            return kCharDoubleLineVertical;
-        
-        if (!map_->IsWall(x-1, y-1) && !map_->IsWall(x-1, y) && !map_->IsWall(x-1, y+1))
-            return kCharDoubleLineVertical;
-        
-        if (!map_->IsWall(x-1, y-1) && !map_->IsWall(x, y-1) && !map_->IsWall(x+1, y-1))
-            return kCharDoubleLineHorizontal;
-        
-        if (!map_->IsWall(x-1, y+1) && !map_->IsWall(x, y+1) && !map_->IsWall(x+1, y+1))
-            return kCharDoubleLineHorizontal;
-        
-        
-        /**
-         .#.        .#.     ...     .#.
-         .X#        #X.     #X#     #X#
-         .#.        .#.     .#.     ...
-         */
-        
-        if (!map_->IsWall(x-1, y))
-            return kCharDoubleLineTeeEast;
-        
-        if (!map_->IsWall(x+1, y))
-            return kCharDoubleLineTeeWest;
-        
-        if (!map_->IsWall(x, y-1))
-            return kCharDoubleLineTeeSouth;
-        
-        if (!map_->IsWall(x, y+1))
-            return kCharDoubleLineTeeNorth;
-        
-        /**
-         .#.
-         #X#
-         .#.
-         */
-        
-        if (map_->IsWall(x, y-1) &&
-            map_->IsWall(x-1, y) &&
-            map_->IsWall(x+1, y) &&
-            map_->IsWall(x, y+1))
-            return kCharDoubleLineCross;
-        
-    }
-    if (wall_count == 6)
-    {
-        /**
-         .##        ##.
-         #X#        #X#
-         ##.        .##
-         */
-        
-        if ((!map_->IsWall(x-1, y-1) && !map_->IsWall(x+1, y+1))
-            || (!map_->IsWall(x+1, y-1) && !map_->IsWall(x-1, y+1)))
-            return kCharDoubleLineCross;
-        
-        /**
-         ##.        .#.     .##     ###
-         #X#        #X#     #X#     #X#
-         ##.        ###     .##     .#.
-         */
-        
-        if (!map_->IsWall(x+1, y-1) && !map_->IsWall(x+1, y+1))
-            return kCharDoubleLineTeeEast;
-        
-        if (!map_->IsWall(x-1, y-1) && !map_->IsWall(x+1, y-1))
-            return kCharDoubleLineTeeNorth;
-        
-        if (!map_->IsWall(x-1, y-1) && !map_->IsWall(x-1, y+1))
-            return kCharDoubleLineTeeWest;
-        
-        if (!map_->IsWall(x-1, y+1) && !map_->IsWall(x+1, y+1))
-            return kCharDoubleLineTeeSouth;
-        
-        /**
-         .#.        ...
-         .X.        #X#
-         .#.        ...
-         */
-        
-        if (map_->IsWall(x, y-1) && map_->IsWall(x, y+1))
-            return kCharDoubleLineVertical;
-        
-        if (map_->IsWall(x-1, y) && map_->IsWall(x+1, y))
-            return kCharDoubleLineHorizontal;
-        
-        /**
-         .#.        .#.     ...     .#.
-         .X#        #X.     #X#     #X#
-         .#.        .#.     .#.     ...
-         */
-        
-        if (!map_->IsWall(x-1, y))
-            return kCharDoubleLineTeeEast;
-        
-        if (!map_->IsWall(x+1, y))
-            return kCharDoubleLineTeeWest;
-        
-        if (!map_->IsWall(x, y-1))
-            return kCharDoubleLineTeeSouth;
-        
-        if (!map_->IsWall(x, y+1))
-            return kCharDoubleLineTeeNorth;
-    }
-    if (wall_count == 7)
-    {
-        /**
-         ##.    .##     ###     ###
-         #X#    #X#     #X#     #X#
-         ###    ###     .##     ##.
-         */
-        
-        if (!map_->IsWall(x+1, y-1))
-            return kCharDoubleLineCornerSouthWest;
-        
-        if (!map_->IsWall(x-1, y-1))
-            return kCharDoubleLineCornerSouthEast;
-        
-        if (!map_->IsWall(x-1, y+1))
-            return kCharDoubleLineCornerNorthEast;
-        
-        if (!map_->IsWall(x+1, y+1))
-            return kCharDoubleLineCornerNorthWest;
-    }
+    // 7
+    else if (bitmask_cmp(neighbors, kCornerSouthWest))
+        return kCharDoubleLineCornerSouthWest;
+    else if (bitmask_cmp(neighbors, kCornerNorthWest))
+        return kCharDoubleLineCornerNorthWest;
+    else if (bitmask_cmp(neighbors, kCornerNorthEast))
+        return kCharDoubleLineCornerNorthEast;
+    else if (bitmask_cmp(neighbors, kCornerSouthEast))
+        return kCharDoubleLineCornerSouthEast;
     
+    // 5
+    else if (bitmask_cmp(neighbors, kStraightHorizontal))
+        return kCharDoubleLineHorizontal;
+    else if (bitmask_cmp(neighbors, kStraightHorizontal2))
+        return kCharDoubleLineHorizontal;
+    else if (bitmask_cmp(neighbors, kStraightHorizontal3))
+        return kCharDoubleLineHorizontal;
+    else if (bitmask_cmp(neighbors, kStraightHorizontal4))
+        return kCharDoubleLineHorizontal;
+    else if (bitmask_cmp(neighbors, kStraightHorizontal5))
+        return kCharDoubleLineHorizontal;
+    else if (bitmask_cmp(neighbors, kStraightVertical))
+        return kCharDoubleLineVertical;
+    else if (bitmask_cmp(neighbors, kStraightVertical2))
+        return kCharDoubleLineVertical;
+    else if (bitmask_cmp(neighbors, kStraightVertical3))
+        return kCharDoubleLineVertical;
+    else if (bitmask_cmp(neighbors, kStraightVertical4))
+        return kCharDoubleLineVertical;
+    else if (bitmask_cmp(neighbors, kStraightVertical5))
+        return kCharDoubleLineVertical;
+    
+    // 5
+    else if (bitmask_cmp(neighbors, kStraightVertical6))
+        return kCharDoubleLineVertical;
+    else if (bitmask_cmp(neighbors, kStraightVertical7))
+        return kCharDoubleLineVertical;
+    else if (bitmask_cmp(neighbors, kStraightHorizontal6))
+        return kCharDoubleLineHorizontal;
+    else if (bitmask_cmp(neighbors, kStraightHorizontal7))
+        return kCharDoubleLineHorizontal;
+    
+    // 4
+    else if (bitmask_cmp(neighbors, kTeeEast))
+        return kCharDoubleLineTeeEast;
+    else if (bitmask_cmp(neighbors, kTeeEast2))
+        return kCharDoubleLineTeeEast;
+    else if (bitmask_cmp(neighbors, kTeeWest))
+        return kCharDoubleLineTeeWest;
+    else if (bitmask_cmp(neighbors, kTeeWest2))
+        return kCharDoubleLineTeeWest;
+    else if (bitmask_cmp(neighbors, kTeeNorth))
+        return kCharDoubleLineTeeNorth;
+    else if (bitmask_cmp(neighbors, kTeeNorth2))
+        return kCharDoubleLineTeeNorth;
+    else if (bitmask_cmp(neighbors, kTeeSouth))
+        return kCharDoubleLineTeeSouth;
+    else if (bitmask_cmp(neighbors, kTeeSouth2))
+        return kCharDoubleLineTeeSouth;
+    else if (bitmask_cmp(neighbors, kCenterCross))
+        return kCharDoubleLineCross;
+    else if (bitmask_cmp(neighbors, kTeeEast4))
+        return kCharDoubleLineTeeEast;
+    else if (bitmask_cmp(neighbors, kTeeWest4))
+        return kCharDoubleLineTeeWest;
+    else if (bitmask_cmp(neighbors, kTeeNorth4))
+        return kCharDoubleLineTeeNorth;
+    else if (bitmask_cmp(neighbors, kTeeSouth4))
+        return kCharDoubleLineTeeSouth;
+
+    // 3
+    else if (bitmask_cmp(neighbors, kCornerSouthWest2))
+        return kCharDoubleLineCornerSouthWest;
+    else if (bitmask_cmp(neighbors, kCornerNorthWest2))
+        return kCharDoubleLineCornerNorthWest;
+    else if (bitmask_cmp(neighbors, kCornerNorthEast2))
+        return kCharDoubleLineCornerNorthEast;
+    else if (bitmask_cmp(neighbors, kCornerSouthEast2))
+        return kCharDoubleLineCornerSouthEast;
+    else if (bitmask_cmp(neighbors, kTeeEast3))
+        return kCharDoubleLineTeeEast;
+    else if (bitmask_cmp(neighbors, kTeeWest3))
+        return kCharDoubleLineTeeWest;
+    else if (bitmask_cmp(neighbors, kTeeNorth3))
+        return kCharDoubleLineTeeNorth;
+    else if (bitmask_cmp(neighbors, kTeeSouth3))
+        return kCharDoubleLineTeeSouth;
+    
+    // 2
+    else if (bitmask_cmp(neighbors, kStraightVertical8))
+        return kCharDoubleLineVertical;
+    else if (bitmask_cmp(neighbors, kStraightHorizontal8))
+        return kCharDoubleLineHorizontal;
+    else if (bitmask_cmp(neighbors, kCornerSouthWest3))
+        return kCharDoubleLineCornerSouthWest;
+    else if (bitmask_cmp(neighbors, kCornerNorthWest3))
+        return kCharDoubleLineCornerNorthWest;
+    else if (bitmask_cmp(neighbors, kCornerNorthEast3))
+        return kCharDoubleLineCornerNorthEast;
+    else if (bitmask_cmp(neighbors, kCornerSouthEast3))
+        return kCharDoubleLineCornerSouthEast;
+
+    // 1
+    else if (bitmask_cmp(neighbors, kOpenNorth))
+        return kCharDoubleLineOpenNorth;
+    else if (bitmask_cmp(neighbors, kOpenSouth))
+        return kCharDoubleLineOpenSouth;
+    else if (bitmask_cmp(neighbors, kOpenWest))
+        return kCharDoubleLineOpenWest;
+    else if (bitmask_cmp(neighbors, kOpenEast))
+        return kCharDoubleLineOpenEast;
+    
+    // 0
+    else if (bitmask_cmp(neighbors, kEmptyBlock))
+        return kCharDoubleLineCenter;
+        
     // Default case
     return kCharBlock2;
 }

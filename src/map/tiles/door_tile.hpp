@@ -10,7 +10,7 @@ public:
     DoorTile(std::shared_ptr<libpmg::Tile> other) : Tile (other) {
         is_open_ = false;
         is_locked_ = false;
-        type_ = TileType::WALL_;
+        type_ = TileType::DOOR_;
     }
     void Draw(std::shared_ptr<TCODConsole> console, bool is_in_fov) override;
     

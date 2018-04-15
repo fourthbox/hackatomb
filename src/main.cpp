@@ -16,7 +16,7 @@ libpmg::DungeonMap* InitDungeon() {
     dungeon_builder.SetMinRoomSize(4, 4);
     dungeon_builder.SetMaxRoomSize(12, 12);
     dungeon_builder.SetMaxRoomPlacementAttempts(10);
-    dungeon_builder.SetMaxRooms(10);
+    dungeon_builder.SetMaxRooms(30);
     dungeon_builder.SetDefaultPathAlgorithm(libpmg::PathAlgorithm::ASTAR_BFS_MIX);
     dungeon_builder.SetDiagonalCorridors(false);
     

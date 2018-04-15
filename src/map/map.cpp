@@ -42,32 +42,6 @@ void Map::DigPmgMap(libpmg::DungeonMap &map) {
     }
 }
 
-std::vector<Tile_p> Map::GetNeighbors(Tile *tile) {
-    size_t x, y;
-    std::tie(x, y) = tile->GetXY();
-    std::vector<Tile_p> vec;
-    
-    if (auto tile {GetTile(x, y-1)}; tile != nullptr)
-        vec.push_back(tile);
-    if (auto tile {GetTile(x+1, y)}; tile != nullptr)
-        vec.push_back(tile);
-    if (auto tile {GetTile(x, y+1)}; tile != nullptr)
-        vec.push_back(tile);
-    if (auto tile {GetTile(x-1, y)}; tile != nullptr)
-        vec.push_back(tile);
-    
-    if (auto tile {GetTile(x-1, y-1)}; tile != nullptr)
-        vec.push_back(tile);
-    if (auto tile {GetTile(x+1, y+1)}; tile != nullptr)
-        vec.push_back(tile);
-    if (auto tile {GetTile(x-1, y+1)}; tile != nullptr)
-        vec.push_back(tile);
-    if (auto tile {GetTile(x+1, y-1)}; tile != nullptr)
-        vec.push_back(tile);
-    
-    return vec;
-}
-
 void Map::Draw(std::shared_ptr<TCODConsole> console) {
     for (auto const &tile : map_) {
         tile->Draw(console, IsInFov(tile->GetX(), tile->GetY()));
@@ -80,12 +54,8 @@ bool Map::IsWall(size_t x, size_t y) {
     auto tile {GetTile(x, y)};
     
     if (tile == nullptr)
-        return false;
+        return true;
     
-    return (tile->GetType() == TileType::WALL_);
-}
-
-bool Map::IsWall(Tile_p tile) {    
     return (tile->GetType() == TileType::WALL_);
 }
 
