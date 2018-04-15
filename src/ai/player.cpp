@@ -11,8 +11,7 @@ Player::Player() {
 void Player::Update() {
     assert(initialized_);
     
-    size_t x {0};
-    size_t y {0};
+    size_t x {0}, y {0};
         
     switch(action_) {
         case Action::MOVE_N:
@@ -57,9 +56,12 @@ void Player::Update() {
     
     if (x != 0 || y != 0) {
         if (action_manager_->CanMove(x_ + x, y_ + y)) {
-            action_manager_->Moved();
+            action_manager_->ActionPerformed();
             x_ += x;
             y_ += y;
+        } else if (action_manager_->CanInteract(x_ + x, y_ + y)) {
+            action_manager_->Interact(x_ + x, y_ + y);
+            action_manager_->ActionPerformed();
         }
     }
 }

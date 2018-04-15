@@ -1,5 +1,6 @@
 #include "maps_manager.hpp"
 
+#include "door_tile.hpp"
 #include "game_constants.hpp"
 #include "game_utils.hpp"
 #include "libtcod.hpp"
@@ -59,6 +60,29 @@ bool MapsManager::IsInFov(size_t x, size_t y) {
            master_maps_holder_[current_map_category_].count(current_floor_) > 0);
     
     return master_maps_holder_[current_map_category_][current_floor_]->IsInFov(x, y);
+}
+
+bool MapsManager::IsInteractable(size_t x, size_t y) {
+    assert(initialized_);
+    
+    assert(master_maps_holder_.count(current_map_category_) > 0 &&
+           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
+
+    return master_maps_holder_[current_map_category_][current_floor_]->HasDoor(x, y);
+}
+
+void MapsManager::OpenDoor(size_t x, size_t y) {
+    assert(initialized_);
+    
+    assert(master_maps_holder_.count(current_map_category_) > 0 &&
+           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
+    
+    auto door {std::static_pointer_cast<DoorTile> (master_maps_holder_[current_map_category_][current_floor_]->GetTile(x, y))};
+    
+    assert (door != nullptr);
+    
+    door->Open();
+    master_maps_holder_[current_map_category_][current_floor_]->UpdateTcodProperties(door);
 }
 
 std::unique_ptr<TCODPath> MapsManager::AllocatePathFromCurrentFloor(ITCODPathCallback const *callback, float diagonal_cost) {

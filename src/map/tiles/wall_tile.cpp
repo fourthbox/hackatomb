@@ -36,6 +36,7 @@ int WallTile::GetChar() {
     // 8
     if (bitmask_cmp(neighbors, kFullBlock))
         return kCharBlock2;
+    
     // 7
     else if (bitmask_cmp(neighbors, kCornerSouthWest))
         return kCharDoubleLineCornerSouthWest;
@@ -46,36 +47,28 @@ int WallTile::GetChar() {
     else if (bitmask_cmp(neighbors, kCornerSouthEast))
         return kCharDoubleLineCornerSouthEast;
     
+    // 6
+    else if (bitmask_cmp(neighbors, kTeeEast4))
+        return kCharDoubleLineTeeEast;
+    else if (bitmask_cmp(neighbors, kTeeWest4))
+        return kCharDoubleLineTeeWest;
+    else if (bitmask_cmp(neighbors, kTeeNorth4))
+        return kCharDoubleLineTeeNorth;
+    else if (bitmask_cmp(neighbors, kTeeSouth4))
+        return kCharDoubleLineTeeSouth;
+    else if (bitmask_cmp(neighbors, kCenterCross))
+        return kCharDoubleLineCross;
+    else if (bitmask_cmp(neighbors, kCenterCross2))
+        return kCharDoubleLineCross;
+    
     // 5
-    else if (bitmask_cmp(neighbors, kStraightHorizontal))
-        return kCharDoubleLineHorizontal;
-    else if (bitmask_cmp(neighbors, kStraightHorizontal2))
-        return kCharDoubleLineHorizontal;
-    else if (bitmask_cmp(neighbors, kStraightHorizontal3))
-        return kCharDoubleLineHorizontal;
-    else if (bitmask_cmp(neighbors, kStraightHorizontal4))
-        return kCharDoubleLineHorizontal;
-    else if (bitmask_cmp(neighbors, kStraightHorizontal5))
-        return kCharDoubleLineHorizontal;
     else if (bitmask_cmp(neighbors, kStraightVertical))
         return kCharDoubleLineVertical;
     else if (bitmask_cmp(neighbors, kStraightVertical2))
         return kCharDoubleLineVertical;
-    else if (bitmask_cmp(neighbors, kStraightVertical3))
-        return kCharDoubleLineVertical;
-    else if (bitmask_cmp(neighbors, kStraightVertical4))
-        return kCharDoubleLineVertical;
-    else if (bitmask_cmp(neighbors, kStraightVertical5))
-        return kCharDoubleLineVertical;
-    
-    // 5
-    else if (bitmask_cmp(neighbors, kStraightVertical6))
-        return kCharDoubleLineVertical;
-    else if (bitmask_cmp(neighbors, kStraightVertical7))
-        return kCharDoubleLineVertical;
-    else if (bitmask_cmp(neighbors, kStraightHorizontal6))
+    else if (bitmask_cmp(neighbors, kStraightHorizontal))
         return kCharDoubleLineHorizontal;
-    else if (bitmask_cmp(neighbors, kStraightHorizontal7))
+    else if (bitmask_cmp(neighbors, kStraightHorizontal2))
         return kCharDoubleLineHorizontal;
     
     // 4
@@ -95,26 +88,10 @@ int WallTile::GetChar() {
         return kCharDoubleLineTeeSouth;
     else if (bitmask_cmp(neighbors, kTeeSouth2))
         return kCharDoubleLineTeeSouth;
-    else if (bitmask_cmp(neighbors, kCenterCross))
+    else if (bitmask_cmp(neighbors, kCenterCross3))
         return kCharDoubleLineCross;
-    else if (bitmask_cmp(neighbors, kTeeEast4))
-        return kCharDoubleLineTeeEast;
-    else if (bitmask_cmp(neighbors, kTeeWest4))
-        return kCharDoubleLineTeeWest;
-    else if (bitmask_cmp(neighbors, kTeeNorth4))
-        return kCharDoubleLineTeeNorth;
-    else if (bitmask_cmp(neighbors, kTeeSouth4))
-        return kCharDoubleLineTeeSouth;
 
     // 3
-    else if (bitmask_cmp(neighbors, kCornerSouthWest2))
-        return kCharDoubleLineCornerSouthWest;
-    else if (bitmask_cmp(neighbors, kCornerNorthWest2))
-        return kCharDoubleLineCornerNorthWest;
-    else if (bitmask_cmp(neighbors, kCornerNorthEast2))
-        return kCharDoubleLineCornerNorthEast;
-    else if (bitmask_cmp(neighbors, kCornerSouthEast2))
-        return kCharDoubleLineCornerSouthEast;
     else if (bitmask_cmp(neighbors, kTeeEast3))
         return kCharDoubleLineTeeEast;
     else if (bitmask_cmp(neighbors, kTeeWest3))
@@ -129,13 +106,13 @@ int WallTile::GetChar() {
         return kCharDoubleLineVertical;
     else if (bitmask_cmp(neighbors, kStraightHorizontal8))
         return kCharDoubleLineHorizontal;
-    else if (bitmask_cmp(neighbors, kCornerSouthWest3))
+    else if (bitmask_cmp(neighbors, kCornerSouthWest2))
         return kCharDoubleLineCornerSouthWest;
-    else if (bitmask_cmp(neighbors, kCornerNorthWest3))
+    else if (bitmask_cmp(neighbors, kCornerNorthWest2))
         return kCharDoubleLineCornerNorthWest;
-    else if (bitmask_cmp(neighbors, kCornerNorthEast3))
+    else if (bitmask_cmp(neighbors, kCornerNorthEast2))
         return kCharDoubleLineCornerNorthEast;
-    else if (bitmask_cmp(neighbors, kCornerSouthEast3))
+    else if (bitmask_cmp(neighbors, kCornerSouthEast2))
         return kCharDoubleLineCornerSouthEast;
 
     // 1

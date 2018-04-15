@@ -72,7 +72,9 @@ public:
     /**
      Signals that an actor moved in the specified position, setting the current_turn_phase_ to ACTION.
      */
-    void Moved();
+    void ActionPerformed();
+    
+    void Interact(size_t x, size_t y);
     
     void StartTurn();
     

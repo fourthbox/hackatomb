@@ -15,11 +15,29 @@ TCODMap {(int)map.GetConfigs()->map_width_, (int)map.GetConfigs()->map_height_} 
 }
 
 void Map::DigTcodMap() {
-    for (auto x {0}; x < getWidth(); x++) {
-        for (auto y {0}; y < getHeight(); y++) {
-            setProperties(x, y, !IsWall(x, y), !IsWall(x, y));
-        }
+    for (auto const &tile : map_) {
+        UpdateTcodProperties(tile);
     }
+    
+//    for (auto x {0}; x < getWidth(); x++) {
+//        for (auto y {0}; y < getHeight(); y++) {
+//            setProperties(x, y, IsEmpty(x, y), IsEmpty(x, y));
+//        }
+//    }
+}
+
+void Map::UpdateTcodProperties(size_t x, size_t y) {
+    auto tile {GetTile(x, y)};
+    
+    assert(tile != nullptr);
+    
+    setProperties((int)x, (int)y, tile->IsTransparent(), tile->IsWalkable());
+}
+
+void Map::UpdateTcodProperties(Tile_p tile) {
+    assert(tile != nullptr);
+    
+    setProperties(tile->GetX(), tile->GetY(), tile->IsTransparent(), tile->IsWalkable());
 }
 
 void Map::DigPmgMap(libpmg::DungeonMap &map) {
@@ -62,8 +80,7 @@ bool Map::IsWall(size_t x, size_t y) {
 bool Map::HasDoor(size_t x, size_t y) {
     auto tile {GetTile(x, y)};
     
-    if (tile == nullptr)
-        return false;
+    assert (tile != nullptr);
     
     return (tile->GetType() == TileType::DOOR_);
 }

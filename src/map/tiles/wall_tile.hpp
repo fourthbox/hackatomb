@@ -23,6 +23,8 @@ public:
     void Draw(std::shared_ptr<TCODConsole> console, bool is_in_fov) override;
     
     int GetChar() override;
+    inline bool IsTransparent() override { return false; }
+    inline bool IsWalkable() override { return false; }
     
 private:
     Map *map_;
@@ -55,56 +57,6 @@ private:
     BOTTOM_LEFT_ |  BOTTOM_ |   BOTTOM_RIGHT_;
 
     // 6
-    const char kStraightHorizontal =
-    TOP_LEFT_ |     0 |      TOP_RIGHT_ |
-    LEFT_ |                     RIGHT_ |
-    BOTTOM_LEFT_ |  0 |   BOTTOM_RIGHT_;
-    
-    const char kStraightHorizontal2 =
-    TOP_LEFT_ |     0 |      0 |
-    LEFT_ |                     RIGHT_ |
-    BOTTOM_LEFT_ |  BOTTOM_ |   BOTTOM_RIGHT_;
-    
-    const char kStraightHorizontal3 =
-    0 |     0 |      TOP_RIGHT_ |
-    LEFT_ |                     RIGHT_ |
-    BOTTOM_LEFT_ |  BOTTOM_ |   BOTTOM_RIGHT_;
-    
-    const char kStraightHorizontal4 =
-    TOP_LEFT_ |     TOP_ |      TOP_RIGHT_ |
-    LEFT_ |                     RIGHT_ |
-    BOTTOM_LEFT_ |  0 |   0;
-    
-    const char kStraightHorizontal5 =
-    TOP_LEFT_ |     TOP_ |      TOP_RIGHT_ |
-    LEFT_ |                     RIGHT_ |
-    0 |  0 |   BOTTOM_RIGHT_;
-
-    const char kStraightVertical =
-    TOP_LEFT_ |     TOP_ |      TOP_RIGHT_ |
-    0 |                     0 |
-    BOTTOM_LEFT_ |  BOTTOM_ |   BOTTOM_RIGHT_;
-    
-    const char kStraightVertical2 =
-    TOP_LEFT_ |     TOP_ |      0 |
-    LEFT_ |                     0 |
-    BOTTOM_LEFT_ |  BOTTOM_ |   BOTTOM_RIGHT_;
-    
-    const char kStraightVertical3 =
-    TOP_LEFT_ |     TOP_ |      TOP_RIGHT_ |
-    LEFT_ |                     0 |
-    BOTTOM_LEFT_ |  BOTTOM_ |   0;
-    
-    const char kStraightVertical4 =
-    0 |     TOP_ |      TOP_RIGHT_ |
-    0 |                     RIGHT_ |
-    BOTTOM_LEFT_ |  BOTTOM_ |   BOTTOM_RIGHT_;
-    
-    const char kStraightVertical5 =
-    TOP_LEFT_ |     TOP_ |      TOP_RIGHT_ |
-    0 |                     RIGHT_ |
-    0 |  BOTTOM_ |   BOTTOM_RIGHT_;
-    
     const char kTeeNorth4 =
     0 |     TOP_ |      0 |
     LEFT_ |                     RIGHT_ |
@@ -124,24 +76,34 @@ private:
     TOP_LEFT_ |     TOP_ |      0 |
     LEFT_ |                     RIGHT_ |
     BOTTOM_LEFT_ |  BOTTOM_ |   0;
+    
+    const char kCenterCross =
+    0 |     TOP_ |      TOP_RIGHT_ |
+    LEFT_ |                     RIGHT_ |
+    BOTTOM_LEFT_ |  BOTTOM_ |   0;
+
+    const char kCenterCross2 =
+    TOP_LEFT_ |     TOP_ |      0 |
+    LEFT_ |                     RIGHT_ |
+    0 |  BOTTOM_ |   BOTTOM_RIGHT_;
 
     // 5
-    const char kStraightHorizontal6 =
+    const char kStraightHorizontal =
     0 |     0 |      0 |
     LEFT_ |                     RIGHT_ |
     BOTTOM_LEFT_ |  BOTTOM_ |   BOTTOM_RIGHT_;
 
-    const char kStraightHorizontal7 =
+    const char kStraightHorizontal2 =
     TOP_LEFT_ |     TOP_ |      TOP_RIGHT_ |
     LEFT_ |                     RIGHT_ |
     0 |  0 |   0;
 
-    const char kStraightVertical6 =
+    const char kStraightVertical =
     TOP_LEFT_ |     TOP_ |      0 |
     LEFT_ |                     0 |
     BOTTOM_LEFT_ |  BOTTOM_ |   0;
 
-    const char kStraightVertical7 =
+    const char kStraightVertical2 =
     0 |     TOP_ |      TOP_RIGHT_ |
     0 |                     RIGHT_ |
     0 |  BOTTOM_ |   BOTTOM_RIGHT_;
@@ -187,32 +149,12 @@ private:
     LEFT_ |                     0 |
     0 |  BOTTOM_ |   0;
     
-    const char kCenterCross =
+    const char kCenterCross3 =
     0 |     TOP_ |      0 |
     LEFT_ |                     RIGHT_ |
     0 |  BOTTOM_ |   0;
     
     //3
-    const char kCornerNorthWest2 =
-    0 |     0 |      0 |
-    0 |                     RIGHT_ |
-    0 |  BOTTOM_ |   BOTTOM_RIGHT_;
-    
-    const char kCornerSouthEast2 =
-    TOP_LEFT_ |     TOP_ |      0 |
-    LEFT_ |                     0 |
-    0 |  0 |   0;
-
-    const char kCornerSouthWest2 =
-    0 |     TOP_ |      TOP_RIGHT_ |
-    0 |                     RIGHT_ |
-    0 |  0 |   0;
-
-    const char kCornerNorthEast2 =
-    0 |     0 |      0 |
-    LEFT_ |                     0 |
-    BOTTOM_LEFT_ |  BOTTOM_ |   0;
-    
     const char kTeeSouth3 =
     0 |     0 |      0 |
     LEFT_ |                     RIGHT_ |
@@ -244,26 +186,25 @@ private:
     0 |                     0 |
     0 |  BOTTOM_ |   0;
 
-    const char kCornerSouthEast3 =
+    const char kCornerSouthEast2 =
     0 |     TOP_ |      0 |
     LEFT_ |                     0 |
     0 |  0 |   0;
 
-    const char kCornerSouthWest3 =
+    const char kCornerSouthWest2 =
     0 |     TOP_ |      0 |
     0 |                     RIGHT_ |
     0 |  0 |   0;
 
-    const char kCornerNorthWest3 =
+    const char kCornerNorthWest2 =
     0 |     0 |      0 |
     0 |                     RIGHT_ |
     0 |  BOTTOM_ |   0;
 
-    const char kCornerNorthEast3 =
+    const char kCornerNorthEast2 =
     0 |     0 |      0 |
     LEFT_ |                     0 |
     0 |  BOTTOM_ |   0;
-
 
     // 1
     const char kOpenNorth =

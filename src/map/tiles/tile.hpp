@@ -15,6 +15,8 @@ public:
     Tile(std::shared_ptr<libpmg::Tile> other);
     
     virtual void Draw(std::shared_ptr<TCODConsole> console, bool is_in_fov);
+    virtual bool IsTransparent() = 0;
+    virtual bool IsWalkable() = 0;
     virtual int GetChar() = 0;
     
     inline bool IsExplored() { return explored_; }

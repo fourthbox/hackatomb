@@ -32,7 +32,7 @@ public:
      @return True if the tile is a wall, false otherwise or if the tile fails the bounds check.
      */
     bool IsWall(size_t x, size_t y);
-        
+
     bool HasDoor(size_t x, size_t y);
     
 private:
@@ -83,6 +83,9 @@ private:
      @return The corresponding wall char
      */
     int GetWallChar(size_t x, size_t y);
+    
+    void UpdateTcodProperties(size_t x, size_t y);
+    void UpdateTcodProperties(Tile_p tile);
     
     Tile_p GetTile(size_t x, size_t y);
     
