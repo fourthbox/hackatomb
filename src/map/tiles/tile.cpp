@@ -11,4 +11,15 @@ libpmg::Tile(other->GetX(), other->GetY(), other->GetTagList()) {
 void Tile::Draw(std::shared_ptr<TCODConsole> console, bool is_in_fov) {
     if (is_in_fov || explored_)
         console->setChar(GetX(), GetY(), GetChar());
+    
+    if (!is_in_fov && explored_) {
+        auto bg {console->getCharBackground(GetX(), GetY())};
+        auto fg {console->getCharForeground(GetX(), GetY())};
+
+        bg.scaleHSV(1.0f, 0.4f);
+        fg.scaleHSV(1.0f, 0.4f);
+        
+        console->setCharBackground(GetX(), GetY(), bg);
+        console->setCharForeground(GetX(), GetY(), fg);
+    }
 }
