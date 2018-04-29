@@ -10,29 +10,7 @@
 
 #include "initiable_object.hpp"
 #include "libtcod.hpp"
-
-/**
- This struct holds all the stats an actor have
- */
-struct Stats {
-    int atk_;
-    int def_;
-    int max_hp_;
-    int current_hp_;
-    int fov_;
-    
-    Stats() {
-    }
-    
-    Stats (int atk, int def, int max_hp, int fov) :
-    atk_ {atk},
-    def_ {def},
-    max_hp_ {max_hp},
-    current_hp_ {max_hp},
-    fov_ {fov} {
-    }
-
-};
+#include "stats.hpp"
 
 class ActionManager;
 class ActorManager;
@@ -58,7 +36,7 @@ public:
      @param stats The stats for this actor.
      @param action_manager A pointer to the ActionManager.
      */
-    void Initialize(size_t x, size_t y, const int &sprite, std::string &name, const TCODColor &color, const Stats &stats, std::shared_ptr<ActionManager> action_manager, std::shared_ptr<MapsManager> maps_manager);
+    void Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, std::shared_ptr<ActionManager> action_manager, std::shared_ptr<MapsManager> maps_manager);
     
     virtual void Update() = 0;
     
@@ -90,7 +68,7 @@ protected:
     int sprite_;        /**< Character used to represent this actor. */
     TCODColor color_;   /**< Color used to represent this actor. */
     std::string name_;  /**< Name of this actor. */
-    Stats stats_;       /**< Statsof this actor. */
+    Stats stats_;       /**< Stats of this actor. */
 };
 
 typedef std::shared_ptr<Actor> Actor_p;

@@ -24,7 +24,7 @@ void Monster::Update() {
     y_ = location->second;
 }
 
-void Monster::Initialize(size_t x, size_t y, const int &sprite, std::string &name, const TCODColor &color, const Stats &stats, ActionManager_p action_manager, MapsManager_p maps_manager) {
+void Monster::Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, ActionManager_p action_manager, MapsManager_p maps_manager) {
     assert(!initialized_);
     
     is_always_visible_ = false;

@@ -27,7 +27,7 @@ public:
      @param action_manager A pointer to the ActionManager.
      @param maps_manager A pointer to the MapManager.
      */
-    void Initialize(size_t x, size_t y, const int &sprite, std::string &name, const TCODColor &color, const Stats &stats, std::shared_ptr<ActionManager> action_manager, MapsManager_p maps_manager);
+    void Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, std::shared_ptr<ActionManager> action_manager, MapsManager_p maps_manager);
     
     bool IsVisible();
     void SetAlwaysVisible(bool is_visible);
