@@ -4,7 +4,7 @@ void ActionManager::Initialize(std::shared_ptr<ActorManager> actor_manager, std:
     assert(!initialized_);
     
     // Default the first turn phase to idle
-    current_turn_phase_ = TurnPhase::START_SCREEN_;
+    current_turn_phase_ = TurnPhase::IDLE_;
     
     actor_manager_ = actor_manager;
     maps_manager_ = maps_manager;

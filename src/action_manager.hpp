@@ -29,9 +29,7 @@ enum struct Action {
  */
 enum struct TurnPhase {
     IDLE_,   /**< The game is idle. Waiting for a player input to procede. */
-    ACTION_,  /**< The player has performed an action. Every actor will perform an action. */
-    MENU_,
-    START_SCREEN_
+    ACTION_  /**< The player has performed an action. Every actor will perform an action. */
 };
 
 /**

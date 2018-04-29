@@ -15,11 +15,6 @@
 class UiManager : public InitiableObject {
     
 public :
-    std::shared_ptr<UiWindow> environment_window_;
-    std::shared_ptr<UiWindow> player_info_window_;
-    std::shared_ptr<UiWindow> message_log_window_;
-    std::shared_ptr<UiWindow> start_screen_window_;
-
     UiManager();
     
     /**
@@ -32,9 +27,15 @@ public :
      */
     void Draw();
     
-    void DrawStartScreen();
-    
+    std::shared_ptr<UiWindow> GetEnvironmentWindow();
+    std::shared_ptr<UiWindow> GetPlayerInfoWindow();
+    std::shared_ptr<UiWindow> GetMessageLogWindow();
+        
 private :
+    std::shared_ptr<UiWindow> environment_window_;
+    std::shared_ptr<UiWindow> player_info_window_;
+    std::shared_ptr<UiWindow> message_log_window_;
+
     /**
      Initialize the environment window.
      */

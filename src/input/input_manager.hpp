@@ -18,7 +18,8 @@ class Player;
  */
 class InputManager {
 public:
-    void Update(TurnPhase turn_phase);
+    void Update();
+    void UpdateStartScreen();
     
     inline void SetPlayer(std::shared_ptr<Player> player) { player_ = player; }
     inline void SetStartScreen(std::shared_ptr<StartScreen> start_screen) { start_screen_ = start_screen; }
@@ -29,9 +30,6 @@ private:
     
     TCOD_key_t last_key_;
     TCOD_mouse_t last_mouse_position_;
-    
-    void IdleInput();
-    void MenuInput();
     
 };
 

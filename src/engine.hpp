@@ -14,6 +14,7 @@
 #include "maps_manager.hpp"
 #include "player.hpp"
 #include "root_console_manager.hpp"
+#include "start_screen.hpp"
 #include "ui_manager.hpp"
 #include "world.hpp"
 
@@ -21,7 +22,7 @@
  The main class. It must be initialized before every operation, because it will initialize every needed component.
  Update() and Render() will updare and render every needed component.
  */
-class Engine : public InitiableObject{
+class Engine{
 public:
     Engine();
     
@@ -30,8 +31,7 @@ public:
      @param map The first map to add to the MapsManager
      @param player The player
      */
-    void Initialize(libpmg::DungeonMap &map, Player_p player);
-//    void Initialize(std::unique_ptr<libpmg::WorldMap> map); // TODO: this is just temporary
+    void InitializeGame(libpmg::DungeonMap &map, Player_p player);
     
     /**
      At the beginning of the function the game is put in an TurnPhase::IDLE_ state. Then the Update() for the player is called.
@@ -39,33 +39,45 @@ public:
      */
     void Update();
     
+    void UpdateStartScreen();
+    
     /**
      Calls the draw function on every component, then tells the RootConsoleManager to blit every console on the root console.
      */
     void Render();
+    
+    void RenderStartScreen();
     
     void AddMonster(Actor_p monster);   //TODO: temporary design
     
     ActionManager_p GetActionManager() { return action_manager_; } // TODO: TEMP FOR DEBUG PURPOSES
     MapsManager_p GetMapsManager() { return maps_manager_; } // TODO: TEMP FOR DEBUG PURPOSES
     
+    inline bool IsPlaying() { return is_playing_; }
+    
 private:
+    bool start_screen_initialized_;
+    bool game_initialized_;
+    bool is_playing_;
+    
     // Entities management
     ActorManager_p actor_manager_;        /**< Manager for all actors of the loaded game */
     
     // Map management
     MapsManager_p maps_manager_;          /**< The manager for the maps used in the game */
     
-    // World management
-    std::unique_ptr<World> world_map_;  /**< Pointer to the current world map */
-
     // Ui management
     UiManager ui_manager_;              /**< The manager for everything UI */
+    
+    // Start Screen
+    std::shared_ptr<StartScreen> start_screen_;
     
     // Game management
     RootConsoleManager root_console_manager_;   /**< Manager for the root console. It is responsable for drawing every console on the main one */
     ActionManager_p action_manager_; /**< Manager for every movement, attack or interaction done by an actor */
     InputManager input_manager_;        /**< Manager for keyboard and mouse inputs */
+    
+    void InitializeStartScreen();
 };
 
 #endif /* ENGINE_HPP_ */

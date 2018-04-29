@@ -6,8 +6,6 @@ UiManager::UiManager() {
     environment_window_ = std::make_shared<UiWindow>();
     player_info_window_ = std::make_shared<UiWindow>();
     message_log_window_ = std::make_shared<UiWindow>();
-    
-    start_screen_window_ = std::make_shared<UiWindow>();
 }
 
 void UiManager::Initialize() {
@@ -16,8 +14,6 @@ void UiManager::Initialize() {
     InitializeEnvironmentWindow();
     InitializePlayerInfoWindow();
     InitializeMessageLogWindow();
-    
-    InitializeStartScreenWindow();
     
     initialized_ = true;
 }
@@ -53,21 +49,6 @@ void UiManager::InitializeMessageLogWindow() {
                                     "log");
 }
 
-void UiManager::InitializeStartScreenWindow() {
-    assert(!initialized_);
-    
-    // Initialize labels
-    auto start_label { UiLabel(kRootViewWidth / 2, kRootViewHeight/2-3, "start", "start_label") };
-    auto load_label { UiLabel(kRootViewWidth / 2, kRootViewHeight/2-2, "load", "load_label") };
-    auto config_label { UiLabel(kRootViewWidth / 2, kRootViewHeight/2-1, "config", "config_label") };
-    auto quit_label { UiLabel(kRootViewWidth / 2, kRootViewHeight/2, "quit", "quit_label") };
-
-    start_screen_window_->Initialize(kRootViewWidth,
-                                     kRootViewHeight,
-                                     "hackatomb",
-                                     {start_label, load_label, config_label, quit_label});
-}
-
 void UiManager::Draw() {
     assert(initialized_);
     
@@ -76,8 +57,20 @@ void UiManager::Draw() {
     message_log_window_->Draw();
 }
 
-void UiManager::DrawStartScreen() {
+std::shared_ptr<UiWindow> UiManager::GetEnvironmentWindow() {
     assert(initialized_);
     
-    start_screen_window_->Draw();
+    return environment_window_;
+}
+
+std::shared_ptr<UiWindow> UiManager::GetPlayerInfoWindow() {
+    assert(initialized_);
+
+    return player_info_window_;
+}
+
+std::shared_ptr<UiWindow> UiManager::GetMessageLogWindow() {
+    assert(initialized_);
+
+    return message_log_window_;
 }

@@ -3,17 +3,10 @@
 #include "game_constants.hpp"
 #include "player.hpp"
 
-void InputManager::Update(TurnPhase turn_phase) {
-    TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &last_key_, &last_mouse_position_, true);
-    
-    if (turn_phase == TurnPhase::IDLE_)
-        IdleInput();
-    else if (turn_phase == TurnPhase::START_SCREEN_)
-        MenuInput();
-}
+void InputManager::Update() {
+    assert (player_);
 
-void InputManager::IdleInput() {
-    assert (player_ != nullptr);
+    TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &last_key_, &last_mouse_position_, true);
     
     switch (last_key_.c) {
         case kMoveNorth:
@@ -50,9 +43,11 @@ void InputManager::IdleInput() {
     }
 }
 
-void InputManager::MenuInput() {
-    assert (start_screen_ != nullptr);
+void InputManager::UpdateStartScreen() {
+    assert (start_screen_);
 
+    TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &last_key_, &last_mouse_position_, true);
+    
     switch (last_key_.c) {
         case kMoveNorth:
             start_screen_->CycleMenu(0);
