@@ -17,14 +17,14 @@ static const TCOD_color_t kDefaultDoorColor {TCOD_sepia};
 // Frame Sizes
 static const size_t kEnvironmentConsoleWidth = 17;
 static const size_t kEnvironmentConsoleHeight = 15;
-static const size_t kPlayerInfoConsoleWidth = 17;
+static const size_t kPlayerInfoWindowWidth = 17;
 static const size_t kPlayerInfoConsoleHeight = 22;
-static const size_t kMessageLogConsoleHeight = 6;
+static const size_t kMessageLogWindowHeight = 6;
 
 static const size_t kMapWidth = 100;
 static const size_t kMapHeight = 50;
-static const size_t kRootViewWidth = kMapWidth + kEnvironmentConsoleWidth + kPlayerInfoConsoleWidth;
-static const size_t kRootViewHeight = kMapHeight + kMessageLogConsoleHeight;
+static const size_t kRootViewWidth = kMapWidth + kEnvironmentConsoleWidth + kPlayerInfoWindowWidth;
+static const size_t kRootViewHeight = kMapHeight + kMessageLogWindowHeight;
 
 // Characher mappings
 static const int kCharEmpty = 0;

@@ -18,6 +18,7 @@ public :
     std::shared_ptr<UiWindow> environment_window_;
     std::shared_ptr<UiWindow> player_info_window_;
     std::shared_ptr<UiWindow> message_log_window_;
+    std::shared_ptr<UiWindow> start_screen_window_;
 
     UiManager();
     
@@ -30,6 +31,8 @@ public :
      Draw the windows on the consoles.
      */
     void Draw();
+    
+    void DrawStartScreen();
     
 private :
     /**
@@ -47,6 +50,7 @@ private :
      */
     void InitializeMessageLogWindow();
 
+    void InitializeStartScreenWindow();
 };
 
 #endif /* UI_MANAGER_HPP_ */

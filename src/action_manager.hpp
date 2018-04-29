@@ -13,23 +13,25 @@
  Enumerator that holds the possible actions performable by an actor
  */
 enum struct Action {
-    NONE,
-    MOVE_N,
-    MOVE_NE,
-    MOVE_E,
-    MOVE_SE,
-    MOVE_S,
-    MOVE_SW,
-    MOVE_W,
-    MOVE_NW
+    NONE_,
+    MOVE_N_,
+    MOVE_NE_,
+    MOVE_E_,
+    MOVE_SE_,
+    MOVE_S_,
+    MOVE_SW_,
+    MOVE_W_,
+    MOVE_NW_
 };
 
 /**
  Enumerator that defines the phases of the turn.
  */
 enum struct TurnPhase {
-    IDLE,   /**< The game is idle. Waiting for a player input to procede. */
-    ACTION  /**< The player has performed an action. Every actor will perform an action. */
+    IDLE_,   /**< The game is idle. Waiting for a player input to procede. */
+    ACTION_,  /**< The player has performed an action. Every actor will perform an action. */
+    MENU_,
+    START_SCREEN_
 };
 
 /**
@@ -70,7 +72,7 @@ public:
     bool CanInteract(size_t x, size_t y);
     
     /**
-     Signals that an actor moved in the specified position, setting the current_turn_phase_ to ACTION.
+     Signals that an actor moved in the specified position, setting the current_turn_phase_ to ACTION_.
      */
     void ActionPerformed();
     

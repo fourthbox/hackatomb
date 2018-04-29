@@ -8,23 +8,30 @@
 
 #include <memory>
 
-#include "initiable_object.hpp"
+#include "action_manager.hpp"
 #include "libtcod.hpp"
+#include "start_screen.hpp"
 
 class Player;
 
 /**
  */
-class InputManager : public InitiableObject {
+class InputManager {
 public:
-    void Initialize(std::shared_ptr<Player> player);
-    void Update();
+    void Update(TurnPhase turn_phase);
+    
+    inline void SetPlayer(std::shared_ptr<Player> player) { player_ = player; }
+    inline void SetStartScreen(std::shared_ptr<StartScreen> start_screen) { start_screen_ = start_screen; }
     
 private:
     std::shared_ptr<Player> player_;
+    std::shared_ptr<StartScreen> start_screen_;
     
     TCOD_key_t last_key_;
     TCOD_mouse_t last_mouse_position_;
+    
+    void IdleInput();
+    void MenuInput();
     
 };
 

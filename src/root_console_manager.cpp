@@ -5,9 +5,6 @@
 
 RootConsoleManager::RootConsoleManager() {
     main_view_ = std::make_shared<TCODConsole>(kMapWidth, kMapHeight);
-    left_window_ = nullptr;
-    right_window_ = nullptr;
-    bottom_window_ = nullptr;
 }
 
 void RootConsoleManager::Initialize(size_t width, size_t height, std::string root_name) {
@@ -52,11 +49,24 @@ void RootConsoleManager::Render() {
                       TCODConsole::root, 0, 0);
 
     TCODConsole::blit(right_window_->console_.get(), 0, 0, 0, 0,
-                      TCODConsole::root, TCODConsole::root->getWidth() - kPlayerInfoConsoleWidth, 0);
+                      TCODConsole::root, TCODConsole::root->getWidth() - kPlayerInfoWindowWidth, 0);
 
     TCODConsole::blit(bottom_window_->console_.get(), 0, 0, 0, 0,
-                      TCODConsole::root, 0, TCODConsole::root->getHeight() - kMessageLogConsoleHeight);
+                      TCODConsole::root, 0, TCODConsole::root->getHeight() - kMessageLogWindowHeight);
 
+    TCODConsole::flush();
+}
+
+void RootConsoleManager::RenderStartScreen() {
+    assert(initialized_ && start_screen_window_);
+    
+    // Clear the screen
+    Clear();
+    
+    // Blit the consoles on the root console
+    TCODConsole::blit(start_screen_window_->console_.get(), 0, 0, 0, 0,
+                      TCODConsole::root, 0, 0);
+    
     TCODConsole::flush();
 }
 
@@ -88,3 +98,8 @@ void RootConsoleManager::SetBottomWindow(std::shared_ptr<UiWindow> window) {
     bottom_window_ = window;
 }
 
+void RootConsoleManager::SetStartScreenWindow(std::shared_ptr<UiWindow> window) {
+    assert(initialized_);
+    
+    start_screen_window_ = window;
+}

@@ -34,7 +34,7 @@ public:
 //    void Initialize(std::unique_ptr<libpmg::WorldMap> map); // TODO: this is just temporary
     
     /**
-     At the beginning of the function the game is put in an TurnPhase::IDLE state. Then the Update() for the player is called.
+     At the beginning of the function the game is put in an TurnPhase::IDLE_ state. Then the Update() for the player is called.
      If the player performed an action that consumes 1 turn, then the function will proceed to call the Update() from all other actors in the map.
      */
     void Update();
@@ -43,7 +43,6 @@ public:
      Calls the draw function on every component, then tells the RootConsoleManager to blit every console on the root console.
      */
     void Render();
-    void RenderWorld(); // TODO: temporary design
     
     void AddMonster(Actor_p monster);   //TODO: temporary design
     

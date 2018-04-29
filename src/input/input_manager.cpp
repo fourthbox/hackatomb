@@ -3,51 +3,65 @@
 #include "game_constants.hpp"
 #include "player.hpp"
 
-void InputManager::Initialize(Player_p player) {
-    assert(!initialized_);
+void InputManager::Update(TurnPhase turn_phase) {
+    TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &last_key_, &last_mouse_position_, true);
     
-    player_ = player;
-    
-    initialized_ = true;
+    if (turn_phase == TurnPhase::IDLE_)
+        IdleInput();
+    else if (turn_phase == TurnPhase::START_SCREEN_)
+        MenuInput();
 }
 
-void InputManager::Update() {
-    assert(initialized_);
-    
-    TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_MOUSE, &last_key_, &last_mouse_position_);
+void InputManager::IdleInput() {
+    assert (player_ != nullptr);
     
     switch (last_key_.c) {
         case kMoveNorth:
-            player_->SetAction(Action::MOVE_N);
+            player_->SetAction(Action::MOVE_N_);
             break;
         case kMoveNorthEast:
-            player_->SetAction(Action::MOVE_NE);
+            player_->SetAction(Action::MOVE_NE_);
             break;
         case kMoveEast:
-            player_->SetAction(Action::MOVE_E);
+            player_->SetAction(Action::MOVE_E_);
             break;
         case kMoveSouthEast:
-            player_->SetAction(Action::MOVE_SE);
+            player_->SetAction(Action::MOVE_SE_);
             break;
         case kMoveSouth:
-            player_->SetAction(Action::MOVE_S);
+            player_->SetAction(Action::MOVE_S_);
             break;
         case kMoveSouthWest:
-            player_->SetAction(Action::MOVE_SW);
+            player_->SetAction(Action::MOVE_SW_);
             break;
         case kMoveWest:
-            player_->SetAction(Action::MOVE_W);
+            player_->SetAction(Action::MOVE_W_);
             break;
         case kMoveNorthWest:
-            player_->SetAction(Action::MOVE_NW);
+            player_->SetAction(Action::MOVE_NW_);
             break;
         case 'q':
             player_->maps_manager_->SetAllExplored();
             player_->actor_manager_->SetAllMonstersVisible();
             break;
         default:
-            player_->SetAction(Action::NONE);
+            player_->SetAction(Action::NONE_);
             break;
     }
+}
 
+void InputManager::MenuInput() {
+    assert (start_screen_ != nullptr);
+
+    switch (last_key_.c) {
+        case kMoveNorth:
+            start_screen_->CycleMenu(0);
+            break;
+        case kMoveSouth:
+            start_screen_->CycleMenu(1);
+            break;
+        case TCODK_ENTER:
+            start_screen_->SelectMenu();
+            break;
+    }
 }

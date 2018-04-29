@@ -32,6 +32,8 @@ public:
      */
     void Render();
     
+    void RenderStartScreen();
+    
     /**
      Set left_window_ to point to the specific window.
      @param window A pointer to the window.
@@ -50,9 +52,11 @@ public:
      */
     void SetBottomWindow(std::shared_ptr<UiWindow> window);
     
+    void SetStartScreenWindow(std::shared_ptr<UiWindow> window);
+    
 private:
     size_t width_, height_;     /**< Size of the root console. */
-    std::shared_ptr<UiWindow> left_window_, right_window_, bottom_window_;   /**< Pointers to the fixed windows. */
+    std::shared_ptr<UiWindow> left_window_, right_window_, bottom_window_, start_screen_window_;   /**< Pointers to the fixed windows. */
     
     /**
      Map non-default characters to specific char codes.

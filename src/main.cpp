@@ -128,8 +128,8 @@ int main(int argc, char **argv) {
     // Game loop
     while ( !TCODConsole::isWindowClosed() ) {
 
-        eng.Update();
         eng.Render();
+        eng.Update();
         
 //        eng.RenderWorld();
         

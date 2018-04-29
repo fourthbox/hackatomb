@@ -18,7 +18,7 @@ void Engine::Initialize(libpmg::DungeonMap &map, Player_p player) {
     
     // Initialize Root Console Manager
     root_console_manager_.Initialize(kRootViewWidth, kRootViewHeight, "hackatomb");
-    
+        
     // Initialize the Maps Manager
     maps_manager_->Initialize();
     
@@ -32,6 +32,7 @@ void Engine::Initialize(libpmg::DungeonMap &map, Player_p player) {
     root_console_manager_.SetLeftWindow(ui_manager_.environment_window_);
     root_console_manager_.SetRightWindow(ui_manager_.player_info_window_);
     root_console_manager_.SetBottomWindow(ui_manager_.message_log_window_);
+    root_console_manager_.SetStartScreenWindow(ui_manager_.start_screen_window_);
 
     // Initialize the map
     auto new_map {std::make_unique<Map>(map)};
@@ -51,31 +52,13 @@ void Engine::Initialize(libpmg::DungeonMap &map, Player_p player) {
     
     // Initialize the Action Manager
     action_manager_->Initialize(actor_manager_, maps_manager_);
-    
-    // Initialize Input Manager
-    input_manager_.Initialize(player);
-    
+        
     // Compute fov the first time
     maps_manager_->ComputeFov(player);
 
     // Set as initialized
     initialized_ = true;
 }
-
-//void Engine::Initialize(std::shared_ptr<libpmg::WorldMap> map) {
-//    if (initialized_) {
-//        Utils::LogWarning("Engine", "Engine already initialized.");
-//        return;
-//    }
-//
-////    InitEngine();
-////
-////    // Add the world map
-////    world_map_ = std::make_unique<World>(map);
-//    
-//    // Set as initialized
-//    initialized_ = true;
-//}
 
 void Engine::Update() {
     assert(initialized_);
@@ -84,47 +67,43 @@ void Engine::Update() {
     // Everything that needs to be done when no user action has been detected
     action_manager_->StartTurn();
 
-    input_manager_.Update();
+    input_manager_.Update(action_manager_->GetTurnPhase());
     
     actor_manager_->GetPlayer()->Update();
     
-    if (action_manager_->GetTurnPhase() == TurnPhase::ACTION)
+    if (action_manager_->GetTurnPhase() == TurnPhase::ACTION_)
         actor_manager_->Update();
 }
 
 void Engine::Render() {
     assert(initialized_);
     
-    // Draw the map
-    maps_manager_->Draw(root_console_manager_.main_view_, actor_manager_->GetPlayer());
-    
-    // Draw the player
-    actor_manager_->GetPlayer()->Draw(root_console_manager_.main_view_);
+    if (action_manager_->GetTurnPhase() == TurnPhase::IDLE_) {
+        // Draw the map
+        maps_manager_->Draw(root_console_manager_.main_view_, actor_manager_->GetPlayer());
+        
+        // Draw the player
+        actor_manager_->GetPlayer()->Draw(root_console_manager_.main_view_);
+        
+        // Draw monsters
+        for (auto const &monster : actor_manager_->GetMonsterList()) {
+            if (monster->IsVisible() || maps_manager_->IsInFov(monster->GetPosition().first, monster->GetPosition().second))
+                monster->Draw(root_console_manager_.main_view_);
+        }
+        
+        // Draw the Ui
+        ui_manager_.Draw();
+        
+        // Blit consoles to screen to screen
+        root_console_manager_.Render();
 
-    // Draw monsters
-    for (auto const &monster : actor_manager_->GetMonsterList()) {
-        if (monster->IsVisible() || maps_manager_->IsInFov(monster->GetPosition().first, monster->GetPosition().second))
-            monster->Draw(root_console_manager_.main_view_);
+    } else if (action_manager_->GetTurnPhase() == TurnPhase::START_SCREEN_) {
+        // Draw the Ui
+        ui_manager_.DrawStartScreen();
+        
+        // Blit consoles to screen to screen
+        root_console_manager_.RenderStartScreen();
     }
-
-    // Draw the Ui
-    ui_manager_.Draw();
-    
-    // Blit consoles to screen to screen
-    root_console_manager_.Render();
-}
-
-void Engine::RenderWorld() {
-    assert(initialized_);
-    
-    // Clear the screen
-//    root_console_manager_.Clear();
-    
-    // Draw the map
-    world_map_->Draw();
-    
-    // Draw to screen
-    root_console_manager_.Render();
 }
 
 void Engine::AddMonster(Actor_p monster) {

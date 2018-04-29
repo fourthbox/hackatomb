@@ -5,7 +5,7 @@
 Player::Player() {
     assert(!initialized_);
     
-    action_ = Action::NONE;
+    action_ = Action::NONE_;
 }
 
 void Player::Update() {
@@ -14,38 +14,38 @@ void Player::Update() {
     size_t x {0}, y {0};
         
     switch(action_) {
-        case Action::MOVE_N:
+        case Action::MOVE_N_:
             y--;
             break;
             
-        case Action::MOVE_NE:
+        case Action::MOVE_NE_:
             y--;
             x++;
             break;
             
-        case Action::MOVE_E:
+        case Action::MOVE_E_:
             x++;
             break;
             
-        case Action::MOVE_SE:
+        case Action::MOVE_SE_:
             y++;
             x++;
             break;
             
-        case Action::MOVE_S:
+        case Action::MOVE_S_:
             y++;
             break;
 
-        case Action::MOVE_SW:
+        case Action::MOVE_SW_:
             y++;
             x--;
             break;
             
-        case Action::MOVE_W:
+        case Action::MOVE_W_:
             x--;
             break;
             
-        case Action::MOVE_NW:
+        case Action::MOVE_NW_:
             y--;
             x--;
             break;
