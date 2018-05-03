@@ -103,16 +103,7 @@ void Engine::Update() {
 void Engine::UpdateStartScreen() {
     assert(game_initialized_);
     
-    // Idle phase.
-    // Everything that needs to be done when no user action has been detected
-    action_manager_->StartTurn();
-    
-    input_manager_.Update();
-    
-    actor_manager_->GetPlayer()->Update();
-    
-    if (action_manager_->GetTurnPhase() == TurnPhase::ACTION_)
-        actor_manager_->Update();
+    input_manager_.UpdateStartScreen();
 }
 
 void Engine::Render() {

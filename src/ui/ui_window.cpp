@@ -18,6 +18,10 @@ void UiWindow::Initialize(size_t width, size_t height, string name, std::initial
     // Initialize the console
     console_ = std::make_unique<TCODConsole>(width_, height_);
     
+    // Setup predefined colors
+    // Background is not working
+    TCODConsole::setColorControl(TCOD_COLCTRL_1, TCODColor::red, TCODColor::black);
+    
     initialized_ = true;
 }
 
@@ -35,9 +39,29 @@ void UiWindow::Draw() {
                          name_.empty() ? NULL : name_.c_str());
     
     // Draw the static labels
-    for (auto const & label_entry : static_label_list_) {
-        console_->print(label_entry.second.x_,
-                        label_entry.second.y_,
-                        label_entry.second.text_.c_str());
+    for (auto const &label_entry : static_label_list_) {
+        if (!label_entry.second.is_highlighted_) {
+            console_->print(label_entry.second.x_,
+                            label_entry.second.y_,
+                            label_entry.second.text_.c_str());
+        } else if (label_entry.second.is_highlighted_) {
+            console_->print(label_entry.second.x_,
+                            label_entry.second.y_,
+                            "%c%s%c",
+                            TCOD_COLCTRL_1,
+                            label_entry.second.text_.c_str(),
+                            TCOD_COLCTRL_STOP);
+        }
     }
+}
+
+UiLabel *UiWindow::GetUiLabelById(std::string id) {
+    assert(initialized_);
+
+    for (auto &label_entry : static_label_list_) {
+        if (label_entry.first == id)
+            return &label_entry.second;
+    }
+    
+    return nullptr;
 }

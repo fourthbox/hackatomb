@@ -19,13 +19,15 @@
 struct UiLabel {
     size_t x_, y_;              /**< Coordinates of the top-left point of the label. */
     std::string text_, id_;      /**< Label text, and unique id. */
+    bool is_highlighted_;
     
     UiLabel(size_t x, size_t y, std::string text, std::string id) :
-        x_ {x},
-        y_ {y},
-        text_ {text},
-        id_ {id} {
-        }
+    x_ {x},
+    y_ {y},
+    text_ {text},
+    id_ {id},
+    is_highlighted_ {false} {
+    }
 };
 
 /**
@@ -48,6 +50,8 @@ public:
      Draw the window onto the console
      */
     void Draw();
+    
+    UiLabel *GetUiLabelById(std::string id);
     
 private:
     size_t width_, height_; /**< Size fo the window. */

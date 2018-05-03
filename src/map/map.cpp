@@ -17,13 +17,7 @@ TCODMap {(int)map.GetConfigs()->map_width_, (int)map.GetConfigs()->map_height_} 
 void Map::DigTcodMap() {
     for (auto const &tile : map_) {
         UpdateTcodProperties(tile);
-    }
-    
-//    for (auto x {0}; x < getWidth(); x++) {
-//        for (auto y {0}; y < getHeight(); y++) {
-//            setProperties(x, y, IsEmpty(x, y), IsEmpty(x, y));
-//        }
-//    }
+    }    
 }
 
 void Map::UpdateTcodProperties(size_t x, size_t y) {
