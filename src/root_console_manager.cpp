@@ -4,7 +4,7 @@
 #include "game_utils.hpp"
 
 RootConsoleManager::RootConsoleManager() {
-    main_view_ = std::make_shared<TCODConsole>(kMapWidth, kMapHeight);
+    main_view_ = new TCODConsole(kMapWidth, kMapHeight);
 }
 
 void RootConsoleManager::Initialize(size_t width, size_t height, std::string root_name) {
@@ -41,7 +41,7 @@ void RootConsoleManager::Render() {
     Clear();
     
     // Blit the consoles on the root console
-    TCODConsole::blit(main_view_.get(), 0, 0, 0, 0,
+    TCODConsole::blit(main_view_, 0, 0, 0, 0,
                       TCODConsole::root, kEnvironmentConsoleWidth, 0);
     
     // Blit the windows on the windows on the root console

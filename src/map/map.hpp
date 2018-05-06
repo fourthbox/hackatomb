@@ -35,15 +35,18 @@ public:
 
     bool HasDoor(size_t x, size_t y);
     
+    inline std::vector<libpmg::Room> &GetRoomList() { return room_list_; }
+    
 private:
-    std::vector<Tile_p> map_;
+    std::vector<std::unique_ptr<Tile>> map_;
+    std::vector<libpmg::Room> room_list_;
     libpmg::MapConfigs map_configs_;
     
     /**
      Draws the contents of the Map on a TCODConsole.
      @param console Pointer to the TCODConsole upon which to draw the contents of the Map.
      */
-    void Draw(std::shared_ptr<TCODConsole> console);
+    void Draw(TCODConsole *console);
     
     /**
      Checks wheter the specified coordinate is inside the field of view.
@@ -85,9 +88,9 @@ private:
     int GetWallChar(size_t x, size_t y);
     
     void UpdateTcodProperties(size_t x, size_t y);
-    void UpdateTcodProperties(Tile_p tile);
+    void UpdateTcodProperties(Tile *tile);
     
-    Tile_p GetTile(size_t x, size_t y);
+    Tile *GetTile(size_t x, size_t y);
     
     bool BoundsCheck(std::size_t x, std::size_t y);
     
@@ -95,6 +98,5 @@ private:
 };
 
 typedef std::pair<size_t, size_t> Coordinate;
-typedef std::shared_ptr<std::pair<size_t, size_t>> Coordinate_p;
 
 #endif /* MAP_HPP_ */

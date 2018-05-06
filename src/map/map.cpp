@@ -16,7 +16,7 @@ TCODMap {(int)map.GetConfigs()->map_width_, (int)map.GetConfigs()->map_height_} 
 
 void Map::DigTcodMap() {
     for (auto const &tile : map_) {
-        UpdateTcodProperties(tile);
+        UpdateTcodProperties(tile.get());
     }    
 }
 
@@ -28,7 +28,7 @@ void Map::UpdateTcodProperties(size_t x, size_t y) {
     setProperties((int)x, (int)y, tile->IsTransparent(), tile->IsWalkable());
 }
 
-void Map::UpdateTcodProperties(Tile_p tile) {
+void Map::UpdateTcodProperties(Tile *tile) {
     assert(tile != nullptr);
     
     setProperties(tile->GetX(), tile->GetY(), tile->IsTransparent(), tile->IsWalkable());
@@ -37,24 +37,27 @@ void Map::UpdateTcodProperties(Tile_p tile) {
 void Map::DigPmgMap(libpmg::DungeonMap &map) {
     map_configs_ = *map.GetConfigs();
     
+    // Setup map tiles
     for (auto const &tile : map.GetMap()) {
-        
         if (tile->HasTag(libpmg::TagManager::GetInstance().wall_tag_)) {
-            auto new_tile {std::make_shared<WallTile>(tile)};
+            auto new_tile {std::make_unique<WallTile>(tile.get())};
             new_tile->Initialize(this);
-            map_.push_back(new_tile);
+            map_.push_back(std::move(new_tile));
         } else if (tile->HasTag(libpmg::TagManager::GetInstance().door_tag_)) {
-            map_.push_back(std::make_shared<DoorTile>(tile));
+            map_.push_back(std::make_unique<DoorTile>(tile.get()));
         } else if (tile->HasTag(libpmg::TagManager::GetInstance().floor_tag_)) {
-            map_.push_back(std::make_shared<EmptyTile>(tile));
+            map_.push_back(std::make_unique<EmptyTile>(tile.get()));
         } else {
             Utils::LogError("Map", "Unrecognized tag.");
             abort();
         }
     }
+    
+    // Setup room list
+    room_list_.swap(map.GetRoomList());
 }
 
-void Map::Draw(std::shared_ptr<TCODConsole> console) {
+void Map::Draw(TCODConsole *console) {
     for (auto const &tile : map_) {
         tile->Draw(console, IsInFov(tile->GetX(), tile->GetY()));
     }
@@ -88,11 +91,11 @@ bool Map::IsInFov(size_t x, size_t y) {
     return false;
 }
 
-Tile_p Map::GetTile(size_t x, size_t y) {
+Tile *Map::GetTile(size_t x, size_t y) {
     if (!BoundsCheck(x, y))
         return nullptr;
     
-    return map_[y * map_configs_.map_width_ + x];
+    return map_[y * map_configs_.map_width_ + x].get();
 }
 
 bool Map::BoundsCheck(std::size_t x, std::size_t y) {    
@@ -114,4 +117,3 @@ void Map::SetAllExplored() {
         }
     }
 }
-

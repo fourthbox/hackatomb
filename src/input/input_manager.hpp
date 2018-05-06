@@ -16,17 +16,21 @@ class Player;
 
 /**
  */
-class InputManager {
+class InputManager : public InitiableObject {
 public:
+    void Initialize(ActorManager *actor_manager, MapsManager *maps_manager, StartScreen *start_screen);
+    
     void Update();
+    
     void UpdateStartScreen();
     
-    inline void SetPlayer(std::shared_ptr<Player> player) { player_ = player; }
-    inline void SetStartScreen(std::shared_ptr<StartScreen> start_screen) { start_screen_ = start_screen; }
+    inline void SetPlayer(Player* player) { player_ = player; }
     
 private:
-    std::shared_ptr<Player> player_;
-    std::shared_ptr<StartScreen> start_screen_;
+    Player* player_;
+    StartScreen *start_screen_;
+    MapsManager *maps_manager_;
+    ActorManager *actor_manager_;
     
     TCOD_key_t last_key_;
     TCOD_mouse_t last_mouse_position_;

@@ -12,9 +12,9 @@ enum struct TileType {
 
 class Tile : public libpmg::Tile {
 public:
-    Tile(std::shared_ptr<libpmg::Tile> other);
+    Tile(libpmg::Tile *other);
     
-    virtual void Draw(std::shared_ptr<TCODConsole> console, bool is_in_fov);
+    virtual void Draw(TCODConsole *console, bool is_in_fov);
     virtual bool IsTransparent() = 0;
     virtual bool IsWalkable() = 0;
     virtual int GetChar() = 0;
@@ -28,7 +28,5 @@ protected:
     bool explored_;
     TileType type_;
 };
-
-typedef std::shared_ptr<Tile> Tile_p;
 
 #endif /* TILE_HPP_ */

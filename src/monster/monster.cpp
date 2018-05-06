@@ -1,30 +1,26 @@
 #include "monster.hpp"
 
+#include "actor_manager.hpp"
 #include "player.hpp"
 
 void Monster::Update() {
     assert(initialized_);
     
-    auto px = actor_manager_->GetPlayer()->GetPosition().first;
-    auto py = actor_manager_->GetPlayer()->GetPosition().second;
+    auto px = actor_manager_->GetPlayer().GetPosition().first;
+    auto py = actor_manager_->GetPlayer().GetPosition().second;
     
     // Computer fov for the monster
-    maps_manager_->ComputeFov(shared_from_this());
+    maps_manager_->ComputeFov(this);
     
     // If the hero is not in range, don't do anything
     if (!maps_manager_->IsInFov(px, py))
         return;
     
-    auto location {path_finder_.Walk(x_, y_, px, py)};
+    auto success {path_finder_.Walk(x_, y_, x_, y_, px, py)};
     
-    if (location == nullptr)
-        return;
-    
-    x_ = location->first;
-    y_ = location->second;
 }
 
-void Monster::Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, ActionManager_p action_manager, MapsManager_p maps_manager) {
+void Monster::Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, ActionManager *action_manager, MapsManager *maps_manager) {
     assert(!initialized_);
     
     is_always_visible_ = false;

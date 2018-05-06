@@ -7,6 +7,7 @@
 #define PLAYER_HPP_
 
 #include "action_manager.hpp"
+#include "actor.hpp"
 
 /**
  This class extends Actor with the functionalities that are unique to the player
@@ -28,7 +29,5 @@ public:
 private:    
     Action action_;     /**< The action the player must perform this turn */
 };
-
-typedef std::shared_ptr<Player> Player_p;
 
 #endif /* PLAYER_HPP_ */

@@ -3,7 +3,7 @@
 #include "game_constants.hpp"
 #include "map.hpp"
 
-void WallTile::Draw(std::shared_ptr<TCODConsole> console, bool is_in_fov) {
+void WallTile::Draw(TCODConsole *console, bool is_in_fov) {
     assert(initialized_);
 
     if (is_in_fov || explored_) {

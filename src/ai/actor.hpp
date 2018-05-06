@@ -15,6 +15,7 @@
 class ActionManager;
 class ActorManager;
 class MapsManager;
+class PlayerManager;
 
 /**
  This class represent an intelligent entity on a map
@@ -23,9 +24,6 @@ class Actor : public InitiableObject {
     friend class ActorManager;
     
 public:
-    std::shared_ptr<MapsManager> maps_manager_;         /**< TEMPORARY */
-    std::shared_ptr<ActorManager> actor_manager_;       /**< TEMPORARY */
-
     /**
      Initialize this instance.
      @param x The X coordinate.
@@ -35,8 +33,9 @@ public:
      @param color The color to represent this actor.
      @param stats The stats for this actor.
      @param action_manager A pointer to the ActionManager.
+     @param maps_manager A pointer to the MapsManager
      */
-    void Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, std::shared_ptr<ActionManager> action_manager, std::shared_ptr<MapsManager> maps_manager);
+    void Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, ActionManager *action_manager, MapsManager *maps_manager);
     
     virtual void Update() = 0;
     
@@ -44,7 +43,7 @@ public:
      Draw the actor onto the selected console
      @param console The console upon which to draw the actor.
      */
-    void Draw(std::shared_ptr<TCODConsole> console);
+    void Draw(TCODConsole *console);
     
     /**
      Gets the current position of the actor.
@@ -53,14 +52,11 @@ public:
     std::pair<size_t, size_t> GetPosition();
     
     int GetFovRadius();
-    
-    // This is only a temporary solution, because the actor manager should manage the initialization and instantiation of the actors, passing itself as a parameter.
-    void SetActorManager(std::shared_ptr<ActorManager> am) {actor_manager_ = am;}
-        
+            
 protected:
-    std::shared_ptr<ActionManager> action_manager_;     /**< Pointer to the ActionManager */
-//    std::shared_ptr<ActorManager> actor_manager_;       /**< Pointer to the ActionManaer */
-//    std::shared_ptr<MapsManager> maps_manager_;         /**< Pointer to the MapsManager */
+    ActionManager *action_manager_;     /**< Pointer to the ActionManager */
+    ActorManager *actor_manager_;       /**< Pointer to the ActionManaer */
+    MapsManager *maps_manager_;         /**< Pointer to the MapsManager */
     
     size_t x_, y_;      /**< Location on the current map. */
     uint floor_;        /**< Current floor. */
@@ -70,7 +66,5 @@ protected:
     std::string name_;  /**< Name of this actor. */
     Stats stats_;       /**< Stats of this actor. */
 };
-
-typedef std::shared_ptr<Actor> Actor_p;
 
 #endif /* ACTOR_HPP_ */

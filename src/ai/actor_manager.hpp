@@ -8,17 +8,14 @@
 
 #include <vector>
 
-#include "actor.hpp"
-
-class Monster;
-class Player;
+#include "monster_manager.hpp"
+#include "player_manager.hpp"
 
 /**
  This class is responsable for the maangement and initialization of every actor in the loaded game.
  */
 class ActorManager : public InitiableObject, public std::enable_shared_from_this<ActorManager> {
 public:
-    ActorManager();
     void Initialize();
 
     /**
@@ -28,37 +25,28 @@ public:
      @param y The Y coordinate.
      @return A pointer to the actor if an actor is find, nullptr otherwise.
      */
-    Actor_p GetActorByCoordinates(size_t x, size_t y);
+    Actor *GetActorByCoordinates(size_t x, size_t y);
     
     /**
      Get the list of all the loaded monsters.
      @return A vector of pointers to the monsters.
      */
-    std::vector<std::shared_ptr<Monster>> GetMonsterList();
+    std::vector<Monster*> GetMonsterList();
     
-    /**
-     Add an actor to the actor list performing a check for dupluicates.
-     @param new_actor A pointer to the actor to add.
-     @return True if the Actor was succesfully added, false otherwise.
-     */
-    bool AddActor(Actor_p new_actor);
-    
-    void AddPlayer(std::shared_ptr<Player> player);
-    std::shared_ptr<Player> GetPlayer();
-
     /**
      Call for Update() on every actor in actor_list_
      */
     void Update();
     
     void SetAllMonstersVisible();
-        
-private:
-    std::vector<Actor_p> actor_list_;    /**< List containing all the actors in the loaded game */
-    std::shared_ptr<Player> player_;                   /**< Pointer to the player. */
     
+    void InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager *action_manager, MapsManager *maps_manager);
+    inline Player &GetPlayer() { return player_manager_.GetPlayer(); }
+    
+private:
+    std::vector<Actor*> actor_list_;    /**< List containing all the actors in the loaded game */
+    PlayerManager player_manager_;     /**< The PlayerManager */
+    MonsterManager monster_manager_;     /**< The MonsterManager */
 };
-
-typedef std::shared_ptr<ActorManager> ActorManager_p;
 
 #endif /* ACTOR_MANAGER_HPP_ */

@@ -9,7 +9,7 @@
 #include "actor.hpp"
 #include "path_finder.hpp"
 
-class Monster : public Actor, public std::enable_shared_from_this<Monster> {
+class Monster : public Actor {
 public:
     /**
      Update the player based on the action.
@@ -27,7 +27,7 @@ public:
      @param action_manager A pointer to the ActionManager.
      @param maps_manager A pointer to the MapManager.
      */
-    void Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, std::shared_ptr<ActionManager> action_manager, MapsManager_p maps_manager);
+    void Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, ActionManager *action_manager, MapsManager *maps_manager);
     
     bool IsVisible();
     void SetAlwaysVisible(bool is_visible);
@@ -36,7 +36,5 @@ private:
     PathFinder path_finder_;
     bool is_always_visible_;
 };
-
-typedef std::shared_ptr<Monster> Monster_p;
 
 #endif /* MONSTER_HPP_ */

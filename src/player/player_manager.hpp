@@ -1,14 +1,20 @@
-//
-//  player_manager.hpp
-//  hackatomb
-//
-//  Created by Paolo Arturo Tinti on 5/6/18.
-//  Copyright © 2018 Fourth Box. All rights reserved.
-//
+#ifndef PLAYER_MANAGER_HPP_
+#define PLAYER_MANAGER_HPP_
 
-#ifndef player_manager_hpp
-#define player_manager_hpp
+#include <memory>
 
-#include <stdio.h>
+#include "player.hpp"
 
-#endif /* player_manager_hpp */
+class PlayerManager {
+public:
+    PlayerManager();
+    void InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager *action_manager, MapsManager* maps_manager);
+    Player &GetPlayer();
+    
+private:
+    Player player_;
+    bool player_initialized_;
+    
+};
+
+#endif /* PLAYER_MANAGER_HPP_ */

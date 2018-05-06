@@ -7,8 +7,8 @@
 
 class PathFinder : public InitiableObject {
 public:
-    void Initialize(MapsManager_p map);
-    Coordinate_p Walk(size_t from_x, size_t from_y, size_t to_x, size_t to_y, size_t steps = 1);
+    void Initialize(MapsManager *map);
+    bool Walk(size_t &out_x, size_t &out_y, size_t from_x, size_t from_y, size_t to_x, size_t to_y, size_t steps = 1);
     
 private:
     std::unique_ptr<TCODPath> current_path_;

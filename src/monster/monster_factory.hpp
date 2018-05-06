@@ -5,7 +5,7 @@
 
 class MonsterFactory {
 public:
-    Monster_p CreateGoblin(size_t x, size_t y, std::shared_ptr<ActionManager> action_manager, MapsManager_p maps_manager);
+    std::unique_ptr<Monster> CreateGoblin(size_t x, size_t y, ActionManager *action_manager, MapsManager *maps_manager);
 };
 
 #endif /* MONSTER_FACTORY_HPP_ */

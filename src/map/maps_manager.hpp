@@ -20,7 +20,7 @@ class Actor;
  Class responsable for the management and initialization of every dungeon map.
  Every Map belong to a specific map category, and has a specific floor.
  */
-class MapsManager : public InitiableObject{
+class MapsManager : public InitiableObject {
 public:
     std::string current_map_category_;   // TODO: to redesign. Dungeon type (enum)?
     short current_floor_;               /**< Current floor. */
@@ -34,7 +34,7 @@ public:
      Draws a specific Map on a specific console.
      @param console The console upon which to draw the map.
      */
-    void Draw(std::shared_ptr<TCODConsole> console, std::shared_ptr<Actor> actor);
+    void Draw(TCODConsole *console, Actor *actor);
 
     /**
      It will add the map to the map holder. There's no check for duplicates, and maps can override existing slots.
@@ -42,7 +42,7 @@ public:
      @param map_category The map category this map belongs to.
      @param floor The floor this map belongs to. If floor is -1, it will assign the map with the lowest floor, and append it to the map golder. Default value: -1.
      */
-    void AddMapToMaster(std::unique_ptr<Map> map, std::string &map_category, short floor = -1);
+    void AddMapToMaster(std::unique_ptr<Map> map, std::string map_category, short floor = -1);
     
     /**
      Check whether the specified position is walkable or not.
@@ -58,7 +58,7 @@ public:
      Compute the field of view of the specified actor.
      @param player The player.
      */
-    void ComputeFov(std::shared_ptr<Actor> actor);
+    void ComputeFov(Actor* actor);
     
     /**
      Check whether the specified position is in the field of view or not.
@@ -67,6 +67,8 @@ public:
      @return True if the specified position is in the field of view, false otherwise.
      */
     bool IsInFov(size_t x, size_t y);
+    
+    std::pair<size_t, size_t> GetRandomPosition(int room_number = -1);
     
     std::unique_ptr<TCODPath> AllocatePathFromCurrentFloor(ITCODPathCallback const *callback, float diagonal_cost);
     
@@ -79,7 +81,5 @@ private:
     std::unordered_map<std::string, std::map< size_t, std::unique_ptr<Map>> > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */
 
 };
-
-typedef std::shared_ptr<MapsManager> MapsManager_p;
 
 #endif /* MAPS_MANAGER_HPP_ */

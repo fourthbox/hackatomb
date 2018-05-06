@@ -15,7 +15,7 @@
  */
 class RootConsoleManager : public InitiableObject {
 public:
-    std::shared_ptr<TCODConsole> main_view_;  /**< The console upon which the main view will be drawn. */
+    TCODConsole *main_view_;  /**< The console upon which the main view will be drawn. */
 
     RootConsoleManager();
     

@@ -1,10 +1,22 @@
 #include "input_manager.hpp"
 
+#include "actor_manager.hpp"
 #include "game_constants.hpp"
-#include "player.hpp"
+
+void InputManager::Initialize(ActorManager *actor_manager, MapsManager *maps_manager, StartScreen *start_screen) {
+    assert(!initialized_);
+    
+    actor_manager_ = actor_manager;
+    maps_manager_ = maps_manager;
+    start_screen_ = start_screen;
+    
+    player_ = nullptr;
+    
+    initialized_ = true;
+}
 
 void InputManager::Update() {
-    assert (player_);
+    assert (initialized_ && player_ != nullptr);
 
     TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &last_key_, &last_mouse_position_, true);
     
@@ -34,8 +46,8 @@ void InputManager::Update() {
             player_->SetAction(Action::MOVE_NW_);
             break;
         case 'q':
-            player_->maps_manager_->SetAllExplored();
-            player_->actor_manager_->SetAllMonstersVisible();
+            maps_manager_->SetAllExplored();
+            actor_manager_->SetAllMonstersVisible();
             break;
         default:
             player_->SetAction(Action::NONE_);
@@ -44,19 +56,23 @@ void InputManager::Update() {
 }
 
 void InputManager::UpdateStartScreen() {
-    assert (start_screen_);
+    assert (initialized_);
 
     TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &last_key_, &last_mouse_position_, true);
     
     switch (last_key_.c) {
         case kMoveNorth:
             start_screen_->CycleMenu(0);
-            break;
+            return;
         case kMoveSouth:
             start_screen_->CycleMenu(1);
-            break;
+            return;
+    }
+    
+    switch (last_key_.vk) {
         case TCODK_ENTER:
             start_screen_->SelectMenu();
-            break;
+            return;
     }
+
 }

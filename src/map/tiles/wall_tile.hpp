@@ -17,10 +17,10 @@ class Map;
 
 class WallTile : public Tile, public InitiableObject {
 public:
-    WallTile(std::shared_ptr<libpmg::Tile> other) : Tile(other) { type_ = TileType::WALL_; }
+    WallTile(libpmg::Tile *other) : Tile(other) { type_ = TileType::WALL_; }
     void Initialize(Map *map);
     
-    void Draw(std::shared_ptr<TCODConsole> console, bool is_in_fov) override;
+    void Draw(TCODConsole *console, bool is_in_fov) override;
     
     int GetChar() override;
     inline bool IsTransparent() override { return false; }

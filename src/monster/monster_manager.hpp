@@ -1,14 +1,17 @@
-//
-//  monster_manager.hpp
-//  hackatomb
-//
-//  Created by Paolo Arturo Tinti on 5/6/18.
-//  Copyright © 2018 Fourth Box. All rights reserved.
-//
+#ifndef MONSTER_MANAGER_HPP_
+#define MONSTER_MANAGER_HPP_
 
-#ifndef monster_manager_hpp
-#define monster_manager_hpp
+#include <memory>
 
-#include <stdio.h>
+#include "monster_factory.hpp"
 
-#endif /* monster_manager_hpp */
+class MonsterManager {
+public:
+    Monster *GetRandomMonster(size_t x, size_t y, ActionManager *action_manager, MapsManager *maps_manager);
+
+private:
+    MonsterFactory monster_factory_;
+    std::vector<std::unique_ptr<Monster>> monster_list_;
+};
+
+#endif /* MONSTER_MANAGER_HPP_ */

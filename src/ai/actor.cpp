@@ -4,7 +4,7 @@
 
 using std::string;
 
-void Actor::Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, ActionManager_p action_manager, MapsManager_p maps_manager) {
+void Actor::Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, ActionManager *action_manager, MapsManager *maps_manager) {
     assert(!initialized_);
     
     x_ = x;
@@ -25,7 +25,7 @@ int Actor::GetFovRadius() {
     return stats_.fov_;
 }
 
-void Actor::Draw(std::shared_ptr<TCODConsole> console) {
+void Actor::Draw(TCODConsole *console) {
     assert(initialized_);
 
     console->setChar(x_, y_, sprite_);

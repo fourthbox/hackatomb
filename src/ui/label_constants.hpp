@@ -11,9 +11,9 @@ static const std::string kQuitLabel = "quit";
 static const std::string kLabelAppendix = "_label";
 
 // Composite Names
-static const std::string kStartLabelName = kStartLabel + kLabelAppendix;
-static const std::string kLoadLabelName = kLoadLabel + kLabelAppendix;
-static const std::string kConfigLabelName = kConfigLabel + kLabelAppendix;
-static const std::string kQuitLabelName = kQuitLabel + kLabelAppendix;
+static const std::string kStartLabelId = kStartLabel + kLabelAppendix;
+static const std::string kLoadLabelId = kLoadLabel + kLabelAppendix;
+static const std::string kConfigLabelId = kConfigLabel + kLabelAppendix;
+static const std::string kQuitLabelId = kQuitLabel + kLabelAppendix;
 
 #endif /* LABEL_CONSTANTS_HPP_ */

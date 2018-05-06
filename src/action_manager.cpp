@@ -1,6 +1,9 @@
 #include "action_manager.hpp"
 
-void ActionManager::Initialize(std::shared_ptr<ActorManager> actor_manager, std::shared_ptr<MapsManager> maps_manager) {
+#include "actor_manager.hpp"
+#include "maps_manager.hpp"
+
+void ActionManager::Initialize(ActorManager *actor_manager, MapsManager *maps_manager) {
     assert(!initialized_);
     
     // Default the first turn phase to idle

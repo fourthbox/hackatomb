@@ -6,8 +6,12 @@
 #ifndef ACTION_MANAGER_HPP_
 #define ACTION_MANAGER_HPP_
 
-#include "actor_manager.hpp"
-#include "maps_manager.hpp"
+#include <memory>
+
+#include "initiable_object.hpp"
+
+class ActorManager;
+class MapsManager;
 
 /**
  Enumerator that holds the possible actions performable by an actor
@@ -43,7 +47,7 @@ public:
      @param actor_manager A pointer to the ActorManager.
      @param maps_manager A pointer to the MapsManager.
      */
-    void Initialize(std::shared_ptr<ActorManager> actor_manager, std::shared_ptr<MapsManager> maps_manager);
+    void Initialize(ActorManager *actor_manager, MapsManager *maps_manager);
     
     /**
      Check wheter an actor can move to the specified coordinates.
@@ -82,10 +86,8 @@ public:
     
 private:
     TurnPhase current_turn_phase_;                  /**< Keeps the current turn phase */
-    std::shared_ptr<ActorManager> actor_manager_;   /**< Pointer to the ActorManager */
-    std::shared_ptr<MapsManager> maps_manager_;     /**< Pointer to the MapsManager */
+    ActorManager *actor_manager_;                   /**< Pointer to the ActorManager */
+    MapsManager *maps_manager_;                     /**< Pointer to the MapsManager */
 };
-
-typedef std::shared_ptr<ActionManager> ActionManager_p;
 
 #endif /* ACTION_MANAGER_HPP_ */

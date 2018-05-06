@@ -13,7 +13,7 @@ class TCODPathCallback : public ITCODPathCallback {
     }
 };
 
-void PathFinder::Initialize(MapsManager_p maps_manager) {
+void PathFinder::Initialize(MapsManager *maps_manager) {
     assert(!initialized_);
     
     current_path_ = std::move(maps_manager->AllocatePathFromCurrentFloor(new TCODPathCallback, 1.0f));
@@ -21,19 +21,25 @@ void PathFinder::Initialize(MapsManager_p maps_manager) {
     initialized_ = true;
 }
 
-Coordinate_p PathFinder::Walk(size_t from_x, size_t from_y, size_t to_x, size_t to_y, size_t steps) {
+bool PathFinder::Walk(size_t &out_x, size_t &out_y, size_t from_x, size_t from_y, size_t to_x, size_t to_y, size_t steps) {
     assert(initialized_ && current_path_ != nullptr);
     
     // If the actor is taking 0 steps, return the starting posizion
-    if (steps == 0)
-        return std::make_shared<std::pair<size_t, size_t>> (std::make_pair(from_x, from_y));
+    if (steps == 0) {
+        out_x = from_x;
+        out_y = from_y;
+        return true;
+    }
     
     // Converts steps to path index
     steps--;
     
     // If the steps are more than the path size, return destination
-    if (steps != 0 && steps >= current_path_->size())
-        return std::make_shared<std::pair<size_t, size_t>> (std::make_pair(to_x, to_y));
+    if (steps != 0 && steps >= current_path_->size()) {
+        out_x = to_x;
+        out_y = to_y;
+        return true;
+    }
     
     // If either origin or destination changed, recalculate the path
     int fx, fy, tx, ty, dx, dy;
@@ -43,13 +49,15 @@ Coordinate_p PathFinder::Walk(size_t from_x, size_t from_y, size_t to_x, size_t 
     if (from_x != fx || from_y != fy ||
         to_x != tx || to_y != ty) {
         if (!ComputePath(from_x, from_y, to_x, to_y))
-            return nullptr;
+            return false;
     }
     
     // Get the destination after the specified steps
     current_path_->get(steps, &dx, &dy);
     
-    return std::make_shared<std::pair<size_t, size_t>> (std::make_pair(dx, dy));
+    out_x = dx;
+    out_y = dy;
+    return true;
 }
 
 bool PathFinder::ComputePath(size_t from_x, size_t from_y, size_t to_x, size_t to_y) {
