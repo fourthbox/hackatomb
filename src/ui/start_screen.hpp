@@ -10,7 +10,7 @@ class Engine;
 class StartScreen : public InitiableObject {
 public:
     void Initialize(Engine *engine);
-    std::shared_ptr<UiWindow> GetWindow();
+    UiWindow *GetWindow();
 
     void Draw();
     void CycleMenu(bool direction);
@@ -18,7 +18,7 @@ public:
     
 private:
     Engine* engine_;
-    std::shared_ptr<UiWindow> start_screen_window_;
+    UiWindow *start_screen_window_;
     std::vector<UiLabel*>::iterator selected_label_;
     std::vector<UiLabel*> selectable_labels_;
 };

@@ -8,6 +8,10 @@ Player::Player() {
     action_ = Action::NONE_;
 }
 
+#include "game_globals.hpp"
+
+static int asd = 0;
+
 void Player::Update() {
     assert(initialized_);
     
@@ -15,6 +19,7 @@ void Player::Update() {
         
     switch(action_) {
         case Action::MOVE_N_:
+            
             y--;
             break;
             

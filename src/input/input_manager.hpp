@@ -6,8 +6,6 @@
 #ifndef INPUT_MANAGER_HPP_
 #define INPUT_MANAGER_HPP_
 
-#include <memory>
-
 #include "action_manager.hpp"
 #include "libtcod.hpp"
 #include "start_screen.hpp"
@@ -18,13 +16,13 @@ class Player;
  */
 class InputManager : public InitiableObject {
 public:
-    void Initialize(ActorManager *actor_manager, MapsManager *maps_manager, StartScreen *start_screen);
+    void Initialize(ActorManager &actor_manager, MapsManager &maps_manager, StartScreen &start_screen);
     
     void Update();
     
     void UpdateStartScreen();
     
-    inline void SetPlayer(Player* player) { player_ = player; }
+    inline void SetPlayer(Player &player) { player_ = &player; }
     
 private:
     Player* player_;

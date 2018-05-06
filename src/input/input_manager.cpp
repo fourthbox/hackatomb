@@ -3,12 +3,12 @@
 #include "actor_manager.hpp"
 #include "game_constants.hpp"
 
-void InputManager::Initialize(ActorManager *actor_manager, MapsManager *maps_manager, StartScreen *start_screen) {
+void InputManager::Initialize(ActorManager &actor_manager, MapsManager &maps_manager, StartScreen &start_screen) {
     assert(!initialized_);
     
-    actor_manager_ = actor_manager;
-    maps_manager_ = maps_manager;
-    start_screen_ = start_screen;
+    actor_manager_ = &actor_manager;
+    maps_manager_ = &maps_manager;
+    start_screen_ = &start_screen;
     
     player_ = nullptr;
     

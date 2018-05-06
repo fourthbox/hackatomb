@@ -3,9 +3,9 @@
 #include "game_constants.hpp"
 
 UiManager::UiManager() {
-    environment_window_ = std::make_shared<UiWindow>();
-    player_info_window_ = std::make_shared<UiWindow>();
-    message_log_window_ = std::make_shared<UiWindow>();
+    environment_window_ = new UiWindow();
+    player_info_window_ = new UiWindow();
+    message_log_window_ = new UiWindow();
 }
 
 void UiManager::Initialize() {
@@ -57,19 +57,19 @@ void UiManager::Draw() {
     message_log_window_->Draw();
 }
 
-std::shared_ptr<UiWindow> UiManager::GetEnvironmentWindow() {
+UiWindow *UiManager::GetEnvironmentWindow() {
     assert(initialized_);
     
     return environment_window_;
 }
 
-std::shared_ptr<UiWindow> UiManager::GetPlayerInfoWindow() {
+UiWindow *UiManager::GetPlayerInfoWindow() {
     assert(initialized_);
 
     return player_info_window_;
 }
 
-std::shared_ptr<UiWindow> UiManager::GetMessageLogWindow() {
+UiWindow *UiManager::GetMessageLogWindow() {
     assert(initialized_);
 
     return message_log_window_;

@@ -29,7 +29,7 @@ void Engine::InitializeStartScreen() {
     root_console_manager_.SetStartScreenWindow(start_screen_.GetWindow());
     
     // Initialize Input Manager
-    input_manager_.Initialize(&actor_manager_, &maps_manager_, &start_screen_);
+    input_manager_.Initialize(actor_manager_, maps_manager_, start_screen_);
 
     start_screen_initialized_ = true;
 }
@@ -44,15 +44,15 @@ void Engine::InitializeGame() {
     actor_manager_.Initialize();
     
     // Initialize the Action Manager
-    action_manager_.Initialize(&actor_manager_, &maps_manager_);
+    action_manager_.Initialize(actor_manager_, maps_manager_);
     
     // Initialize the Player
-    actor_manager_.InitializePlayer(maps_manager_.GetRandomPosition(), &action_manager_, &maps_manager_);
+    actor_manager_.InitializePlayer(maps_manager_.GetRandomPosition(), action_manager_, maps_manager_);
     
-    auto player {&actor_manager_.GetPlayer()};
+    auto &player {actor_manager_.GetPlayer()};
     
     // Compute fov the first time
-    maps_manager_.ComputeFov((Actor*)player);
+    maps_manager_.ComputeFov((Actor&)player);
     
     // Attach player to input manager
     input_manager_.SetPlayer(player);
@@ -71,7 +71,7 @@ void Engine::Update() {
     input_manager_.Update();
     
     actor_manager_.GetPlayer().Update();
-    
+        
     if (action_manager_.GetTurnPhase() == TurnPhase::ACTION_)
         actor_manager_.Update();
 }
@@ -86,15 +86,15 @@ void Engine::Render() {
     assert(game_initialized_);
     
     // Draw the map
-    maps_manager_.Draw(root_console_manager_.main_view_, &actor_manager_.GetPlayer());
+    maps_manager_.Draw(*root_console_manager_.main_view_.get(), actor_manager_.GetPlayer());
     
     // Draw the player
-    actor_manager_.GetPlayer().Draw(root_console_manager_.main_view_);
+    actor_manager_.GetPlayer().Draw(*root_console_manager_.main_view_.get());
     
     // Draw monsters
     for (auto const &monster : actor_manager_.GetMonsterList()) {
         if (monster->IsVisible() || maps_manager_.IsInFov(monster->GetPosition().first, monster->GetPosition().second))
-            monster->Draw(root_console_manager_.main_view_);
+            monster->Draw(*root_console_manager_.main_view_.get());
     }
     
     // Draw the Ui

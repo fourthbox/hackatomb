@@ -12,7 +12,7 @@ void ActorManager::Initialize() {
     initialized_ = true;
 }
 
-void ActorManager::InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager *action_manager, MapsManager *maps_manager) {
+void ActorManager::InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager &action_manager, MapsManager &maps_manager) {
     player_manager_.InitializePlayer(start_position, action_manager, maps_manager);
     actor_list_.push_back(&player_manager_.GetPlayer());
 }
@@ -31,8 +31,10 @@ Actor *ActorManager::GetActorByCoordinates(size_t x, size_t y) {
 void ActorManager::Update() {
     assert(initialized_);
     
-    for (auto const &actor : actor_list_) {
-        actor->Update();
+    // TODO: usare monster manager
+    
+    for (auto const &monster : GetMonsterList()) {
+        monster->Update();
     }
 }
 
@@ -42,7 +44,7 @@ std::vector<Monster*> ActorManager::GetMonsterList() {
     std::vector<Monster*> monster_list;
     
     for (auto const &actor : actor_list_) {
-        auto monster {static_cast<Monster*>(actor)};
+        auto monster {dynamic_cast<Monster*>(actor)};
         if (monster != nullptr)
             monster_list.push_back(monster);
     }

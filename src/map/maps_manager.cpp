@@ -30,7 +30,7 @@ bool MapsManager::CanMoveToPosition(size_t x, size_t y) {
     return master_maps_holder_[current_map_category_][current_floor_]->isWalkable(x, y);
 }
 
-void MapsManager::Draw(TCODConsole *console, Actor *actor) {
+void MapsManager::Draw(TCODConsole &console, Actor &actor) {
     assert(initialized_ &&
            master_maps_holder_.count(current_map_category_) > 0 &&
            master_maps_holder_[current_map_category_].count(current_floor_) > 0);
@@ -43,13 +43,13 @@ void MapsManager::Draw(TCODConsole *console, Actor *actor) {
 
 }
 
-void MapsManager::ComputeFov(Actor *actor) {
+void MapsManager::ComputeFov(Actor &actor) {
     assert(master_maps_holder_.count(current_map_category_) > 0 &&
            master_maps_holder_[current_map_category_].count(current_floor_) > 0);
 
-    master_maps_holder_[current_map_category_][current_floor_]->computeFov(actor->GetPosition().first,
-                                                                           actor->GetPosition().second,
-                                                                           actor->GetFovRadius());
+    master_maps_holder_[current_map_category_][current_floor_]->computeFov(actor.GetPosition().first,
+                                                                           actor.GetPosition().second,
+                                                                           actor.GetFovRadius());
 }
 
 void MapsManager::Initialize() {

@@ -12,9 +12,9 @@ enum struct TileType {
 
 class Tile : public libpmg::Tile {
 public:
-    Tile(libpmg::Tile *other);
+    Tile(libpmg::Tile &other);
     
-    virtual void Draw(TCODConsole *console, bool is_in_fov);
+    virtual void Draw(TCODConsole &console, bool is_in_fov);
     virtual bool IsTransparent() = 0;
     virtual bool IsWalkable() = 0;
     virtual int GetChar() = 0;

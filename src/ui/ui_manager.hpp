@@ -27,14 +27,14 @@ public :
      */
     void Draw();
     
-    std::shared_ptr<UiWindow> GetEnvironmentWindow();
-    std::shared_ptr<UiWindow> GetPlayerInfoWindow();
-    std::shared_ptr<UiWindow> GetMessageLogWindow();
+    UiWindow *GetEnvironmentWindow();
+    UiWindow *GetPlayerInfoWindow();
+    UiWindow *GetMessageLogWindow();
         
 private :
-    std::shared_ptr<UiWindow> environment_window_;
-    std::shared_ptr<UiWindow> player_info_window_;
-    std::shared_ptr<UiWindow> message_log_window_;
+    UiWindow *environment_window_;
+    UiWindow *player_info_window_;
+    UiWindow *message_log_window_;
 
     /**
      Initialize the environment window.

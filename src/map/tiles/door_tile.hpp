@@ -7,12 +7,12 @@
 
 class DoorTile : public Tile {
 public:
-    DoorTile(libpmg::Tile *other) : Tile (other) {
+    DoorTile(libpmg::Tile &other) : Tile (other) {
         is_open_ = false;
         is_locked_ = false;
         type_ = TileType::DOOR_;
     }
-    void Draw(TCODConsole *console, bool is_in_fov) override;
+    void Draw(TCODConsole &console, bool is_in_fov) override;
     
     inline int GetChar() override { return (is_open_ ? kCharOpenDoor : kCharClosedDoor ); }
     bool IsTransparent() override { return (is_open_ ? true : false ); }

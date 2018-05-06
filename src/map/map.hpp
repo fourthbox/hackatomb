@@ -46,7 +46,7 @@ private:
      Draws the contents of the Map on a TCODConsole.
      @param console Pointer to the TCODConsole upon which to draw the contents of the Map.
      */
-    void Draw(TCODConsole *console);
+    void Draw(TCODConsole &console);
     
     /**
      Checks wheter the specified coordinate is inside the field of view.

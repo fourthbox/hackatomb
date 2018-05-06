@@ -9,7 +9,7 @@ void StartScreen::Initialize(Engine* engine) {
     assert(!initialized_);
     
     engine_ = engine;
-    start_screen_window_ = std::make_shared<UiWindow>();
+    start_screen_window_ = new UiWindow();
     
     // Initialize labels
     auto start_label { UiLabel(kRootViewWidth / 2, kRootViewHeight/2-3, kStartLabel, kStartLabelId) };
@@ -68,7 +68,7 @@ void StartScreen::SelectMenu() {
     }
 }
 
-std::shared_ptr<UiWindow> StartScreen::GetWindow() {
+UiWindow *StartScreen::GetWindow() {
     assert(initialized_);
 
     return start_screen_window_;

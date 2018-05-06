@@ -4,7 +4,7 @@
 #include "game_utils.hpp"
 
 RootConsoleManager::RootConsoleManager() {
-    main_view_ = new TCODConsole(kMapWidth, kMapHeight);
+    main_view_ = std::make_unique<TCODConsole>(kMapWidth, kMapHeight);
 }
 
 void RootConsoleManager::Initialize(size_t width, size_t height, std::string root_name) {
@@ -41,7 +41,7 @@ void RootConsoleManager::Render() {
     Clear();
     
     // Blit the consoles on the root console
-    TCODConsole::blit(main_view_, 0, 0, 0, 0,
+    TCODConsole::blit(main_view_.get(), 0, 0, 0, 0,
                       TCODConsole::root, kEnvironmentConsoleWidth, 0);
     
     // Blit the windows on the windows on the root console
@@ -80,25 +80,25 @@ void RootConsoleManager::MapCharacters() {
     TCODConsole::mapAsciiCodeToFont(kCharDoubleLineCenter, 15, 13);
 }
 
-void RootConsoleManager::SetLeftWindow(std::shared_ptr<UiWindow> window) {
+void RootConsoleManager::SetLeftWindow(UiWindow *window) {
     assert(initialized_);
     
     left_window_ = window;
 }
 
-void RootConsoleManager::SetRightWindow(std::shared_ptr<UiWindow> window) {
+void RootConsoleManager::SetRightWindow(UiWindow *window) {
     assert(initialized_);
     
     right_window_ = window;
 }
 
-void RootConsoleManager::SetBottomWindow(std::shared_ptr<UiWindow> window) {
+void RootConsoleManager::SetBottomWindow(UiWindow *window) {
     assert(initialized_);
     
     bottom_window_ = window;
 }
 
-void RootConsoleManager::SetStartScreenWindow(std::shared_ptr<UiWindow> window) {
+void RootConsoleManager::SetStartScreenWindow(UiWindow *window) {
     assert(initialized_);
     
     start_screen_window_ = window;

@@ -14,7 +14,7 @@
 /**
  This class is responsable for the maangement and initialization of every actor in the loaded game.
  */
-class ActorManager : public InitiableObject, public std::enable_shared_from_this<ActorManager> {
+class ActorManager : public InitiableObject {
 public:
     void Initialize();
 
@@ -40,7 +40,7 @@ public:
     
     void SetAllMonstersVisible();
     
-    void InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager *action_manager, MapsManager *maps_manager);
+    void InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager &action_manager, MapsManager &maps_manager);
     inline Player &GetPlayer() { return player_manager_.GetPlayer(); }
     
 private:

@@ -34,7 +34,7 @@ public:
      Draws a specific Map on a specific console.
      @param console The console upon which to draw the map.
      */
-    void Draw(TCODConsole *console, Actor *actor);
+    void Draw(TCODConsole &console, Actor &actor);
 
     /**
      It will add the map to the map holder. There's no check for duplicates, and maps can override existing slots.
@@ -58,7 +58,7 @@ public:
      Compute the field of view of the specified actor.
      @param player The player.
      */
-    void ComputeFov(Actor* actor);
+    void ComputeFov(Actor &actor);
     
     /**
      Check whether the specified position is in the field of view or not.

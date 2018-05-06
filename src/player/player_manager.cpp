@@ -6,7 +6,7 @@ PlayerManager::PlayerManager() :
 player_initialized_ {false} {
 }
 
-void PlayerManager::InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager *action_manager, MapsManager *maps_manager) {
+void PlayerManager::InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager &action_manager, MapsManager &maps_manager) {
     
     auto stats {Stats(5, 5, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10)};
     

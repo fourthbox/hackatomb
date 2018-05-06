@@ -3,19 +3,19 @@
 #include "game_constants.hpp"
 #include "map.hpp"
 
-void WallTile::Draw(TCODConsole *console, bool is_in_fov) {
+void WallTile::Draw(TCODConsole &console, bool is_in_fov) {
     assert(initialized_);
 
     if (is_in_fov || explored_) {
-        console->setCharBackground(GetX(), GetY(), kDefaultGroundColor);
-        console->setCharForeground(GetX(), GetY(), kDefaultWallColor);
+        console.setCharBackground(GetX(), GetY(), kDefaultGroundColor);
+        console.setCharForeground(GetX(), GetY(), kDefaultWallColor);
     }
     
     Tile::Draw(console, is_in_fov);
 }
 
-void WallTile::Initialize(Map *map) {
-    map_ = map;
+void WallTile::Initialize(Map &map) {
+    map_ = &map;
     
     initialized_ = true;
 }

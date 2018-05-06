@@ -6,8 +6,6 @@
 #ifndef ACTION_MANAGER_HPP_
 #define ACTION_MANAGER_HPP_
 
-#include <memory>
-
 #include "initiable_object.hpp"
 
 class ActorManager;
@@ -47,7 +45,7 @@ public:
      @param actor_manager A pointer to the ActorManager.
      @param maps_manager A pointer to the MapsManager.
      */
-    void Initialize(ActorManager *actor_manager, MapsManager *maps_manager);
+    void Initialize(ActorManager &actor_manager, MapsManager &maps_manager);
     
     /**
      Check wheter an actor can move to the specified coordinates.

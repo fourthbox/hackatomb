@@ -32,10 +32,10 @@ public:
      @param name The name of the actor.
      @param color The color to represent this actor.
      @param stats The stats for this actor.
-     @param action_manager A pointer to the ActionManager.
-     @param maps_manager A pointer to the MapsManager
+     @param action_manager Reference to the ActionManager.
+     @param maps_manager Reference to the MapsManager
      */
-    void Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, ActionManager *action_manager, MapsManager *maps_manager);
+    void Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, ActionManager &action_manager, MapsManager &maps_manager);
     
     virtual void Update() = 0;
     
@@ -43,7 +43,7 @@ public:
      Draw the actor onto the selected console
      @param console The console upon which to draw the actor.
      */
-    void Draw(TCODConsole *console);
+    void Draw(TCODConsole &console);
     
     /**
      Gets the current position of the actor.

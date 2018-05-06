@@ -13,10 +13,10 @@ class TCODPathCallback : public ITCODPathCallback {
     }
 };
 
-void PathFinder::Initialize(MapsManager *maps_manager) {
+void PathFinder::Initialize(MapsManager &maps_manager) {
     assert(!initialized_);
     
-    current_path_ = std::move(maps_manager->AllocatePathFromCurrentFloor(new TCODPathCallback, 1.0f));
+    current_path_ = std::move(maps_manager.AllocatePathFromCurrentFloor(new TCODPathCallback, 1.0f));
     
     initialized_ = true;
 }
