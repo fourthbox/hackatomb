@@ -43,14 +43,14 @@ public:
      @param name The name that will appear on top of the window.
      @param labels The static labels for the window.
      */
-    void Initialize(size_t width, size_t height, std::string name = "", std::initializer_list<UiLabel> labels = {});
+    void Initialize(size_t width, size_t height, std::string const &name = "", std::initializer_list<UiLabel> labels = {});
     
     /**
      Draw the window onto the console
      */
     void Draw();
     
-    UiLabel *GetUiLabelById(std::string id);
+    UiLabel *GetUiLabelById(std::string const &id);
     
 private:
     size_t width_, height_; /**< Size fo the window. */

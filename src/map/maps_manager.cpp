@@ -8,7 +8,7 @@
 
 using std::string;
 
-void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, string map_category, short floor) {
+void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, string const &map_category, short floor) {
     assert(floor >= -1);
     
     // Set current floor and categoty
@@ -30,7 +30,7 @@ bool MapsManager::CanMoveToPosition(size_t x, size_t y) {
     return master_maps_holder_[current_map_category_][current_floor_]->isWalkable(x, y);
 }
 
-void MapsManager::Draw(TCODConsole &console, Actor &actor) {
+void MapsManager::Draw(TCODConsole &console, Actor const &actor) {
     assert(initialized_ &&
            master_maps_holder_.count(current_map_category_) > 0 &&
            master_maps_holder_[current_map_category_].count(current_floor_) > 0);
@@ -43,7 +43,7 @@ void MapsManager::Draw(TCODConsole &console, Actor &actor) {
 
 }
 
-void MapsManager::ComputeFov(Actor &actor) {
+void MapsManager::ComputeFov(Actor const &actor) {
     assert(master_maps_holder_.count(current_map_category_) > 0 &&
            master_maps_holder_[current_map_category_].count(current_floor_) > 0);
 

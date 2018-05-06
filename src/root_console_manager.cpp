@@ -7,7 +7,7 @@ RootConsoleManager::RootConsoleManager() {
     main_view_ = std::make_unique<TCODConsole>(kMapWidth, kMapHeight);
 }
 
-void RootConsoleManager::Initialize(size_t width, size_t height, std::string root_name) {
+void RootConsoleManager::Initialize(size_t width, size_t height, std::string const &root_name) {
     assert (!initialized_);
     
     // Set fields

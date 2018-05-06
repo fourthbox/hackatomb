@@ -34,7 +34,7 @@ public:
      Draws a specific Map on a specific console.
      @param console The console upon which to draw the map.
      */
-    void Draw(TCODConsole &console, Actor &actor);
+    void Draw(TCODConsole &console, Actor const &actor);
 
     /**
      It will add the map to the map holder. There's no check for duplicates, and maps can override existing slots.
@@ -42,7 +42,7 @@ public:
      @param map_category The map category this map belongs to.
      @param floor The floor this map belongs to. If floor is -1, it will assign the map with the lowest floor, and append it to the map golder. Default value: -1.
      */
-    void AddMapToMaster(std::unique_ptr<Map> map, std::string map_category, short floor = -1);
+    void AddMapToMaster(std::unique_ptr<Map> map, std::string const &map_category, short floor = -1);
     
     /**
      Check whether the specified position is walkable or not.
@@ -58,7 +58,7 @@ public:
      Compute the field of view of the specified actor.
      @param player The player.
      */
-    void ComputeFov(Actor &actor);
+    void ComputeFov(Actor const &actor);
     
     /**
      Check whether the specified position is in the field of view or not.

@@ -27,7 +27,7 @@ public:
      @param action_manager Reference to the ActionManager.
      @param maps_manager Reference to the MapManager.
      */
-    void Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, ActionManager &action_manager, MapsManager &maps_manager);
+    void Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, MapsManager &maps_manager);
     
     bool IsVisible();
     void SetAlwaysVisible(bool is_visible);

@@ -25,7 +25,7 @@ public:
      @param height Height of the root console.
      @param root_name Name of the window.
      */
-    void Initialize(size_t width, size_t height, std::string root_name);
+    void Initialize(size_t width, size_t height, std::string const &root_name);
     
     /**
      Blit the consoles onto the root console.

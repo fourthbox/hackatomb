@@ -2,7 +2,7 @@
 
 using std::string;
 
-void UiWindow::Initialize(size_t width, size_t height, string name, std::initializer_list<UiLabel> labels) {
+void UiWindow::Initialize(size_t width, size_t height, string const &name, std::initializer_list<UiLabel> labels) {
     assert(!initialized_);
     
     width_ = width;
@@ -55,7 +55,7 @@ void UiWindow::Draw() {
     }
 }
 
-UiLabel *UiWindow::GetUiLabelById(std::string id) {
+UiLabel *UiWindow::GetUiLabelById(std::string const &id) {
     assert(initialized_);
 
     for (auto &label_entry : static_label_list_) {

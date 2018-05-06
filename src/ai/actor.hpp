@@ -35,7 +35,7 @@ public:
      @param action_manager Reference to the ActionManager.
      @param maps_manager Reference to the MapsManager
      */
-    void Initialize(size_t x, size_t y, const int &sprite, std::string name, const TCODColor &color, const Stats &stats, ActionManager &action_manager, MapsManager &maps_manager);
+    void Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, MapsManager &maps_manager);
     
     virtual void Update() = 0;
     
@@ -49,9 +49,9 @@ public:
      Gets the current position of the actor.
      @return A pair containing the coordinates on the current map.
      */
-    std::pair<size_t, size_t> GetPosition();
+    std::pair<size_t, size_t> GetPosition() const;
     
-    int GetFovRadius();
+    int GetFovRadius() const;
             
 protected:
     ActionManager *action_manager_;     /**< Pointer to the ActionManager */
