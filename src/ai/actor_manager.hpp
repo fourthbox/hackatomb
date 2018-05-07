@@ -26,13 +26,7 @@ public:
      @return A pointer to the actor if an actor is find, nullptr otherwise.
      */
     Actor *GetActorByCoordinates(size_t x, size_t y);
-    
-    /**
-     Get the list of all the loaded monsters.
-     @return A vector of pointers to the monsters.
-     */
-    std::vector<Monster*> GetMonsterList();
-    
+        
     /**
      Call for Update() on every actor in actor_list_
      */
@@ -42,7 +36,7 @@ public:
     
     void InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager &action_manager, MapsManager &maps_manager);
     inline Player &GetPlayer() { return player_manager_.GetPlayer(); }
-    
+        
 private:
     std::vector<Actor*> actor_list_;    /**< List containing all the actors in the loaded game */
     PlayerManager player_manager_;     /**< The PlayerManager */

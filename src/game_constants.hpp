@@ -67,4 +67,10 @@ static const char kMoveSouthWest = 'b';
 static const char kMoveWest = 'h';
 static const char kMoveNorthWest = 'y';
 
+// Misc constants
+static const short kStandardFloorDepth = 27;
+
+// Map constants
+static const size_t kMaxRoomPlacementAttempts = 10;
+
 #endif /* GAME_CONSTANTS_HPP_ */

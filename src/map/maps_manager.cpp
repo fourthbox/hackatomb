@@ -8,7 +8,7 @@
 
 using std::string;
 
-void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, string const &map_category, short floor) {
+void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, DungeonCategory map_category, short floor) {
     assert(floor >= -1);
     
     // Set current floor and categoty
@@ -40,7 +40,6 @@ void MapsManager::Draw(TCODConsole &console, Actor const &actor) {
     
     // Draw the current map
     master_maps_holder_[current_map_category_][current_floor_]->Draw(console);
-
 }
 
 void MapsManager::ComputeFov(Actor const &actor) {
@@ -55,34 +54,11 @@ void MapsManager::ComputeFov(Actor const &actor) {
 void MapsManager::Initialize() {
     assert (!initialized_);
     
-    // TODO: initialize all floor
+    // Generate first dungeon floor
+    auto map_p {std::make_unique<Map>(dungeon_factory_.GenerateDungeon(DungeonCategory::NORMAL_).get())};
     
-    // Initialize the dungeon builder
-    auto dungeon_builder {libpmg::DungeonBuilder()};
-    
-    // Setup the map
-    dungeon_builder.SetMapSize(kMapWidth, kMapHeight);
-    dungeon_builder.SetMinRoomSize(4, 4);
-    dungeon_builder.SetMaxRoomSize(12, 12);
-    dungeon_builder.SetMaxRoomPlacementAttempts(10);
-    dungeon_builder.SetMaxRooms(30);
-    dungeon_builder.SetDefaultPathAlgorithm(libpmg::PathAlgorithm::ASTAR_BFS_MIX);
-    dungeon_builder.SetDiagonalCorridors(false);
-    
-    // Initialize the map
-    dungeon_builder.InitMap();
-    
-    // Generate the features
-    dungeon_builder.GenerateRooms();
-    dungeon_builder.GenerateCorridors();
-    dungeon_builder.GenerateDoors();
-
-    // Generate
-    libpmg::DungeonMap* map {(libpmg::DungeonMap*) dungeon_builder.Build().release()};
-    
-    auto map_p {std::make_unique<Map>(*map)};
-        
-    AddMapToMaster(std::move(map_p), "standard_dungeon");
+    // Add to map master
+    AddMapToMaster(std::move(map_p), DungeonCategory::NORMAL_);
     
     initialized_ = true;
 }
@@ -141,5 +117,5 @@ std::pair<size_t, size_t> MapsManager::GetRandomPosition(int room_number) {
     if (room_number == -1)
         room_number = libpmg::RndManager::GetInstance().GetRandomUintFromRange(0, master_maps_holder_[current_map_category_][current_floor_]->GetRoomList().size()-1);
 
-    return master_maps_holder_[current_map_category_][current_floor_]->GetRoomList()[room_number].GetRndCoords();
+    return master_maps_holder_[current_map_category_][current_floor_]->GetRoomList()[room_number]->GetRndCoords();
 }

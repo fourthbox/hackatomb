@@ -33,31 +33,16 @@ void ActorManager::Update() {
     
     // TODO: usare monster manager
     
-    for (auto const &monster : GetMonsterList()) {
-        monster->Update();
-    }
-}
-
-std::vector<Monster*> ActorManager::GetMonsterList() {
-    assert(initialized_);
-    
-    std::vector<Monster*> monster_list;
-    
-    for (auto const &actor : actor_list_) {
-        auto monster {dynamic_cast<Monster*>(actor)};
-        if (monster != nullptr)
-            monster_list.push_back(monster);
-    }
-
-    return monster_list;
 }
 
 void ActorManager::SetAllMonstersVisible() {
     assert(initialized_);
     
-    auto monster_list {GetMonsterList()};
-
-    for (auto const &monster : monster_list) {
-        monster->SetAlwaysVisible(true);
-    }
+    // TODO: use the monster list
+    
+//    auto monster_list {GetMonsterList()};
+//
+//    for (auto const &monster : monster_list) {
+//        monster->SetAlwaysVisible(true);
+//    }
 }

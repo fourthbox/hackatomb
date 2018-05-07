@@ -8,9 +8,8 @@
 #define MAPS_MANAGER_HPP_
 
 #include <map>
-#include <string>
-#include <unordered_map>
 
+#include "dungeon_factory.hpp"
 #include "initiable_object.hpp"
 #include "map.hpp"
 
@@ -22,8 +21,8 @@ class Actor;
  */
 class MapsManager : public InitiableObject {
 public:
-    std::string current_map_category_;   // TODO: to redesign. Dungeon type (enum)?
-    short current_floor_;               /**< Current floor. */
+    DungeonCategory current_map_category_;      /**< Dungeon type. */
+    short current_floor_;                   /**< Current floor. */
 
     /**
      Initialized this instance.
@@ -42,7 +41,7 @@ public:
      @param map_category The map category this map belongs to.
      @param floor The floor this map belongs to. If floor is -1, it will assign the map with the lowest floor, and append it to the map golder. Default value: -1.
      */
-    void AddMapToMaster(std::unique_ptr<Map> map, std::string const &map_category, short floor = -1);
+    void AddMapToMaster(std::unique_ptr<Map> map, DungeonCategory map_category, short floor = -1);
     
     /**
      Check whether the specified position is walkable or not.
@@ -78,7 +77,8 @@ public:
     void OpenDoor(size_t x, size_t y);
     
 private:
-    std::unordered_map<std::string, std::map< size_t, std::unique_ptr<Map>> > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */
+    DungeonFactory dungeon_factory_;
+    std::unordered_map<DungeonCategory, std::map< size_t, std::unique_ptr<Map>> > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */
 
 };
 

@@ -23,7 +23,7 @@ public:
      Deallocates the original vector of Tiles inside DungeonMap, and then fills map_.
      @param map A pointer to the map which parameters will be copied into this instance.
      */
-    Map(libpmg::DungeonMap &map);
+    Map(libpmg::DungeonMap *map);
     
     /**
      Check if a tile is flagged as a wall.
@@ -35,12 +35,12 @@ public:
 
     bool HasDoor(size_t x, size_t y);
     
-    inline std::vector<libpmg::Room> &GetRoomList() { return room_list_; }
+    inline std::vector<libpmg::Room*> &GetRoomList() { return room_list_; }
     
 private:
     std::vector<std::unique_ptr<Tile>> map_;
-    std::vector<libpmg::Room> room_list_;
-    libpmg::MapConfigs map_configs_;
+    std::vector<libpmg::Room*> room_list_;
+    std::shared_ptr<libpmg::MapConfigs> map_configs_;
     
     /**
      Draws the contents of the Map on a TCODConsole.
@@ -61,7 +61,7 @@ private:
      */
     void DigTcodMap();
     
-    void DigPmgMap(libpmg::DungeonMap &map);
+    void DigPmgMap(libpmg::DungeonMap *map);
     
     // Getters and setters
     /**

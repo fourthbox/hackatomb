@@ -17,8 +17,8 @@ class Map;
 
 class WallTile : public Tile, public InitiableObject {
 public:
-    WallTile(libpmg::Tile &other) : Tile(other) { type_ = TileType::WALL_; }
-    void Initialize(Map &map);
+    WallTile(libpmg::Tile *other) : Tile(other) { type_ = TileType::WALL_; }
+    void Initialize(Map *map);
     
     void Draw(TCODConsole &console, bool is_in_fov) override;
     

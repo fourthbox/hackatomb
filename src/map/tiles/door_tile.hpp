@@ -7,7 +7,7 @@
 
 class DoorTile : public Tile {
 public:
-    DoorTile(libpmg::Tile &other) : Tile (other) {
+    DoorTile(libpmg::Tile *other) : Tile (other) {
         is_open_ = false;
         is_locked_ = false;
         type_ = TileType::DOOR_;

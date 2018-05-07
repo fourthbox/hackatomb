@@ -11,7 +11,7 @@ TCODMap {(int)configs_->map_width_, (int)configs_->map_height_}
 void World::Draw() {
     for (size_t x {0}; x < getWidth(); x++) {
         for (size_t y {0}; y < getHeight(); y++) {
-            auto tile = std::static_pointer_cast<libpmg::WorldTile>(GetTile(x, y));
+            auto tile {(libpmg::WorldTile*) GetTile(x, y)};
             float value = tile->GetAltitude();
             
             if (value <= 0.1 )

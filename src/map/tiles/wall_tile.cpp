@@ -14,8 +14,8 @@ void WallTile::Draw(TCODConsole &console, bool is_in_fov) {
     Tile::Draw(console, is_in_fov);
 }
 
-void WallTile::Initialize(Map &map) {
-    map_ = &map;
+void WallTile::Initialize(Map *map) {
+    map_ = map;
     
     initialized_ = true;
 }
