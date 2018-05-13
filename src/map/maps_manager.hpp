@@ -43,6 +43,8 @@ public:
      */
     void AddMapToMaster(std::unique_ptr<Map> map, DungeonCategory map_category, short floor = -1);
     
+    void LoadDungeonFloor(DungeonCategory category, short floor);
+    
     /**
      Check whether the specified position is walkable or not.
      @param x The X coordinate.

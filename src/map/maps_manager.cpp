@@ -54,13 +54,18 @@ void MapsManager::ComputeFov(Actor const &actor) {
 void MapsManager::Initialize() {
     assert (!initialized_);
     
-    // Generate first dungeon floor
-    auto map_p {std::make_unique<Map>(dungeon_factory_.GenerateDungeon(DungeonCategory::NORMAL_).get())};
-    
-    // Add to map master
-    AddMapToMaster(std::move(map_p), DungeonCategory::NORMAL_);
+    // Initialize first dungeon map
+    LoadDungeonFloor(DungeonCategory::NORMAL_, 0);
     
     initialized_ = true;
+}
+
+void MapsManager::LoadDungeonFloor(DungeonCategory category, short floor) {
+    // Generate dungeon floor
+    auto map_p {std::make_unique<Map>(dungeon_factory_.GenerateDungeon(category).get())};
+    
+    // Add to map master
+    AddMapToMaster(std::move(map_p), category, floor);
 }
 
 bool MapsManager::IsInFov(size_t x, size_t y) {
