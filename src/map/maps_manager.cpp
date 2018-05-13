@@ -62,7 +62,7 @@ void MapsManager::Initialize() {
 
 void MapsManager::LoadDungeonFloor(DungeonCategory category, short floor) {
     // Generate dungeon floor
-    auto map_p {std::make_unique<Map>(dungeon_factory_.GenerateDungeon(category).get())};
+    auto map_p {std::make_unique<Map>(*dungeon_factory_.GenerateDungeon(category))};
     
     // Add to map master
     AddMapToMaster(std::move(map_p), category, floor);

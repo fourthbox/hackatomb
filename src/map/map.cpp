@@ -8,8 +8,8 @@
 #include "game_utils.hpp"
 #include "wall_tile.hpp"
 
-Map::Map(libpmg::DungeonMap *map) :
-TCODMap {(int)map->GetConfigs().map_width_, (int)map->GetConfigs().map_height_} {
+Map::Map(libpmg::DungeonMap &map) :
+TCODMap {(int)map.GetConfigs().map_width_, (int)map.GetConfigs().map_height_} {
     DigPmgMap(map);
     DigTcodMap();
 }
@@ -34,11 +34,11 @@ void Map::UpdateTcodProperties(Tile *tile) {
     setProperties(tile->GetX(), tile->GetY(), tile->IsTransparent(), tile->IsWalkable());
 }
 
-void Map::DigPmgMap(libpmg::DungeonMap *map) {
-    map_configs_ = std::make_shared<libpmg::MapConfigs> (map->GetConfigs());
+void Map::DigPmgMap(libpmg::DungeonMap &map) {
+    map_configs_ = std::make_shared<libpmg::MapConfigs> (map.GetConfigs());
     
     // Setup map tiles
-    for (auto const &tile : *map->GetMap()) {
+    for (auto const &tile : *map.GetMap()) {
         if (tile->HasTag(libpmg::TagManager::GetInstance().wall_tag_)) {
             auto new_tile {std::make_unique<WallTile>(tile.get())};
             new_tile->Initialize(this);
@@ -54,7 +54,7 @@ void Map::DigPmgMap(libpmg::DungeonMap *map) {
     }
     
     // Setup room list
-    room_list_.swap(map->GetRoomList());
+    room_list_.swap(map.GetRoomList());
 }
 
 void Map::Draw(TCODConsole &console) {

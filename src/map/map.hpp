@@ -23,7 +23,7 @@ public:
      Deallocates the original vector of Tiles inside DungeonMap, and then fills map_.
      @param map A pointer to the map which parameters will be copied into this instance.
      */
-    Map(libpmg::DungeonMap *map);
+    Map(libpmg::DungeonMap &map);
     
     /**
      Check if a tile is flagged as a wall.
@@ -61,7 +61,7 @@ private:
      */
     void DigTcodMap();
     
-    void DigPmgMap(libpmg::DungeonMap *map);
+    void DigPmgMap(libpmg::DungeonMap &map);
     
     // Getters and setters
     /**

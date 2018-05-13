@@ -118,9 +118,11 @@ std::shared_ptr<libpmg::DungeonMap> DungeonFactory::GenerateDungeon(DungeonCateg
     category_builders_[category]->GenerateDoors();
 
     // Generate dungeon
-    auto dungeon {std::static_pointer_cast<libpmg::DungeonMap> (category_builders_[category]->Build())};
+    std::shared_ptr<libpmg::Map> map_sp {std::move(category_builders_[category]->Build())};
     
-    assert (dungeon != nullptr);
+    auto dungeon_sp {std::static_pointer_cast<libpmg::DungeonMap> (map_sp)};
     
-    return dungeon;
+    assert (dungeon_sp != nullptr);
+    
+    return dungeon_sp;
 }
