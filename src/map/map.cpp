@@ -9,7 +9,7 @@
 #include "wall_tile.hpp"
 
 Map::Map(libpmg::DungeonMap *map) :
-TCODMap {(int)map->GetConfigs()->map_width_, (int)map->GetConfigs()->map_height_} {
+TCODMap {(int)map->GetConfigs().map_width_, (int)map->GetConfigs().map_height_} {
     DigPmgMap(map);
     DigTcodMap();
 }
@@ -35,18 +35,18 @@ void Map::UpdateTcodProperties(Tile *tile) {
 }
 
 void Map::DigPmgMap(libpmg::DungeonMap *map) {
-    map_configs_ = map->GetConfigs();
+    map_configs_ = std::make_shared<libpmg::MapConfigs> (map->GetConfigs());
     
     // Setup map tiles
-    for (auto const &tile : map->GetMap()) {
+    for (auto const &tile : *map->GetMap()) {
         if (tile->HasTag(libpmg::TagManager::GetInstance().wall_tag_)) {
-            auto new_tile {std::make_unique<WallTile>(tile)};
+            auto new_tile {std::make_unique<WallTile>(tile.get())};
             new_tile->Initialize(this);
             map_.push_back(std::move(new_tile));
         } else if (tile->HasTag(libpmg::TagManager::GetInstance().door_tag_)) {
-            map_.push_back(std::make_unique<DoorTile>(tile));
+            map_.push_back(std::make_unique<DoorTile>(tile.get()));
         } else if (tile->HasTag(libpmg::TagManager::GetInstance().floor_tag_)) {
-            map_.push_back(std::make_unique<EmptyTile>(tile));
+            map_.push_back(std::make_unique<EmptyTile>(tile.get()));
         } else {
             Utils::LogError("Map", "Unrecognized tag.");
             abort();

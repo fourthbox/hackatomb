@@ -35,11 +35,11 @@ public:
 
     bool HasDoor(size_t x, size_t y);
     
-    inline std::vector<libpmg::Room*> &GetRoomList() { return room_list_; }
+    inline std::vector<std::unique_ptr<libpmg::Room>> &GetRoomList() { return room_list_; }
     
 private:
     std::vector<std::unique_ptr<Tile>> map_;
-    std::vector<libpmg::Room*> room_list_;
+    std::vector<std::unique_ptr<libpmg::Room>> room_list_;
     std::shared_ptr<libpmg::MapConfigs> map_configs_;
     
     /**
