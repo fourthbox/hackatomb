@@ -32,9 +32,9 @@ public :
     UiWindow *GetMessageLogWindow();
         
 private :
-    UiWindow *environment_window_;
-    UiWindow *player_info_window_;
-    UiWindow *message_log_window_;
+    std::unique_ptr<UiWindow> environment_window_;
+    std::unique_ptr<UiWindow> player_info_window_;
+    std::unique_ptr<UiWindow> message_log_window_;
 
     /**
      Initialize the environment window.

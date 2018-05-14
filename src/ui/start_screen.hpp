@@ -17,8 +17,8 @@ public:
     void SelectMenu();
     
 private:
-    Engine* engine_;
-    UiWindow *start_screen_window_;
+    Engine *engine_;
+    std::unique_ptr<UiWindow> start_screen_window_;
     std::vector<UiLabel*>::iterator selected_label_;
     std::vector<UiLabel*> selectable_labels_;
 };

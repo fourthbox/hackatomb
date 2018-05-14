@@ -35,7 +35,7 @@ void Map::UpdateTcodProperties(Tile *tile) {
 }
 
 void Map::DigPmgMap(libpmg::DungeonMap &map) {
-    map_configs_ = std::make_shared<libpmg::MapConfigs> (map.GetConfigs());
+    map_configs_ = std::make_unique<libpmg::MapConfigs> (map.GetConfigs());
     
     // Setup map tiles
     for (auto const &tile : *map.GetMap()) {

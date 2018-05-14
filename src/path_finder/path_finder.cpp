@@ -1,22 +1,11 @@
 #include "path_finder.hpp"
 
-class TCODPathCallback : public ITCODPathCallback {
-    public :
-    float getWalkCost(int from_x, int from_y, int to_x, int to_y, void *user_data ) const override {
-        assert(user_data != nullptr);
-        auto map {static_cast<Map*> (user_data)};
-
-        if (map->IsWall(to_x, to_y))
-            return 0.0f;
-        
-        return 1.0f;
-    }
-};
-
 void PathFinder::Initialize(MapsManager &maps_manager) {
     assert(!initialized_);
     
-    current_path_ = std::move(maps_manager.AllocatePathFromCurrentFloor(new TCODPathCallback, 1.0f));
+    path_callback_ = std::make_unique<TCODPathCallback>();
+    
+    current_path_ = std::move(maps_manager.AllocatePathFromCurrentFloor(path_callback_.get(), 1.0f));
     
     initialized_ = true;
 }

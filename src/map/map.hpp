@@ -40,7 +40,7 @@ public:
 private:
     std::vector<std::unique_ptr<Tile>> map_;
     std::vector<std::unique_ptr<libpmg::Room>> room_list_;
-    std::shared_ptr<libpmg::MapConfigs> map_configs_;
+    std::unique_ptr<libpmg::MapConfigs> map_configs_;
     
     /**
      Draws the contents of the Map on a TCODConsole.
