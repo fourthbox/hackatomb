@@ -25,6 +25,7 @@ public:
 private:
     std::unordered_map<DungeonCategory, std::unique_ptr<libpmg::DungeonBuilder>> category_builders_;
     
+    void SetupBuilder(libpmg::DungeonBuilder &builder);
 };
 
 #endif /* DUNGEON_FACTORY_HPP_ */

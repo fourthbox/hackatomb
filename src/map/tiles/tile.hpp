@@ -7,7 +7,8 @@
 enum struct TileType {
     FLOOR_,
     WALL_,
-    DOOR_
+    DOOR_,
+    STAIRS_
 };
 
 class Tile : public libpmg::Tile {

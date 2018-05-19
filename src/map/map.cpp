@@ -6,6 +6,7 @@
 #include "empty_tile.hpp"
 #include "engine.hpp"
 #include "game_utils.hpp"
+#include "stairs_tile.hpp"
 #include "wall_tile.hpp"
 
 Map::Map(libpmg::DungeonMap &map) :
@@ -47,6 +48,10 @@ void Map::DigPmgMap(libpmg::DungeonMap &map) {
             map_.push_back(std::make_unique<DoorTile>(tile.get()));
         } else if (tile->HasTag(libpmg::TagManager::GetInstance().floor_tag_)) {
             map_.push_back(std::make_unique<EmptyTile>(tile.get()));
+        } else if (tile->HasTag(libpmg::TagManager::GetInstance().upstairs_tag_)) {
+            map_.push_back(std::make_unique<StairsTile>(tile.get(), true));
+        } else if (tile->HasTag(libpmg::TagManager::GetInstance().downstairs_tag_)) {
+            map_.push_back(std::make_unique<StairsTile>(tile.get(), false));
         } else {
             Utils::LogError("Map", "Unrecognized tag.");
             abort();
