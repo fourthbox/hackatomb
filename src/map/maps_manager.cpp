@@ -6,8 +6,6 @@
 #include "libtcod.hpp"
 #include "player.hpp"
 
-using std::string;
-
 void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, DungeonCategory map_category, short floor) {
     assert(floor >= -1);
     
@@ -141,13 +139,17 @@ CoordinateOpt MapsManager::MoveToFloor(bool is_upstairs) {
     else
         current_floor_ ++;
     
-    assert(current_floor_ >= 0 && current_floor_ <= kStandardDungeonDepth);
+    assert(current_floor_ >= 0
+           && current_floor_ <= kStandardDungeonDepth
+           && master_maps_holder_.count(current_map_category_) > 0);
     
-    // Aync load new floor
-    LoadDungeonFloor(current_map_category_, current_floor_);
-    
-    assert(master_maps_holder_.count(current_map_category_) > 0 &&
-           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
+    // If the new floor has not already been explored, create it
+    if (master_maps_holder_[current_map_category_].count(current_floor_) == 0) {
+        // Aync load new floor
+        LoadDungeonFloor(current_map_category_, current_floor_);
+        
+        assert(master_maps_holder_[current_map_category_].count(current_floor_) > 0);
+    }
     
     // Refresh the console on the next draw itetation
     need_refresh_ = true;
