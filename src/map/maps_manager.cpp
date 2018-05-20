@@ -38,6 +38,12 @@ void MapsManager::Draw(TCODConsole &console, Actor const &actor) {
     // Recompute fov for hero
     ComputeFov(actor);
     
+    // Refresh the console if needed
+    if (need_refresh_) {
+        console.clear();
+        need_refresh_ = false;
+    }
+    
     // Draw the current map
     master_maps_holder_[current_map_category_][current_floor_]->Draw(console);
 }
@@ -61,8 +67,10 @@ void MapsManager::Initialize() {
 }
 
 void MapsManager::LoadDungeonFloor(DungeonCategory category, short floor) {
+    assert(floor >= 0 && floor <= kStandardDungeonDepth);
+    
     // Generate dungeon floor
-    auto map_p {std::make_unique<Map>(*dungeon_factory_.GenerateDungeon(category))};
+    auto map_p {std::make_unique<Map>(*dungeon_factory_.GenerateDungeon(category, floor))};
     
     // Add to map master
     AddMapToMaster(std::move(map_p), category, floor);
@@ -124,3 +132,55 @@ std::pair<size_t, size_t> MapsManager::GetRandomPosition(int room_number) {
 
     return master_maps_holder_[current_map_category_][current_floor_]->GetRoomList()[room_number]->GetRndCoords();
 }
+
+CoordinateOpt MapsManager::MoveToFloor(bool is_upstairs) {
+    assert(initialized_);
+    
+    if (is_upstairs)
+        current_floor_ --;
+    else
+        current_floor_ ++;
+    
+    assert(current_floor_ >= 0 && current_floor_ <= kStandardDungeonDepth);
+    
+    // Aync load new floor
+    LoadDungeonFloor(current_map_category_, current_floor_);
+    
+    assert(master_maps_holder_.count(current_map_category_) > 0 &&
+           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
+    
+    // Refresh the console on the next draw itetation
+    need_refresh_ = true;
+    
+    // Return start position on the floor
+    return (is_upstairs ? GetExitPosition() : GetEntrancePosition());
+}
+
+CoordinateOpt MapsManager::GetEntrancePosition() {
+    assert(initialized_);
+    
+    assert(master_maps_holder_.count(current_map_category_) > 0 &&
+           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
+    
+    auto tile {master_maps_holder_[current_map_category_][current_floor_]->GetEntranceTile()};
+    
+    if (tile == nullptr)
+        return {};
+    
+    return tile->GetXY();
+}
+
+CoordinateOpt MapsManager::GetExitPosition() {
+    assert(initialized_);
+    
+    assert(master_maps_holder_.count(current_map_category_) > 0 &&
+           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
+
+    auto tile {master_maps_holder_[current_map_category_][current_floor_]->GetExitTile()};
+    
+    if (tile == nullptr)
+        return {};
+    
+    return tile->GetXY();
+}
+

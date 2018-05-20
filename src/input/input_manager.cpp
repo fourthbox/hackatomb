@@ -45,6 +45,26 @@ void InputManager::Update() {
         case kMoveNorthWest:
             player_->SetAction(Action::MOVE_NW_);
             break;
+        case kMoveUpstairs:
+            if (!last_key_.shift)
+                return;
+            
+            if (auto position {maps_manager_->GetEntrancePosition()}; position && *position == player_->GetPosition()) {
+                if (auto new_coors {maps_manager_->MoveToFloor(true)}; position)
+                    player_->MoveToPosition(new_coors->first, new_coors->second);
+            }
+            
+            break;
+        case kMoveDownstairs:
+            if (!last_key_.shift)
+                return;
+
+            if (auto position {maps_manager_->GetExitPosition()}; position && *position == player_->GetPosition()) {
+                if (auto new_coors {maps_manager_->MoveToFloor(false)}; position)
+                    player_->MoveToPosition(new_coors->first, new_coors->second);
+            }
+
+            break;
         case 'q':
             maps_manager_->SetAllExplored();
             actor_manager_->SetAllMonstersVisible();

@@ -52,6 +52,8 @@ public:
     std::pair<size_t, size_t> GetPosition() const;
     
     int GetFovRadius() const;
+    
+    inline void MoveToPosition(size_t x, size_t y) { x_ = x; y_ = y; }
             
 protected:
     ActionManager *action_manager_;     /**< Pointer to the ActionManager */

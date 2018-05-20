@@ -6,6 +6,8 @@
 #ifndef MAP_HPP_
 #define MAP_HPP_
 
+#include <experimental/optional>
+
 #include "libtcod.hpp"
 #include "libpmg.hpp"
 #include "tile.hpp"
@@ -37,10 +39,14 @@ public:
     
     inline std::vector<std::unique_ptr<libpmg::Room>> &GetRoomList() { return room_list_; }
     
+    inline Tile *GetEntranceTile() { return entrance_stair_; }
+    inline Tile *GetExitTile() { return exit_stair_; }
+    
 private:
     std::vector<std::unique_ptr<Tile>> map_;
     std::vector<std::unique_ptr<libpmg::Room>> room_list_;
     std::unique_ptr<libpmg::MapConfigs> map_configs_;
+    Tile *entrance_stair_, *exit_stair_;
     
     /**
      Draws the contents of the Map on a TCODConsole.
@@ -78,15 +84,7 @@ private:
      @return True if the tile has been explored, false otherwise.
      */
     bool IsExplored(size_t x, size_t y);
-    
-    /**
-     Get a wall character, based on the tiles adjacent to it.
-     @param x X coordinate
-     @param y Y coordinate
-     @return The corresponding wall char
-     */
-    int GetWallChar(size_t x, size_t y);
-    
+        
     void UpdateTcodProperties(size_t x, size_t y);
     void UpdateTcodProperties(Tile *tile);
     
@@ -98,5 +96,7 @@ private:
 };
 
 typedef std::pair<size_t, size_t> Coordinate;
+typedef std::experimental::optional<Coordinate> CoordinateOpt;
+
 
 #endif /* MAP_HPP_ */

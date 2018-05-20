@@ -10,7 +10,10 @@
 #include "wall_tile.hpp"
 
 Map::Map(libpmg::DungeonMap &map) :
-TCODMap {(int)map.GetConfigs().map_width_, (int)map.GetConfigs().map_height_} {
+TCODMap {(int)map.GetConfigs().map_width_, (int)map.GetConfigs().map_height_},
+entrance_stair_ {nullptr},
+exit_stair_ {nullptr} {
+
     DigPmgMap(map);
     DigTcodMap();
 }
@@ -50,8 +53,10 @@ void Map::DigPmgMap(libpmg::DungeonMap &map) {
             map_.push_back(std::make_unique<EmptyTile>(tile.get()));
         } else if (tile->HasTag(libpmg::TagManager::GetInstance().upstairs_tag_)) {
             map_.push_back(std::make_unique<StairsTile>(tile.get(), true));
+            entrance_stair_ = map_.back().get();
         } else if (tile->HasTag(libpmg::TagManager::GetInstance().downstairs_tag_)) {
             map_.push_back(std::make_unique<StairsTile>(tile.get(), false));
+            exit_stair_ = map_.back().get();
         } else {
             Utils::LogError("Map", "Unrecognized tag.");
             abort();

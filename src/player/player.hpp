@@ -25,7 +25,7 @@ public:
      Set the action the player must perform
      */
     void SetAction(Action action);
-            
+                
 private:    
     Action action_;     /**< The action the player must perform this turn */
 };

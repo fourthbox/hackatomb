@@ -69,9 +69,11 @@ static const char kMoveSouth = 'j';
 static const char kMoveSouthWest = 'b';
 static const char kMoveWest = 'h';
 static const char kMoveNorthWest = 'y';
+static const char kMoveUpstairs = ',';
+static const char kMoveDownstairs = '.';
 
 // Misc constants
-static const short kStandardFloorDepth = 27;
+static const short kStandardDungeonDepth = 27;
 
 // Map constants
 static const size_t kMaxRoomPlacementAttempts = 10;

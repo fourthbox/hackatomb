@@ -21,9 +21,6 @@ class Actor;
  */
 class MapsManager : public InitiableObject {
 public:
-    DungeonCategory current_map_category_;      /**< Dungeon type. */
-    short current_floor_;                   /**< Current floor. */
-
     /**
      Initialized this instance.
      */
@@ -78,9 +75,17 @@ public:
     bool IsInteractable(size_t x, size_t y);
     void OpenDoor(size_t x, size_t y);
     
+    CoordinateOpt MoveToFloor(bool is_upstairs);
+    CoordinateOpt GetEntrancePosition();
+    CoordinateOpt GetExitPosition();
+    
 private:
+    DungeonCategory current_map_category_;      /**< Dungeon type. */
+    short current_floor_;                   /**< Current floor. */
     DungeonFactory dungeon_factory_;
     std::unordered_map<DungeonCategory, std::map< size_t, std::unique_ptr<Map>> > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */
+    
+    bool need_refresh_;
 
 };
 

@@ -41,12 +41,24 @@ void DungeonFactory::SetupBuilder(libpmg::DungeonBuilder &builder) {
     builder.SetDigStairsOnlyInRooms(kDigStairsOnlyInRoomsNormal);
 }
 
-std::shared_ptr<libpmg::DungeonMap> DungeonFactory::GenerateDungeon(DungeonCategory const &category) {
+std::shared_ptr<libpmg::DungeonMap> DungeonFactory::GenerateDungeon(DungeonCategory const &category, short floor) {
     // Reset map
-    category_builders_[category]->ResetMap(true);
+    category_builders_[category]->ResetMap();
     
     // Setup builder settings
     SetupBuilder(*category_builders_[category]);
+    
+    // Remove stairs in the first and last floor
+    if (floor == 0) {
+        category_builders_[category]->SetMinUpstairs(0);
+        category_builders_[category]->SetMaxUpstairs(0);
+    } else if (floor == kStandardDungeonDepth) {
+        category_builders_[category]->SetMinDownstairs(0);
+        category_builders_[category]->SetMaxDownstairs(0);
+    }
+    
+    // Initialize Map
+    category_builders_[category]->InitMap();
     
     // Generate the features
     category_builders_[category]->GenerateRooms();
