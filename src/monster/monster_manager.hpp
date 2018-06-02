@@ -3,11 +3,17 @@
 
 #include "monster_factory.hpp"
 
-class MonsterManager {
+class MonsterManager : public InitiableObject {
 public:
-    Monster *GetRandomMonster(size_t x, size_t y, ActionManager &action_manager, MapsManager &maps_manager);
+    void Initialize(ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager);
+    void Draw(TCODConsole &console);
+    void SetPermaVisible(bool is_perma_visible, Monster *monster = nullptr) const;
+    void Update() const;
 
 private:
+    ActionManager *action_manager_;
+    MapsManager *maps_manager_;
+    
     MonsterFactory monster_factory_;
     std::vector<std::unique_ptr<Monster>> monster_list_;
 };

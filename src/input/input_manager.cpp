@@ -3,7 +3,7 @@
 #include "actor_manager.hpp"
 #include "game_constants.hpp"
 
-void InputManager::Initialize(ActorManager &actor_manager, MapsManager &maps_manager, StartScreen &start_screen) {
+void InputManager::Initialize(ActorManager const &actor_manager, MapsManager &maps_manager, StartScreen &start_screen) {
     assert(!initialized_);
     
     actor_manager_ = &actor_manager;

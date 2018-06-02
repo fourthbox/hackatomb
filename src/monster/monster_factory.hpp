@@ -5,7 +5,7 @@
 
 class MonsterFactory {
 public:
-    std::unique_ptr<Monster> CreateGoblin(size_t x, size_t y, ActionManager &action_manager, MapsManager &maps_manager);
+    std::unique_ptr<Monster> CreateGoblin(size_t x, size_t y, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager);
 };
 
 #endif /* MONSTER_FACTORY_HPP_ */

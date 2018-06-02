@@ -35,7 +35,7 @@ public:
      @param action_manager Reference to the ActionManager.
      @param maps_manager Reference to the MapsManager
      */
-    void Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, MapsManager &maps_manager);
+    void Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager);
     
     virtual void Update() = 0;
     

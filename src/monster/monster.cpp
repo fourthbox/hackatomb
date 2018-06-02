@@ -20,23 +20,23 @@ void Monster::Update() {
     
 }
 
-void Monster::Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, MapsManager &maps_manager) {
+void Monster::Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager) {
     assert(!initialized_);
     
-    is_always_visible_ = false;
+    is_perma_visible_ = false;
     
-    Actor::Initialize(x, y, sprite, name, color, stats, action_manager, maps_manager);
+    Actor::Initialize(x, y, sprite, name, color, stats, action_manager, actor_manager, maps_manager);
     path_finder_.Initialize(maps_manager);
 }
 
-bool Monster::IsVisible() {
+bool Monster::IsPermaVisible() {
     assert(initialized_);
     
-    return is_always_visible_;
+    return is_perma_visible_;
 }
 
-void Monster::SetAlwaysVisible(bool is_visible) {
+void Monster::SetPermaVisible(bool is_perma_visible) {
     assert(initialized_);
     
-    is_always_visible_ = is_visible;
+    is_perma_visible_ = is_perma_visible;
 }

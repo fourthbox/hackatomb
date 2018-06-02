@@ -67,6 +67,7 @@ public:
     bool IsInFov(size_t x, size_t y);
     
     std::pair<size_t, size_t> GetRandomPosition(int room_number = -1);
+    size_t GetRandomRoom();
     
     std::unique_ptr<TCODPath> AllocatePathFromCurrentFloor(ITCODPathCallback const *callback, float diagonal_cost);
     

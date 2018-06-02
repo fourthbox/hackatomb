@@ -6,7 +6,7 @@ PlayerManager::PlayerManager() :
 player_initialized_ {false} {
 }
 
-void PlayerManager::InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager &action_manager, MapsManager &maps_manager) {
+void PlayerManager::InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager) {
     
     auto stats {Stats(5, 5, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10)};
     
@@ -17,8 +17,9 @@ void PlayerManager::InitializePlayer(std::pair<size_t, size_t> start_position, A
                         TCODColor::white,
                         stats,
                         action_manager,
+                        actor_manager,
                         maps_manager);
-
+    
     player_initialized_ = true;
 }
 

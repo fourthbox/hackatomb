@@ -12,9 +12,25 @@ void ActorManager::Initialize() {
     initialized_ = true;
 }
 
-void ActorManager::InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager &action_manager, MapsManager &maps_manager) {
-    player_manager_.InitializePlayer(start_position, action_manager, maps_manager);
+void ActorManager::InitializePlayer(Coordinate start_position, ActionManager &action_manager, MapsManager &maps_manager) {
+    player_manager_.InitializePlayer(start_position, action_manager, *this, maps_manager);
     actor_list_.push_back(&player_manager_.GetPlayer());
+}
+
+void ActorManager::InitializeMonsterManager(ActionManager &action_manager, MapsManager &maps_manager) {
+    monster_manager_.Initialize(action_manager, *this, maps_manager);
+}
+
+void ActorManager::DrawMonsters(TCODConsole &console) {
+    assert(initialized_);
+
+    monster_manager_.Draw(console);
+}
+
+void ActorManager::DrawPlayer(TCODConsole &console) {
+    assert(initialized_);
+
+    player_manager_.GetPlayer().Draw(console);
 }
 
 Actor *ActorManager::GetActorByCoordinates(size_t x, size_t y) {
@@ -31,18 +47,11 @@ Actor *ActorManager::GetActorByCoordinates(size_t x, size_t y) {
 void ActorManager::Update() {
     assert(initialized_);
     
-    // TODO: usare monster manager
-    
+    monster_manager_.Update();
 }
 
-void ActorManager::SetAllMonstersVisible() {
+void ActorManager::SetAllMonstersVisible() const {
     assert(initialized_);
     
-    // TODO: use the monster list
-    
-//    auto monster_list {GetMonsterList()};
-//
-//    for (auto const &monster : monster_list) {
-//        monster->SetAlwaysVisible(true);
-//    }
+    monster_manager_.SetPermaVisible(true);
 }

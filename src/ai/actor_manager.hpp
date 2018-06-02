@@ -32,10 +32,14 @@ public:
      */
     void Update();
     
-    void SetAllMonstersVisible();
+    void SetAllMonstersVisible() const;
     
     void InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager &action_manager, MapsManager &maps_manager);
+    void InitializeMonsterManager(ActionManager &action_manager, MapsManager &maps_manager);
     inline Player &GetPlayer() { return player_manager_.GetPlayer(); }
+    
+    void DrawMonsters(TCODConsole &console);
+    void DrawPlayer(TCODConsole &console);
         
 private:
     std::vector<Actor*> actor_list_;    /**< List containing all the actors in the loaded game */

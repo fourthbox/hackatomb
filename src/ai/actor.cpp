@@ -4,7 +4,7 @@
 
 using std::string;
 
-void Actor::Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, MapsManager &maps_manager) {
+void Actor::Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager) {
     assert(!initialized_);
     
     x_ = x;
@@ -14,8 +14,9 @@ void Actor::Initialize(size_t x, size_t y, int const &sprite, std::string const 
     color_ = color;
     stats_ = stats;
     action_manager_ = &action_manager;
+    actor_manager_ = &actor_manager;
     maps_manager_ = &maps_manager;
-    
+        
     initialized_ = true;
 }
 

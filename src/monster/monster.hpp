@@ -27,14 +27,14 @@ public:
      @param action_manager Reference to the ActionManager.
      @param maps_manager Reference to the MapManager.
      */
-    void Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, MapsManager &maps_manager);
+    void Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager);
     
-    bool IsVisible();
-    void SetAlwaysVisible(bool is_visible);
+    bool IsPermaVisible();
+    void SetPermaVisible(bool is_perma_visible);
 
 private:
     PathFinder path_finder_;
-    bool is_always_visible_;
+    bool is_perma_visible_;
 };
 
 #endif /* MONSTER_HPP_ */

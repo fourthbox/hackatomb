@@ -46,11 +46,11 @@ void Engine::InitializeGame() {
     // Initialize the Action Manager
     action_manager_.Initialize(actor_manager_, maps_manager_);
     
-    // Populate dungeon
-    // TODO: populate dungeon
-    
     // Initialize the Player
     actor_manager_.InitializePlayer(maps_manager_.GetRandomPosition(), action_manager_, maps_manager_);
+    
+    // Initialize the Monsters
+    actor_manager_.InitializeMonsterManager(action_manager_, maps_manager_);
     
     auto &player {actor_manager_.GetPlayer()};
     
@@ -92,15 +92,11 @@ void Engine::Render() {
     maps_manager_.Draw(*root_console_manager_.main_view_.get(), actor_manager_.GetPlayer());
     
     // Draw the player
-    actor_manager_.GetPlayer().Draw(*root_console_manager_.main_view_.get());
+    actor_manager_.DrawPlayer(*root_console_manager_.main_view_);
     
     // Draw monsters
-    // TODO: use monster manager
-//    for (auto const &monster : actor_manager_.GetMonsterList()) {
-//        if (monster->IsVisible() || maps_manager_.IsInFov(monster->GetPosition().first, monster->GetPosition().second))
-//            monster->Draw(*root_console_manager_.main_view_.get());
-//    }
-    
+    actor_manager_.DrawMonsters(*root_console_manager_.main_view_);
+        
     // Draw the Ui
     ui_manager_.Draw();
     
