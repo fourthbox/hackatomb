@@ -8,9 +8,12 @@ Player::Player() {
     action_ = Action::NONE_;
 }
 
-void Player::Update() {
+bool Player::Update(size_t speed) {
     assert(initialized_);
     
+    if (!Actor::Update(speed))
+        return false;
+
     size_t x {0}, y {0};
         
     switch(action_) {
@@ -57,18 +60,26 @@ void Player::Update() {
     
     if (x != 0 || y != 0) {
         if (action_manager_->CanMove(x_ + x, y_ + y)) {
-            action_manager_->ActionPerformed();
             x_ += x;
             y_ += y;
-        } else if (action_manager_->CanInteract(x_ + x, y_ + y)) {
-            action_manager_->Interact(x_ + x, y_ + y);
             action_manager_->ActionPerformed();
+        } else {
+            if (action_manager_->PerformAction(*this, x_ + x, y_ + y))
+                action_manager_->ActionPerformed();
         }
     }
+    
+    return true;
 }
 
 void Player::SetAction(Action action) {
     assert(initialized_);
 
     action_ = action;
+}
+
+void Player::Die() {
+    assert(initialized_);
+
+    action_manager_->GameOver();
 }

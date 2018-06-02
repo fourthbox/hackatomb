@@ -66,17 +66,28 @@ void Engine::InitializeGame() {
 
 void Engine::Update() {
     assert(game_initialized_);
+    
+    // Checks if a game over has occurred
+    if (action_manager_.GetTurnPhase() == TurnPhase::GAME_OVER) {
+        GameOver();
+    }
         
     // Idle phase.
     // Everything that needs to be done when no user action has been detected
     action_manager_.StartTurn();
 
+    // Receive user input
     input_manager_.Update();
     
-    actor_manager_.GetPlayer().Update();
+    // Cycle an update for every speed
+    for (auto i {kMinSpeed}; i <= kMaxSpeed; i++) {
+        // Update player
+        actor_manager_.GetPlayer().Update(i);
         
-    if (action_manager_.GetTurnPhase() == TurnPhase::ACTION_)
-        actor_manager_.Update();
+        // If an action was performed, update all other actors
+        if (action_manager_.GetTurnPhase() == TurnPhase::ACTION_)
+            actor_manager_.Update(i);
+    }
 }
 
 void Engine::UpdateStartScreen() {
@@ -113,3 +124,8 @@ void Engine::RenderStartScreen() {
     // Blit consoles to screen to screen
     root_console_manager_.RenderStartScreen();
 }
+
+void Engine::GameOver() {
+    is_playing_ = false;
+}
+

@@ -20,7 +20,8 @@ const struct GoblinStats {
         5, //xp
         0, //hunger
         0, //stealth
-        10 //fov
+        10,//fov
+        3, //speed
     };
     
     const int sprite_ = 'g';

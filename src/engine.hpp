@@ -48,9 +48,12 @@ public:
     void Render();
     
     void RenderStartScreen();
-        
+    
     inline bool IsPlaying() { return is_playing_; }
     inline void StartGame() { is_playing_ = true; }
+    
+    static size_t GetRandomUintFromRange(size_t min, size_t max) { return libpmg::RndManager::GetInstance().GetRandomUintFromRange(min, max); }
+    static size_t GetRandomPercentage() { return GetRandomUintFromRange(0, 100); }
     
 private:
     bool start_screen_initialized_;
@@ -73,6 +76,8 @@ private:
     RootConsoleManager root_console_manager_;   /**< Manager for the root console. It is responsable for drawing every console on the main one */
     ActionManager action_manager_; /**< Manager for every movement, attack or interaction done by an actor */
     InputManager input_manager_;        /**< Manager for keyboard and mouse inputs */
+    
+    void GameOver();
 };
 
 #endif /* ENGINE_HPP_ */

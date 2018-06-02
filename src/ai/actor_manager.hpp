@@ -29,8 +29,9 @@ public:
         
     /**
      Call for Update() on every actor in actor_list_
+     @param speed The speed of this update cycle
      */
-    void Update();
+    void Update(size_t speed);
     
     void SetAllMonstersVisible() const;
     
@@ -42,7 +43,6 @@ public:
     void DrawPlayer(TCODConsole &console);
         
 private:
-    std::vector<Actor*> actor_list_;    /**< List containing all the actors in the loaded game */
     PlayerManager player_manager_;     /**< The PlayerManager */
     MonsterManager monster_manager_;     /**< The MonsterManager */
 };

@@ -37,8 +37,14 @@ public:
      */
     void Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager);
     
-    virtual void Update() = 0;
+    virtual bool Update(size_t speed);
     
+    /**
+     Attempts to perform a dodge.
+     @return True if the dodge was succesfully performed, false otherwise.
+     */
+    bool PerformDodge() const;
+        
     /**
      Draw the actor onto the selected console
      @param console The console upon which to draw the actor.
@@ -54,7 +60,14 @@ public:
     int GetFovRadius() const;
     
     inline void MoveToPosition(size_t x, size_t y) { x_ = x; y_ = y; }
-            
+    
+    inline std::string const &GetName() { return name_; } const;
+    
+    size_t GetAttackPower() const;
+    float GetDefenseModifier() const;
+    size_t GetArmorRating() const;
+    void InflictDamage(size_t total_damage);
+    
 protected:
     ActionManager *action_manager_;     /**< Pointer to the ActionManager */
     ActorManager *actor_manager_;       /**< Pointer to the ActionManaer */
@@ -67,6 +80,8 @@ protected:
     TCODColor color_;   /**< Color used to represent this actor. */
     std::string name_;  /**< Name of this actor. */
     Stats stats_;       /**< Stats of this actor. */
+    
+    virtual void Die() = 0;
 };
 
 #endif /* ACTOR_HPP_ */

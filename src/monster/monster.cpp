@@ -1,23 +1,30 @@
 #include "monster.hpp"
 
 #include "actor_manager.hpp"
+#include "game_constants.hpp"
 #include "player.hpp"
 
-void Monster::Update() {
+bool Monster::Update(size_t speed) {
     assert(initialized_);
     
-    auto px = actor_manager_->GetPlayer().GetPosition().first;
-    auto py = actor_manager_->GetPlayer().GetPosition().second;
+    if (is_dead_ || !Actor::Update(speed))
+        return false;
+    
+    auto px {actor_manager_->GetPlayer().GetPosition().first};
+    auto py {actor_manager_->GetPlayer().GetPosition().second};
     
     // Computer fov for the monster
     maps_manager_->ComputeFov(*this);
     
     // If the hero is not in range, don't do anything
     if (!maps_manager_->IsInFov(px, py))
-        return;
+        return false;
     
     auto success {path_finder_.Walk(x_, y_, x_, y_, px, py)};
     
+    // TODO keep working from here
+    
+    return success;
 }
 
 void Monster::Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager) {
@@ -39,4 +46,11 @@ void Monster::SetPermaVisible(bool is_perma_visible) {
     assert(initialized_);
     
     is_perma_visible_ = is_perma_visible;
+}
+
+void Monster::Die() {
+    sprite_ = kCharCorpse;
+    color_ = kCorpseColor;
+    
+    is_dead_ = true;
 }

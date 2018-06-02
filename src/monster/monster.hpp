@@ -14,7 +14,7 @@ public:
     /**
      Update the player based on the action.
      */
-    void Update() override;
+    bool Update(size_t speed) override;
     
     /**
      Initialize this instance.
@@ -35,6 +35,9 @@ public:
 private:
     PathFinder path_finder_;
     bool is_perma_visible_;
+    bool is_dead_;
+    
+    void Die() override;
 };
 
 #endif /* MONSTER_HPP_ */

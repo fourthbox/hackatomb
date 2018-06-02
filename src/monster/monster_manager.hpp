@@ -8,7 +8,8 @@ public:
     void Initialize(ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager);
     void Draw(TCODConsole &console);
     void SetPermaVisible(bool is_perma_visible, Monster *monster = nullptr) const;
-    void Update() const;
+    void Update(size_t speed) const;
+    Monster *GetMonsterByCoordinates(size_t x, size_t y) const;
 
 private:
     ActionManager *action_manager_;

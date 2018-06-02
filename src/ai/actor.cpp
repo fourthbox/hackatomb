@@ -1,6 +1,8 @@
 #include "actor.hpp"
 
 #include "action_manager.hpp"
+#include "engine.hpp"
+#include "game_constants.hpp"
 
 using std::string;
 
@@ -37,4 +39,44 @@ std::pair<size_t, size_t> Actor::GetPosition() const {
     assert(initialized_);
     
     return std::make_pair(x_, y_);
+}
+
+bool Actor::Update(size_t speed) {
+    assert(initialized_);
+
+    return stats_.speed_ == speed;
+}
+
+bool Actor::PerformDodge() const {
+    assert(initialized_);
+
+    return (Engine::GetRandomPercentage() <= stats_.dex_ * kDodgePointsPerDex);
+}
+
+size_t Actor::GetAttackPower() const {
+    assert(initialized_);
+
+    // TODO: add weapon modifier
+    return stats_.str_;
+}
+
+float Actor::GetDefenseModifier() const {
+    assert(initialized_);
+
+    return (float)stats_.con_ * kDefensePointsPerCon;
+}
+
+size_t Actor::GetArmorRating() const {
+    assert(initialized_);
+
+    return 1;
+}
+
+void Actor::InflictDamage(size_t total_damage) {
+    assert(initialized_);
+    
+    stats_.current_hp_ -= total_damage;
+    
+    if (stats_.current_hp_ <= 0)
+        Die();
 }

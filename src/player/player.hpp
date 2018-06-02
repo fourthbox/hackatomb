@@ -19,7 +19,7 @@ public:
     /**
      Update the player based on the action.
      */
-    void Update() override;
+    bool Update(size_t speed) override;
     
     /**
      Set the action the player must perform
@@ -28,6 +28,7 @@ public:
                 
 private:    
     Action action_;     /**< The action the player must perform this turn */
+    void Die() override;
 };
 
 #endif /* PLAYER_HPP_ */

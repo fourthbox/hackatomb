@@ -15,6 +15,8 @@ static const TCOD_color_t kDefaultWallColor {TCOD_darker_grey};
 static const TCOD_color_t kDefaultDoorColor {TCOD_sepia};
 static const TCOD_color_t kDefaultStairsColor {TCOD_yellow};
 
+static const TCOD_color_t kCorpseColor {TCOD_red};
+
 // Frame Sizes
 static const size_t kEnvironmentConsoleWidth = 17;
 static const size_t kEnvironmentConsoleHeight = 15;
@@ -54,11 +56,13 @@ static const int kCharDoubleLineCross = TCOD_CHAR_DCROSS;
 
 static const int kCharBlock2 = TCOD_CHAR_BLOCK2;
 
+// Sprites
 static const int kCharFloor = '.';
 static const int kCharClosedDoor = '+';
 static const int kCharOpenDoor = '/';
 static const int kCharUpstairs = '<';
 static const int kCharDownstairs = '>';
+static const int kCharCorpse = '%';
 
 // Keyboard controls
 static const char kMoveNorth = 'k';
@@ -77,5 +81,11 @@ static const short kStandardDungeonDepth = 27;
 
 // Map constants
 static const size_t kMaxRoomPlacementAttempts = 10;
+
+// Stats constants
+static const size_t kMinSpeed = 1;
+static const size_t kMaxSpeed = 7;
+static const size_t kDodgePointsPerDex = 5;
+static const float kDefensePointsPerCon = 0.5f;
 
 #endif /* GAME_CONSTANTS_HPP_ */

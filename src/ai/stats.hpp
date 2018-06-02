@@ -18,12 +18,13 @@ struct Stats {
     std::size_t xp_;
     std::size_t hunger_;
     std::size_t stealth_;
+    std::size_t speed_;
     int fov_;
     
     Stats() {
     }
     
-    Stats (std::size_t strength, std::size_t dexterity, std::size_t constitution, std::size_t intelligence, std::size_t max_hp, std::size_t current_hp, std::size_t max_mp, std::size_t current_mp, std::size_t hp_rec, std::size_t mp_rec, std::size_t xp, std::size_t hunger, std::size_t stealth, int fov) :
+    Stats (std::size_t strength, std::size_t dexterity, std::size_t constitution, std::size_t intelligence, std::size_t max_hp, std::size_t current_hp, std::size_t max_mp, std::size_t current_mp, std::size_t hp_rec, std::size_t mp_rec, std::size_t xp, std::size_t hunger, std::size_t stealth, int fov, std::size_t speed) :
     str_ {strength},
     dex_ {dexterity},
     con_ {constitution},
@@ -37,7 +38,8 @@ struct Stats {
     xp_ {xp},
     hunger_ {hunger},
     stealth_ {stealth},
-    fov_ {fov} {
+    fov_ {fov},
+    speed_ {speed} {
     }
     
 };

@@ -1,6 +1,7 @@
 #include "maps_manager.hpp"
 
 #include "door_tile.hpp"
+#include "engine.hpp"
 #include "game_constants.hpp"
 #include "game_utils.hpp"
 #include "libtcod.hpp"
@@ -126,7 +127,7 @@ std::pair<size_t, size_t> MapsManager::GetRandomPosition(int room_number) {
     assert(initialized_ && room_number < (int)master_maps_holder_[current_map_category_][current_floor_]->GetRoomList().size());
 
     if (room_number == -1)
-        room_number = libpmg::RndManager::GetInstance().GetRandomUintFromRange(0, master_maps_holder_[current_map_category_][current_floor_]->GetRoomList().size()-1);
+        room_number = Engine::GetRandomUintFromRange(0, master_maps_holder_[current_map_category_][current_floor_]->GetRoomList().size()-1);
 
     return master_maps_holder_[current_map_category_][current_floor_]->GetRoomList()[room_number]->GetRndCoords();
 }

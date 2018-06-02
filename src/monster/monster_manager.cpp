@@ -43,11 +43,20 @@ void MonsterManager::SetPermaVisible(bool is_perma_visible, Monster *monster) co
     }
 }
 
-void MonsterManager::Update() const {
+void MonsterManager::Update(size_t speed) const {
     assert(initialized_);
     
     for (auto const &monster : monster_list_) {
-        monster->Update();
+        monster->Update(speed);
     }
+}
 
+Monster *MonsterManager::GetMonsterByCoordinates(size_t x, size_t y) const {
+    for (auto const &monster : monster_list_) {
+        if (monster->GetPosition().first == x && monster->GetPosition().second == y) {
+            return monster.get();
+        }
+    }
+    
+    return nullptr;
 }

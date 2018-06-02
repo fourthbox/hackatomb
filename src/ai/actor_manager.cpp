@@ -14,7 +14,6 @@ void ActorManager::Initialize() {
 
 void ActorManager::InitializePlayer(Coordinate start_position, ActionManager &action_manager, MapsManager &maps_manager) {
     player_manager_.InitializePlayer(start_position, action_manager, *this, maps_manager);
-    actor_list_.push_back(&player_manager_.GetPlayer());
 }
 
 void ActorManager::InitializeMonsterManager(ActionManager &action_manager, MapsManager &maps_manager) {
@@ -35,19 +34,14 @@ void ActorManager::DrawPlayer(TCODConsole &console) {
 
 Actor *ActorManager::GetActorByCoordinates(size_t x, size_t y) {
     assert(initialized_);
-    for (auto const &actor : actor_list_) {
-        if (actor->x_ == x && actor->y_ == y) {
-//            if (map_category.empty() && )
-        }
-    }
     
-    return nullptr;
+    return monster_manager_.GetMonsterByCoordinates(x, y);
 }
 
-void ActorManager::Update() {
+void ActorManager::Update(size_t speed) {
     assert(initialized_);
     
-    monster_manager_.Update();
+    monster_manager_.Update(speed);
 }
 
 void ActorManager::SetAllMonstersVisible() const {

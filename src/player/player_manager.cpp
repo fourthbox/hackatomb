@@ -8,7 +8,7 @@ player_initialized_ {false} {
 
 void PlayerManager::InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager) {
     
-    auto stats {Stats(5, 5, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10)};
+    auto stats {Stats(5, 5, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 3)};
     
     player_.Initialize(start_position.first,
                         start_position.second,

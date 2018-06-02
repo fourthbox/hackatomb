@@ -21,6 +21,19 @@ class TCODPathCallback : public ITCODPathCallback {
 class PathFinder : public InitiableObject {
 public:
     void Initialize(MapsManager &map);
+    
+    /**
+     Move an actor by changing the positions for a specified amount of steps.
+     Only recompute the path if the starting or end potision changed
+     @param out_x Output X coordinate.
+     @param out_y Output Y coordinate.
+     @param from_x Starting X coordinate.
+     @param from_y Starting Y coordinate.
+     @param to_x Ending X coordinate.
+     @param to_y Ending Y coordinate.
+     @param steps Number of steps. Default: 1
+     @return True if succesfully moved, false otherwise.
+     */
     bool Walk(size_t &out_x, size_t &out_y, size_t from_x, size_t from_y, size_t to_x, size_t to_y, size_t steps = 1);
     
 private:
