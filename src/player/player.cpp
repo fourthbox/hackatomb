@@ -54,8 +54,12 @@ bool Player::Update(size_t speed) {
             x--;
             break;
             
+        case Action::SKIP:
+            action_manager_->ActionPerformed();
+            return false;
+            
         default:
-            break;
+            return false;
     }
     
     if (x != 0 || y != 0) {

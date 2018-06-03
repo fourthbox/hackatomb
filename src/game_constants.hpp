@@ -75,6 +75,7 @@ static const char kMoveWest = 'h';
 static const char kMoveNorthWest = 'y';
 static const char kMoveUpstairs = ',';
 static const char kMoveDownstairs = '.';
+static const char kSkipTurn = '.';
 
 // Misc constants
 static const short kStandardDungeonDepth = 27;
@@ -86,6 +87,6 @@ static const size_t kMaxRoomPlacementAttempts = 10;
 static const size_t kMinSpeed = 1;
 static const size_t kMaxSpeed = 7;
 static const size_t kDodgePointsPerDex = 5;
-static const float kDefensePointsPerCon = 0.5f;
+static const float kDefensePointsPerCon = 0.05f;
 
 #endif /* GAME_CONSTANTS_HPP_ */

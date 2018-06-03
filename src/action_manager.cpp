@@ -74,17 +74,19 @@ bool ActionManager::Attack(Actor &source, size_t x, size_t y, bool ignore_armor)
     
     // Mitigate by the target constitution
     if (!ignore_armor) {
-        auto mitigated_damage {std::floor((float)total_damage * (float)target->GetDefenseModifier())};
+        auto armor_modifier {(float)total_damage * (float)target->GetDefenseModifier()};
+        
+        auto mitigated_damage {std::floor((float)total_damage - armor_modifier)};
         
         assert(mitigated_damage >= 0.0f);
         
         total_damage = (int)mitigated_damage;
     }
     
-    // Subtract from the the target armor
-    total_damage = target->GetArmorRating() - total_damage;
+    // Subtract from the target armor
+    total_damage -= target->GetArmorRating();
     
-    if (total_damage == 0)
+    if (total_damage <= 0)
         return false;
     
     // Inflicts the damage to the target

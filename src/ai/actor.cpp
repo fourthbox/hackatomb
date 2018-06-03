@@ -53,17 +53,23 @@ bool Actor::PerformDodge() const {
     return (Engine::GetRandomPercentage() <= stats_.dex_ * kDodgePointsPerDex);
 }
 
-size_t Actor::GetAttackPower() const {
+int Actor::GetAttackPower() const {
     assert(initialized_);
+    
+    auto attack_power {stats_.str_};
+    
+    assert(attack_power < INT_MAX);
 
     // TODO: add weapon modifier
-    return stats_.str_;
+    return (int) attack_power;
 }
 
 float Actor::GetDefenseModifier() const {
     assert(initialized_);
+    
+    auto def {(float)stats_.con_ * kDefensePointsPerCon};
 
-    return (float)stats_.con_ * kDefensePointsPerCon;
+    return def;
 }
 
 size_t Actor::GetArmorRating() const {
@@ -72,7 +78,7 @@ size_t Actor::GetArmorRating() const {
     return 1;
 }
 
-void Actor::InflictDamage(size_t total_damage) {
+void Actor::InflictDamage(int total_damage) {
     assert(initialized_);
     
     stats_.current_hp_ -= total_damage;

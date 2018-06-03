@@ -24,7 +24,8 @@ enum struct Action {
     MOVE_S_,
     MOVE_SW_,
     MOVE_W_,
-    MOVE_NW_
+    MOVE_NW_,
+    SKIP
 };
 
 /**
@@ -83,11 +84,6 @@ public:
     
     TurnPhase GetTurnPhase();
     
-private:
-    TurnPhase current_turn_phase_;                  /**< Keeps the current turn phase */
-    ActorManager *actor_manager_;                   /**< Pointer to the ActorManager */
-    MapsManager *maps_manager_;                     /**< Pointer to the MapsManager */
-    
     /**
      Check wheter an actor can attack on the specified coordinates.
      @param x The X coordinate.
@@ -95,6 +91,11 @@ private:
      @return True if an Actor can attack there, false otherwise.
      */
     bool CanAtttack(size_t x, size_t y);
+    
+private:
+    TurnPhase current_turn_phase_;                  /**< Keeps the current turn phase */
+    ActorManager *actor_manager_;                   /**< Pointer to the ActorManager */
+    MapsManager *maps_manager_;                     /**< Pointer to the MapsManager */
     
     /**
      Check wheter an actor can interact with the specified coordinates.

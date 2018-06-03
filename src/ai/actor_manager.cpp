@@ -35,6 +35,12 @@ void ActorManager::DrawPlayer(TCODConsole &console) {
 Actor *ActorManager::GetActorByCoordinates(size_t x, size_t y) {
     assert(initialized_);
     
+    // Check if player is there
+    if (auto *player {&player_manager_.GetPlayer()};
+        player->GetPosition().first == x
+        && player->GetPosition().second == y)
+        return player;
+    
     return monster_manager_.GetMonsterByCoordinates(x, y);
 }
 

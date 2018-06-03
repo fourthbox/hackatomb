@@ -63,10 +63,10 @@ public:
     
     inline std::string const &GetName() { return name_; } const;
     
-    size_t GetAttackPower() const;
+    int GetAttackPower() const;
     float GetDefenseModifier() const;
     size_t GetArmorRating() const;
-    void InflictDamage(size_t total_damage);
+    void InflictDamage(int total_damage);
     
 protected:
     ActionManager *action_manager_;     /**< Pointer to the ActionManager */
@@ -74,7 +74,7 @@ protected:
     MapsManager *maps_manager_;         /**< Pointer to the MapsManager */
     
     size_t x_, y_;      /**< Location on the current map. */
-    uint floor_;        /**< Current floor. */
+    short floor_;        /**< Current floor. */
     std::string map_category_; /**< Current map category */
     int sprite_;        /**< Character used to represent this actor. */
     TCODColor color_;   /**< Color used to represent this actor. */
