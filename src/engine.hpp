@@ -76,6 +76,7 @@ private:
     RootConsoleManager root_console_manager_;   /**< Manager for the root console. It is responsable for drawing every console on the main one */
     ActionManager action_manager_; /**< Manager for every movement, attack or interaction done by an actor */
     InputManager input_manager_;        /**< Manager for keyboard and mouse inputs */
+    AimManager aim_manager_;
     
     void GameOver();
 };

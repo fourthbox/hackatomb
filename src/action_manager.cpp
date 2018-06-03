@@ -31,7 +31,13 @@ void ActionManager::StartTurn() {
 void ActionManager::GameOver() {
     assert(initialized_);
     
-    current_turn_phase_ = TurnPhase::GAME_OVER;
+    current_turn_phase_ = TurnPhase::GAME_OVER_;
+}
+
+void ActionManager::SwitchToAimMode() {
+    assert(initialized_);
+    
+    current_turn_phase_ = TurnPhase::AIM_;
 }
 
 bool ActionManager::CanMove(size_t x, size_t y) {
@@ -95,7 +101,7 @@ bool ActionManager::Attack(Actor &source, size_t x, size_t y, bool ignore_armor)
     return true;
 }
 
-TurnPhase ActionManager::GetTurnPhase() {
+TurnPhase ActionManager::GetTurnPhase() const {
     assert(initialized_);
 
     return current_turn_phase_;

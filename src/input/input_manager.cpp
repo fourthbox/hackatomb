@@ -3,12 +3,14 @@
 #include "actor_manager.hpp"
 #include "game_constants.hpp"
 
-void InputManager::Initialize(ActorManager const &actor_manager, MapsManager &maps_manager, StartScreen &start_screen) {
+void InputManager::Initialize(ActorManager const &actor_manager, MapsManager &maps_manager, StartScreen &start_screen, AimManager &aim_manager, ActionManager &action_manager) {
     assert(!initialized_);
     
     actor_manager_ = &actor_manager;
     maps_manager_ = &maps_manager;
     start_screen_ = &start_screen;
+    aim_manager_ = &aim_manager;
+    action_manager_ = &action_manager;
     
     player_ = nullptr;
     
@@ -16,10 +18,23 @@ void InputManager::Initialize(ActorManager const &actor_manager, MapsManager &ma
 }
 
 void InputManager::Update() {
-    assert (initialized_ && player_ != nullptr);
-
-    TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &last_key_, &last_mouse_position_, true);
+    assert (initialized_ && player_ != nullptr && action_manager_->GetTurnPhase() != TurnPhase::ACTION_);
     
+    TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &last_key_, &last_mouse_position_, true);
+
+    switch (action_manager_->GetTurnPhase()) {
+        case TurnPhase::IDLE_:
+            UpdateNormalMode();
+            break;
+        case TurnPhase::AIM_:
+            UpdateAimMode();
+            break;
+        default:
+            break;
+    }
+}
+
+void InputManager::UpdateNormalMode() {
     // SHIFT + keys
     if (last_key_.shift) {
         switch (last_key_.c) {
@@ -41,7 +56,7 @@ void InputManager::Update() {
                 player_->SetAction(Action::NONE_);
                 break;
         }
-
+        
     } else {
         // Normal keys
         switch (last_key_.c) {
@@ -76,13 +91,48 @@ void InputManager::Update() {
             case kSkipTurn:
                 player_->SetAction(Action::SKIP);
                 break;
+            case kEnterAimMode:
+                action_manager_->SwitchToAimMode();
+                player_->SetAction(Action::NONE_);
+                break;
             default:
                 player_->SetAction(Action::NONE_);
                 break;
         }
-
     }
-    
+}
+
+void InputManager::UpdateAimMode() {
+    switch (last_key_.c) {
+        case kMoveNorth:
+            aim_manager_->SetAction(Action::MOVE_N_);
+            break;
+        case kMoveNorthEast:
+            aim_manager_->SetAction(Action::MOVE_NE_);
+            break;
+        case kMoveEast:
+            aim_manager_->SetAction(Action::MOVE_E_);
+            break;
+        case kMoveSouthEast:
+            aim_manager_->SetAction(Action::MOVE_SE_);
+            break;
+        case kMoveSouth:
+            aim_manager_->SetAction(Action::MOVE_S_);
+            break;
+        case kMoveSouthWest:
+            aim_manager_->SetAction(Action::MOVE_SW_);
+            break;
+        case kMoveWest:
+            aim_manager_->SetAction(Action::MOVE_W_);
+            break;
+        case kMoveNorthWest:
+            aim_manager_->SetAction(Action::MOVE_NW_);
+            break;
+        case kSelectOption:
+            // TODO: shot arrow
+            action_manager_->StartTurn();
+            break;
+    }
 }
 
 void InputManager::UpdateStartScreen() {

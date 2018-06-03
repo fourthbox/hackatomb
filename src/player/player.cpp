@@ -14,7 +14,7 @@ bool Player::Update(size_t speed) {
     if (!Actor::Update(speed))
         return false;
 
-    size_t x {0}, y {0};
+    int x {0}, y {0};
         
     switch(action_) {
         case Action::MOVE_N_:

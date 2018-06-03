@@ -16,6 +16,7 @@ static const TCOD_color_t kDefaultDoorColor {TCOD_sepia};
 static const TCOD_color_t kDefaultStairsColor {TCOD_yellow};
 
 static const TCOD_color_t kCorpseColor {TCOD_red};
+static const TCOD_color_t kCrossHairColor {TCOD_yellow};
 
 // Frame Sizes
 static const size_t kEnvironmentConsoleWidth = 17;
@@ -63,6 +64,7 @@ static const int kCharOpenDoor = '/';
 static const int kCharUpstairs = '<';
 static const int kCharDownstairs = '>';
 static const int kCharCorpse = '%';
+static const int kCharCrossHair = 'X';
 
 // Keyboard controls
 static const char kMoveNorth = 'k';
@@ -76,6 +78,9 @@ static const char kMoveNorthWest = 'y';
 static const char kMoveUpstairs = ',';
 static const char kMoveDownstairs = '.';
 static const char kSkipTurn = '.';
+
+static const char kEnterAimMode = 't';
+static const char kSelectOption = TCODK_ENTER;
 
 // Misc constants
 static const short kStandardDungeonDepth = 27;

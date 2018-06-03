@@ -34,7 +34,8 @@ enum struct Action {
 enum struct TurnPhase {
     IDLE_,   /**< The game is idle. Waiting for a player input to procede. */
     ACTION_, /**< The player has performed an action. Every actor will perform an action. */
-    GAME_OVER /**< The game is over. Show game over screen */
+    GAME_OVER_, /**< The game is over. Show game over screen */
+    AIM_ /**< The game is in aim mode. */
 };
 
 /**
@@ -82,7 +83,9 @@ public:
     
     void GameOver();
     
-    TurnPhase GetTurnPhase();
+    TurnPhase GetTurnPhase() const;
+    
+    void SwitchToAimMode();
     
     /**
      Check wheter an actor can attack on the specified coordinates.

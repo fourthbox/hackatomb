@@ -29,7 +29,7 @@ void Engine::InitializeStartScreen() {
     root_console_manager_.SetStartScreenWindow(start_screen_.GetWindow());
     
     // Initialize Input Manager
-    input_manager_.Initialize(actor_manager_, maps_manager_, start_screen_);
+    input_manager_.Initialize(actor_manager_, maps_manager_, start_screen_, aim_manager_, action_manager_);
 
     start_screen_initialized_ = true;
 }
@@ -60,6 +60,12 @@ void Engine::InitializeGame() {
     // Attach player to input manager
     input_manager_.SetPlayer(player);
     
+    // Initialize Aim Manager
+    aim_manager_.Initialize(action_manager_, actor_manager_);
+    
+    // Everything that needs to be done when no user action has been detected
+    action_manager_.StartTurn();
+    
     // Set as initialized
     game_initialized_ = true;
 }
@@ -68,14 +74,10 @@ void Engine::Update() {
     assert(game_initialized_);
     
     // Checks if a game over has occurred
-    if (action_manager_.GetTurnPhase() == TurnPhase::GAME_OVER) {
+    if (action_manager_.GetTurnPhase() == TurnPhase::GAME_OVER_) {
         GameOver();
     }
-        
-    // Idle phase.
-    // Everything that needs to be done when no user action has been detected
-    action_manager_.StartTurn();
-
+    
     // Receive user input
     input_manager_.Update();
     
@@ -85,8 +87,17 @@ void Engine::Update() {
         actor_manager_.GetPlayer().Update(i);
         
         // If an action was performed, update all other actors
-        if (action_manager_.GetTurnPhase() == TurnPhase::ACTION_)
+        if (action_manager_.GetTurnPhase() == TurnPhase::ACTION_) {
             actor_manager_.Update(i);
+            
+            // Everything that needs to be done when no user action has been detected
+            action_manager_.StartTurn();
+        }
+    }
+    
+    // Draw crosshair
+    if (action_manager_.GetTurnPhase() == TurnPhase::AIM_) {
+        aim_manager_.Update();
     }
 }
 
@@ -100,7 +111,7 @@ void Engine::Render() {
     assert(game_initialized_);
     
     // Draw the map
-    maps_manager_.Draw(*root_console_manager_.main_view_.get(), actor_manager_.GetPlayer());
+    maps_manager_.Draw(*root_console_manager_.main_view_, actor_manager_.GetPlayer());
     
     // Draw the player
     actor_manager_.DrawPlayer(*root_console_manager_.main_view_);
@@ -110,6 +121,11 @@ void Engine::Render() {
         
     // Draw the Ui
     ui_manager_.Draw();
+    
+    // Draw the crosshair
+    if (action_manager_.GetTurnPhase() == TurnPhase::AIM_) {
+        aim_manager_.Draw(*root_console_manager_.main_view_);
+    }
     
     // Blit consoles to screen to screen
     root_console_manager_.Render();
