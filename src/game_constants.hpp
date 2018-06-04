@@ -16,7 +16,7 @@ static const TCOD_color_t kDefaultDoorColor {TCOD_sepia};
 static const TCOD_color_t kDefaultStairsColor {TCOD_yellow};
 
 static const TCOD_color_t kCorpseColor {TCOD_red};
-static const TCOD_color_t kCrossHairColor {TCOD_yellow};
+static const TCOD_color_t kCrosshairColor {TCOD_yellow};
 
 // Frame Sizes
 static const size_t kEnvironmentConsoleWidth = 17;
@@ -64,7 +64,7 @@ static const int kCharOpenDoor = '/';
 static const int kCharUpstairs = '<';
 static const int kCharDownstairs = '>';
 static const int kCharCorpse = '%';
-static const int kCharCrossHair = 'X';
+static const int kCharCrosshair = 'X';
 
 // Keyboard controls
 static const char kMoveNorth = 'k';

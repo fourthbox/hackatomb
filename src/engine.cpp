@@ -126,7 +126,7 @@ void Engine::Render() {
     if (action_manager_.GetTurnPhase() == TurnPhase::AIM_) {
         aim_manager_.Draw(*root_console_manager_.main_view_);
     }
-    
+
     // Blit consoles to screen to screen
     root_console_manager_.Render();
 }

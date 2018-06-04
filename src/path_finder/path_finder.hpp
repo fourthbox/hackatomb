@@ -16,6 +16,26 @@ class TCODPathCallback : public ITCODPathCallback {
     }
 };
 
+class TCODLineCallback : public TCODLineListener {
+public:
+    TCODLineCallback() : maps_manager_ {nullptr} {}
+    
+    std::function<void(Tile*)> callback_;
+    MapsManager *maps_manager_;
+    
+    bool putPoint (int x, int y) override {
+        assert (callback_ && maps_manager_);
+        
+        auto tile {maps_manager_->GetTileFromFloor(x, y)};
+        
+        assert (tile);
+        
+        callback_(tile);
+        
+        return true;
+    }
+};
+
 class PathFinder : public InitiableObject {
 public:
     void Initialize(MapsManager &maps_manager);
@@ -34,14 +54,21 @@ public:
      */
     bool Walk(size_t &out_x, size_t &out_y, size_t from_x, size_t from_y, size_t to_x, size_t to_y, size_t steps = 1);
     
-    bool ExecuteCallbackAlongPath(size_t from_x, size_t from_y, size_t to_x, size_t to_y, std::function<void(Tile*)> callback);
+    bool ExecuteCallbackAlongPath(size_t from_x, size_t from_y, size_t to_x, size_t to_y,
+                                  std::function<void(Tile*)> callback);
+    bool ExecuteCallbackAlongLine(size_t from_x, size_t from_y, size_t to_x, size_t to_y,
+                                  std::function<void(Tile*)> callback);
+    
+    int GetPathLength(size_t from_x, size_t from_y, size_t to_x, size_t to_y);
+    int GetLineLength(size_t from_x, size_t from_y, size_t to_x, size_t to_y);
     
 private:
-    std::unique_ptr<TCODPathCallback> path_callback_;
+    TCODPathCallback path_callback_;
     std::unique_ptr<TCODPath> current_path_;
     MapsManager *maps_manager_;
 
     bool ComputePath(size_t from_x, size_t from_y, size_t to_x, size_t to_y);
+    bool RecomputeIfNeeded(size_t from_x, size_t from_y, size_t to_x, size_t to_y);
 };
 
 #endif /* PATH_FINDER_HPP_ */

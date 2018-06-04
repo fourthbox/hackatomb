@@ -14,10 +14,12 @@ int main(int argc, char **argv) {
     while ( !TCODConsole::isWindowClosed() ) {
         eng.RenderStartScreen();
         eng.UpdateStartScreen();
+        eng.RenderStartScreen();
 
         while (eng.IsPlaying()) {
             eng.Render();
             eng.Update();
+            eng.Render();
         }
 
     }

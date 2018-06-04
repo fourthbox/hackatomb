@@ -4,10 +4,10 @@
 #include "game_globals.hpp"
 
 // Normal
-static const size_t kMinRoomSizeWidthNormal =                         4;
-static const size_t kMinRoomSizeHeightNormal =                        4;
-static const size_t kMaxRoomSizeWidthNormal =                         12;
-static const size_t kMaxRoomSizeHeightNormal =                        12;
+static const size_t kMinRoomSizeWidthNormal =                         12;
+static const size_t kMinRoomSizeHeightNormal =                        12;
+static const size_t kMaxRoomSizeWidthNormal =                         20;
+static const size_t kMaxRoomSizeHeightNormal =                        20;
 static const size_t kMaxRoomsNormal =                                 5;
 static const libpmg::PathAlgorithm kDefaultPathAlgorithmNormal =      libpmg::PathAlgorithm::ASTAR_BFS_MIX;
 static const bool kDiagonalCorridorsNormal =                          false;

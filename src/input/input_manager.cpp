@@ -92,7 +92,13 @@ void InputManager::UpdateNormalMode() {
                 player_->SetAction(Action::SKIP);
                 break;
             case kEnterAimMode:
+                // Setup aim mode turn phase
                 action_manager_->SwitchToAimMode();
+                
+                // Setup crosshair for arrows
+                aim_manager_->SetupCrossshair(CrosshairMode::ARROW_, player_->GetFovRadius());
+                
+                // Set default player action
                 player_->SetAction(Action::NONE_);
                 break;
             default:
