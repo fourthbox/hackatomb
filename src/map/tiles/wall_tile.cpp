@@ -6,7 +6,7 @@
 void WallTile::Draw(TCODConsole &console, bool is_in_fov) {
     assert(initialized_);
 
-    if (is_in_fov || explored_) {
+    if (is_in_fov || is_explored_) {
         console.setCharBackground(GetX(), GetY(), kDefaultGroundColor);
         console.setCharForeground(GetX(), GetY(), kDefaultWallColor);
     }

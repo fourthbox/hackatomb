@@ -1,6 +1,7 @@
 #ifndef PATH_FINDER_HPP_
 #define PATH_FINDER_HPP_
 
+#include "game_globals.hpp"
 #include "initiable_object.hpp"
 #include "libtcod.hpp"
 #include "maps_manager.hpp"
@@ -11,16 +12,13 @@ class TCODPathCallback : public ITCODPathCallback {
         assert(user_data != nullptr);
         auto map {static_cast<Map*> (user_data)};
         
-        if (map->IsWall(to_x, to_y))
-            return 0.0f;
-        
-        return 1.0f;
+        return map->IsWall(to_x, to_y) ? 0.0f : 1.0f;
     }
 };
 
 class PathFinder : public InitiableObject {
 public:
-    void Initialize(MapsManager &map);
+    void Initialize(MapsManager &maps_manager);
     
     /**
      Move an actor by changing the positions for a specified amount of steps.
@@ -36,9 +34,12 @@ public:
      */
     bool Walk(size_t &out_x, size_t &out_y, size_t from_x, size_t from_y, size_t to_x, size_t to_y, size_t steps = 1);
     
+    bool ExecuteCallbackAlongPath(size_t from_x, size_t from_y, size_t to_x, size_t to_y, std::function<void(Tile*)> callback);
+    
 private:
     std::unique_ptr<TCODPathCallback> path_callback_;
     std::unique_ptr<TCODPath> current_path_;
+    MapsManager *maps_manager_;
 
     bool ComputePath(size_t from_x, size_t from_y, size_t to_x, size_t to_y);
 };

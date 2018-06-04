@@ -1,7 +1,7 @@
 #include "empty_tile.hpp"
 
 void EmptyTile::Draw(TCODConsole &console, bool is_in_fov) {
-    if (is_in_fov || explored_) {
+    if (is_in_fov || is_explored_) {
         console.setCharBackground(GetX(), GetY(), kDefaultGroundColor);
         console.setCharForeground(GetX(), GetY(), kDefaultWallColor);
     }

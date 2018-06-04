@@ -132,6 +132,19 @@ std::pair<size_t, size_t> MapsManager::GetRandomPosition(int room_number) {
     return master_maps_holder_[current_map_category_][current_floor_]->GetRoomList()[room_number]->GetRndCoords();
 }
 
+Tile *MapsManager::GetTileFromFloor(size_t x, size_t y, short floor) {
+    assert(initialized_);
+    
+    if (floor == -1)
+        floor = current_floor_;
+    
+    assert(master_maps_holder_.count(current_map_category_) > 0 &&
+           master_maps_holder_[current_map_category_].count(floor) > 0);
+
+    
+    return master_maps_holder_[current_map_category_][floor]->GetTile(x, y);
+}
+
 CoordinateOpt MapsManager::MoveToFloor(bool is_upstairs) {
     assert(initialized_);
     
@@ -168,9 +181,9 @@ CoordinateOpt MapsManager::GetEntrancePosition() {
     auto tile {master_maps_holder_[current_map_category_][current_floor_]->GetEntranceTile()};
     
     if (tile == nullptr)
-        return {};
-    
-    return tile->GetXY();
+        return std::experimental::nullopt;
+
+    return std::experimental::make_optional(tile->GetXY());
 }
 
 CoordinateOpt MapsManager::GetExitPosition() {
@@ -182,8 +195,8 @@ CoordinateOpt MapsManager::GetExitPosition() {
     auto tile {master_maps_holder_[current_map_category_][current_floor_]->GetExitTile()};
     
     if (tile == nullptr)
-        return {};
+        return std::experimental::nullopt;
     
-    return tile->GetXY();
+    return std::experimental::make_optional(tile->GetXY());
 }
 

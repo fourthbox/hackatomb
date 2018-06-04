@@ -20,13 +20,15 @@ public:
     virtual bool IsWalkable() = 0;
     virtual int GetChar() = 0;
     
-    inline bool IsExplored() { return explored_; }
-    inline void Explore() { explored_ = true; }
+    inline bool IsExplored() { return is_explored_; }
+    inline void Explore() { is_explored_ = true; }
     
     inline TileType GetType() { return type_; }
     
+    inline void ToggleHighlight(bool toggle) { is_highlighted_ = toggle; }
+    
 protected:
-    bool explored_;
+    bool is_explored_, is_highlighted_;
     TileType type_;
 };
 

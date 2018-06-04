@@ -4,12 +4,14 @@
 #include <experimental/optional>
 
 #include "action_manager.hpp"
+#include "game_globals.hpp"
 #include "libtcod.hpp"
+#include "path_finder.hpp"
 
 class AimManager : public InitiableObject {
 public:
     AimManager();
-    void Initialize(ActionManager &action_manager, ActorManager &actor_manager);
+    void Initialize(ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager);
 
     inline void SetAction(Action action) { action_ = action; }
     
@@ -19,6 +21,7 @@ public:
 private:
     std::experimental::optional<size_t> crosshair_x_, crosshair_y_;
     Action action_;
+    PathFinder path_finder_;
     
     ActionManager *action_manager_;
     ActorManager *actor_manager_;

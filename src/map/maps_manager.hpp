@@ -69,6 +69,8 @@ public:
     std::pair<size_t, size_t> GetRandomPosition(int room_number = -1);
     size_t GetRandomRoom();
     
+    Tile *GetTileFromFloor(size_t x, size_t y, short floor = -1);
+    
     std::unique_ptr<TCODPath> AllocatePathFromCurrentFloor(ITCODPathCallback const *callback, float diagonal_cost);
     
     void SetAllExplored();

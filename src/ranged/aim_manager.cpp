@@ -9,11 +9,13 @@ action_manager_ {nullptr} {
     ResetCrosshair();
 }
 
-void AimManager::Initialize(ActionManager &action_manager, ActorManager &actor_manager) {
+void AimManager::Initialize(ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager) {
     assert(!action_manager_ && !initialized_);
     
     action_manager_ = &action_manager;
     actor_manager_ = &actor_manager;
+    
+    path_finder_.Initialize(maps_manager);
     
     initialized_ = true;
 }
@@ -81,6 +83,7 @@ void AimManager::Update() {
 void AimManager::Draw(TCODConsole &console) {
     assert(initialized_);
     
+    // Drawing the crosshair
     console.setChar(crosshair_x_.value_or(actor_manager_->GetPlayer().GetPosition().first),
                     crosshair_y_.value_or(actor_manager_->GetPlayer().GetPosition().second),
                     kCharCrossHair);
@@ -88,6 +91,16 @@ void AimManager::Draw(TCODConsole &console) {
     console.setCharForeground(crosshair_x_.value_or(actor_manager_->GetPlayer().GetPosition().first),
                               crosshair_y_.value_or(actor_manager_->GetPlayer().GetPosition().second),
                               kCrossHairColor);
+        
+    // Drawing the trail
+    if (crosshair_x_ != std::experimental::nullopt && crosshair_y_ != std::experimental::nullopt) {
+        auto success { path_finder_.ExecuteCallbackAlongPath(actor_manager_->GetPlayer().GetPosition().first,
+                                                             actor_manager_->GetPlayer().GetPosition().second,
+                                                             *crosshair_x_,
+                                                             *crosshair_y_,
+                                                             [] (Tile *tile) { tile->ToggleHighlight(true); }
+                                                             )};
+    }
 }
 
 void AimManager::ResetCrosshair() {

@@ -5,7 +5,9 @@ void PathFinder::Initialize(MapsManager &maps_manager) {
     
     path_callback_ = std::make_unique<TCODPathCallback>();
     
-    current_path_ = std::move(maps_manager.AllocatePathFromCurrentFloor(path_callback_.get(), 1.0f));
+    maps_manager_ = &maps_manager;
+    
+    current_path_ = std::move(maps_manager_->AllocatePathFromCurrentFloor(path_callback_.get(), 1.0f));
     
     initialized_ = true;
 }
@@ -46,6 +48,39 @@ bool PathFinder::Walk(size_t &out_x, size_t &out_y, size_t from_x, size_t from_y
     
     out_x = dx;
     out_y = dy;
+    return true;
+}
+
+bool PathFinder::ExecuteCallbackAlongPath(size_t from_x, size_t from_y, size_t to_x, size_t to_y, std::function<void(Tile*)> callback)
+{
+    assert(initialized_ && current_path_ != nullptr);
+    
+    // If either origin or destination changed, recalculate the path
+    int fx, fy, tx, ty, dx, dy;
+    current_path_->getOrigin(&fx, &fy);
+    current_path_->getDestination(&tx, &ty);
+    
+    if (from_x != fx || from_y != fy ||
+        to_x != tx || to_y != ty) {
+        if (!ComputePath(from_x, from_y, to_x, to_y))
+            return false;
+    }
+    
+    // Walk the path and execute the callback
+    while (!current_path_->isEmpty()) {
+        int x, y;
+        if (current_path_->walk(&x, &y, true)) {
+            auto tile {maps_manager_->GetTileFromFloor(x, y)};
+            
+            assert(tile);
+            
+            callback(tile);
+        }
+        else {
+            break;
+        }
+    }
+    
     return true;
 }
 

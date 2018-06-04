@@ -61,7 +61,7 @@ void Engine::InitializeGame() {
     input_manager_.SetPlayer(player);
     
     // Initialize Aim Manager
-    aim_manager_.Initialize(action_manager_, actor_manager_);
+    aim_manager_.Initialize(action_manager_, actor_manager_, maps_manager_);
     
     // Everything that needs to be done when no user action has been detected
     action_manager_.StartTurn();
