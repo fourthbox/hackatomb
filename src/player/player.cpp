@@ -1,6 +1,7 @@
 #include "player.hpp"
 
 #include "game_constants.hpp"
+#include "maps_manager.hpp"
 
 Player::Player() {
     assert(!initialized_);
@@ -86,4 +87,24 @@ void Player::Die() {
     assert(initialized_);
 
     action_manager_->GameOver();
+}
+
+bool Player::CanSee(size_t x, size_t y) {
+    assert(initialized_);
+
+    maps_manager_->ComputeFov(*this);
+    
+    return maps_manager_->IsInFov(x, y);
+}
+
+bool Player::CanSee(Tile *tile) {
+    assert(tile);
+
+    return CanSee(tile->GetX(), tile->GetY());
+}
+
+bool Player::CanSee(Actor *actor) {
+    assert(actor);
+
+    return CanSee(actor->GetPosition().first, actor->GetPosition().second);
 }

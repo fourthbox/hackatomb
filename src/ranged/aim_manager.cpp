@@ -80,20 +80,22 @@ void AimManager::Update() {
     if (x != 0 || y != 0) {
         auto new_x {*crosshair_x_ + x}, new_y {*crosshair_y_ + y};
         
-        // Check if it's going out of range
-        auto length {path_finder_.GetLineLength(actor_manager_->GetPlayer().GetPosition().first,
-                                                actor_manager_->GetPlayer().GetPosition().second,
-                                                new_x,
-                                                new_y)};
+        if (actor_manager_->GetPlayer().CanSee(new_x, new_y)
+            && action_manager_->CanMove(new_x, new_y)) {
+            
+            // Check if it's going out of range
+            auto length {path_finder_.GetLineLength(actor_manager_->GetPlayer().GetPosition().first,
+                                                    actor_manager_->GetPlayer().GetPosition().second,
+                                                    new_x,
+                                                    new_y)};
+            
+            // Note: If length is -1, the pathfinder found an obstacle
+            // If out of range, exit the function
+            if (length <= range_) {
+                crosshair_x_ = std::experimental::make_optional(new_x);
+                crosshair_y_ = std::experimental::make_optional(new_y);
 
-        // Note:If length is -1, the pathfinder found an obstacle
-        // If out of range, exit the function
-        if (length > 5)
-            return;
-
-        if (action_manager_->CanMove(new_x, new_y)) {
-            crosshair_x_ = std::experimental::make_optional(new_x);
-            crosshair_y_ = std::experimental::make_optional(new_y);
+            }
         }
     }
 }
@@ -106,22 +108,28 @@ void AimManager::Draw(TCODConsole &console) {
            && action_manager_->GetTurnPhase() == TurnPhase::AIM_
            && mode_ != CrosshairMode::NONE_);
     
-    // Drawing the crosshair
-    console.setChar(crosshair_x_.value_or(actor_manager_->GetPlayer().GetPosition().first),
-                    crosshair_y_.value_or(actor_manager_->GetPlayer().GetPosition().second),
-                    kCharCrosshair);
-
-    console.setCharForeground(crosshair_x_.value_or(actor_manager_->GetPlayer().GetPosition().first),
-                              crosshair_y_.value_or(actor_manager_->GetPlayer().GetPosition().second),
-                              kCrosshairColor);
+    auto x {crosshair_x_.value_or(actor_manager_->GetPlayer().GetPosition().first)};
+    auto y {crosshair_y_.value_or(actor_manager_->GetPlayer().GetPosition().second)};
+    
+    // Highlight tile callback
+    auto callback = [=] (Tile *tile) {
+        if (tile->GetXY() == actor_manager_->GetPlayer().GetPosition())
+            return;
         
+        // Draw the crosshair OR toggle the highlight
+        if (tile->GetXY() == std::make_pair(x, y))
+            tile->ToggleCrosshair(true);
+        else
+            tile->ToggleHighlight(true);
+    };
+
     // Drawing the trail
     if (crosshair_x_ != std::experimental::nullopt && crosshair_y_ != std::experimental::nullopt) {
         auto success { path_finder_.ExecuteCallbackAlongLine(actor_manager_->GetPlayer().GetPosition().first,
                                                              actor_manager_->GetPlayer().GetPosition().second,
                                                              *crosshair_x_,
                                                              *crosshair_y_,
-                                                             [] (Tile *tile) { tile->ToggleHighlight(true); }
+                                                             callback
                                                              )};
     }
 }

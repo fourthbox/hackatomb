@@ -5,7 +5,11 @@
 #include "monster.hpp"
 
 Engine::Engine() :
-is_playing_ {false} {
+start_screen_initialized_ {false},
+game_initialized_ {false},
+is_playing_ {false},
+is_start_screen_first_update_cycle_ {false},
+is_main_game_first_update_cycle_ {false} {
     
     // Initialize Root Console Manager
     root_console_manager_.Initialize(kRootViewWidth, kRootViewHeight, "hackatomb");
@@ -73,6 +77,12 @@ void Engine::InitializeGame() {
 void Engine::Update() {
     assert(game_initialized_);
     
+    // Only in the very first update iteration, execute a render beforehand
+    if (!is_main_game_first_update_cycle_) {
+        Render();
+        is_main_game_first_update_cycle_ = true;
+    }
+    
     // Checks if a game over has occurred
     if (action_manager_.GetTurnPhase() == TurnPhase::GAME_OVER_) {
         GameOver();
@@ -104,12 +114,23 @@ void Engine::Update() {
 void Engine::UpdateStartScreen() {
     assert(start_screen_initialized_);
     
+    // Only in the very first update iteration, execute a render beforehand
+    if (!is_start_screen_first_update_cycle_) {
+        RenderStartScreen();
+        is_start_screen_first_update_cycle_ = true;
+    }
+
     input_manager_.UpdateStartScreen();
 }
 
 void Engine::Render() {
     assert(game_initialized_);
     
+    // Draw the crosshair
+    if (action_manager_.GetTurnPhase() == TurnPhase::AIM_) {
+        aim_manager_.Draw(*root_console_manager_.main_view_);
+    }
+
     // Draw the map
     maps_manager_.Draw(*root_console_manager_.main_view_, actor_manager_.GetPlayer());
     
@@ -122,11 +143,6 @@ void Engine::Render() {
     // Draw the Ui
     ui_manager_.Draw();
     
-    // Draw the crosshair
-    if (action_manager_.GetTurnPhase() == TurnPhase::AIM_) {
-        aim_manager_.Draw(*root_console_manager_.main_view_);
-    }
-
     // Blit consoles to screen to screen
     root_console_manager_.Render();
 }

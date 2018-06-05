@@ -8,6 +8,7 @@
 
 #include "action_manager.hpp"
 #include "actor.hpp"
+#include "tile.hpp"
 
 /**
  This class extends Actor with the functionalities that are unique to the player
@@ -25,6 +26,10 @@ public:
      Set the action the player must perform
      */
     void SetAction(Action action);
+    
+    bool CanSee(size_t x, size_t y);
+    bool CanSee(Tile *tile);
+    bool CanSee(Actor *actor);
                 
 private:    
     Action action_;     /**< The action the player must perform this turn */

@@ -59,6 +59,8 @@ private:
     bool start_screen_initialized_;
     bool game_initialized_;
     bool is_playing_;
+    bool is_start_screen_first_update_cycle_;
+    bool is_main_game_first_update_cycle_;
     
     // Entities management
     ActorManager actor_manager_;        /**< Manager for all actors of the loaded game */

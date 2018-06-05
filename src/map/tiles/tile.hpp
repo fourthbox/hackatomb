@@ -26,9 +26,10 @@ public:
     inline TileType GetType() { return type_; }
     
     inline void ToggleHighlight(bool toggle) { is_highlighted_ = toggle; }
+    inline void ToggleCrosshair(bool toggle) { is_crosshair_ = toggle; }
     
 protected:
-    bool is_explored_, is_highlighted_;
+    bool is_explored_, is_highlighted_, is_crosshair_;
     TileType type_;
 };
 
