@@ -9,7 +9,6 @@ libpmg::Tile(other->GetX(), other->GetY(), other->GetTagList()) {
     
     is_explored_ = false;
     is_highlighted_ = false;
-    is_crosshair_ = false;
 }
 
 void Tile::Draw(TCODConsole &console, bool is_in_fov) {
@@ -38,12 +37,4 @@ void Tile::Draw(TCODConsole &console, bool is_in_fov) {
     // Set the resulting color
     console.setCharBackground(GetX(), GetY(), bg);
     console.setCharForeground(GetX(), GetY(), fg);
-    
-    // Override default settings with crosshair if necessary
-    if (is_crosshair_) {
-        console.setChar(GetX(), GetY(), kCharCrosshair);
-        console.setCharForeground(GetX(), GetY(), kCrosshairColor);
-        
-        is_crosshair_ = false;
-    }
 }

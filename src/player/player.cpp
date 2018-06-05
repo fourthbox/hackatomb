@@ -64,12 +64,14 @@ bool Player::Update(size_t speed) {
     }
     
     if (x != 0 || y != 0) {
-        if (action_manager_->CanMove(x_ + x, y_ + y)) {
-            x_ += x;
-            y_ += y;
+        auto new_x {x_ + x}, new_y {y_ + y};
+        if (action_manager_->CanMove(new_x, new_y)
+            && !action_manager_->CanAtttack(new_x, new_y)) {
+            x_ = new_x;
+            y_ = new_y;
             action_manager_->ActionPerformed();
         } else {
-            if (action_manager_->PerformAction(*this, x_ + x, y_ + y))
+            if (action_manager_->PerformAction(*this, new_x, new_y))
                 action_manager_->ActionPerformed();
         }
     }

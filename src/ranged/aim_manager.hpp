@@ -26,7 +26,8 @@ public:
     void SetAction(Action action);
     
     void Update();
-    void Draw(TCODConsole &console);
+    void DrawTrail(TCODConsole &console);
+    void DrawCrosshair(TCODConsole &console);
     
     void SetupCrossshair(CrosshairMode mode, int range);
     

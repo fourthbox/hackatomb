@@ -126,20 +126,29 @@ void Engine::UpdateStartScreen() {
 void Engine::Render() {
     assert(game_initialized_);
     
-    // Draw the crosshair
-    if (action_manager_.GetTurnPhase() == TurnPhase::AIM_) {
-        aim_manager_.Draw(*root_console_manager_.main_view_);
-    }
+    // Draw the crosshair's trail
+    // The trail is a tile effect, and therefore must be drawn before the actual crosshair
+    if (action_manager_.GetTurnPhase() == TurnPhase::AIM_)
+        aim_manager_.DrawTrail(*root_console_manager_.main_view_);
 
+    // **********************************************************************
+    // EVERY DRAW CALL ADDING EFFECTS TO THE TILES MUST BE CALLED BEFORE THIS
+    // **********************************************************************
+    
     // Draw the map
     maps_manager_.Draw(*root_console_manager_.main_view_, actor_manager_.GetPlayer());
+    
+    // Draw monsters
+    actor_manager_.DrawMonsters(*root_console_manager_.main_view_);
     
     // Draw the player
     actor_manager_.DrawPlayer(*root_console_manager_.main_view_);
     
-    // Draw monsters
-    actor_manager_.DrawMonsters(*root_console_manager_.main_view_);
-        
+    // Draw the crosshair's trail
+    // The trail is a tile effect, and therefore must be drawn before the actual crosshair
+    if (action_manager_.GetTurnPhase() == TurnPhase::AIM_)
+        aim_manager_.DrawCrosshair(*root_console_manager_.main_view_);
+
     // Draw the Ui
     ui_manager_.Draw();
     

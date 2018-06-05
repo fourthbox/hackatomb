@@ -28,7 +28,8 @@ bool Monster::Update(size_t speed) {
     auto success {path_finder_.Walk(dest_x, dest_y, x_, y_, px, py)};
     
     // Check if the moster can move to the specified position
-    if (success && action_manager_->CanMove(dest_x, dest_y)) {
+    if (success && action_manager_->CanMove(dest_x, dest_y)
+        && !action_manager_->CanAtttack(dest_x, dest_y)) {
         x_ = dest_x;
         y_ = dest_y;
         

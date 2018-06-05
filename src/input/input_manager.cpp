@@ -138,6 +138,9 @@ void InputManager::UpdateAimMode() {
             // TODO: shot arrow
             action_manager_->StartTurn();
             break;
+        default:
+            aim_manager_->SetAction(Action::NONE_);
+            break;
     }
 }
 

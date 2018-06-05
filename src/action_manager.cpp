@@ -43,7 +43,7 @@ void ActionManager::SwitchToAimMode() {
 bool ActionManager::CanMove(size_t x, size_t y) {
     assert(initialized_);
     
-    return maps_manager_->CanMoveToPosition(x, y) && !CanAtttack(x, y);
+    return maps_manager_->CanMoveToPosition(x, y);
 }
 
 bool ActionManager::CanAtttack(size_t x, size_t y) {
