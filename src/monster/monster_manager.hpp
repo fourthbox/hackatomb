@@ -10,6 +10,7 @@ public:
     void SetPermaVisible(bool is_perma_visible, Monster *monster = nullptr) const;
     void Update(size_t speed) const;
     Monster *GetMonsterByCoordinates(size_t x, size_t y) const;
+    std::vector<Actor*> GetMonsterList() const;
 
 private:
     ActionManager *action_manager_;

@@ -31,6 +31,8 @@ public:
     
     void SetupCrossshair(CrosshairMode mode, int range);
     
+    void ResetCrosshair();
+    
 private:
     std::experimental::optional<size_t> crosshair_x_, crosshair_y_;
     std::experimental::optional<int> range_;
@@ -41,8 +43,6 @@ private:
     
     ActionManager *action_manager_;
     ActorManager *actor_manager_;
-    
-    void ResetCrosshair();
     
 };
 

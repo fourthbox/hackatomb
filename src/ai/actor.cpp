@@ -86,3 +86,53 @@ void Actor::InflictDamage(int total_damage) {
     if (stats_.current_hp_ <= 0)
         Die();
 }
+
+bool Actor::CanSee(size_t x, size_t y) const {
+    assert(initialized_);
+    
+    maps_manager_->ComputeFov(*this);
+    
+    return maps_manager_->IsInFov(x, y);
+}
+
+bool Actor::CanSee(Tile *tile) const {
+    assert(tile);
+    
+    return CanSee(tile->GetX(), tile->GetY());
+}
+
+bool Actor::CanSee(Actor *actor) const {
+    assert(actor);
+    
+    return CanSee(actor->GetPosition().first, actor->GetPosition().second);
+}
+
+Actor *Actor::GetClosestActorInFov() {
+    assert (initialized_);
+    
+    // Compute fov
+    maps_manager_->ComputeFov(*this);
+    
+    // Calculate distance between 2 points
+    auto distance = [this] (Actor &actor) -> float {
+        auto p1 {GetPosition()}, p2 {actor.GetPosition()};
+        
+        return sqrt( (p1.first - p2.first) * (p1.first - p2.first) +
+                    (p1.second - p2.second) * (p1.second - p2.second) );
+    };
+    
+    auto actor_list {actor_manager_->GetAllActors()};
+    
+    auto shortest_dist {std::numeric_limits<float>::max()};
+    Actor *target {nullptr};
+    for (auto &actor : actor_list) {
+        if (CanSee(actor)) {
+            if (auto dist {distance(*actor)}; dist < shortest_dist && dist != 0) {
+                shortest_dist = dist;
+                target = actor;
+            }
+        }
+    }
+    
+    return target;
+}

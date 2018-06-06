@@ -26,11 +26,7 @@ public:
      Set the action the player must perform
      */
     void SetAction(Action action);
-    
-    bool CanSee(size_t x, size_t y);
-    bool CanSee(Tile *tile);
-    bool CanSee(Actor *actor);
-                
+                    
 private:    
     Action action_;     /**< The action the player must perform this turn */
     void Die() override;

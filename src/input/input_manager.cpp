@@ -136,6 +136,7 @@ void InputManager::UpdateAimMode() {
             break;
         case kSelectOption:
             // TODO: shot arrow
+            aim_manager_->ResetCrosshair();
             action_manager_->StartTurn();
             break;
         default:

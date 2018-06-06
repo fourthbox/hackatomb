@@ -60,3 +60,14 @@ Monster *MonsterManager::GetMonsterByCoordinates(size_t x, size_t y) const {
     
     return nullptr;
 }
+
+std::vector<Actor*> MonsterManager::GetMonsterList() const {
+    assert (initialized_);
+    
+    std::vector<Actor*> new_list;
+    
+    for (auto const &monster : monster_list_)
+        new_list.push_back(monster.get());
+    
+    return new_list;
+}

@@ -41,7 +41,16 @@ public:
     
     void DrawMonsters(TCODConsole &console);
     void DrawPlayer(TCODConsole &console);
+    
+    std::vector<Actor*> GetAllActors() {
+        assert (initialized_);
         
+        std::vector<Actor*> actor_list {monster_manager_.GetMonsterList()};
+        actor_list.push_back(&GetPlayer());
+        
+        return actor_list;
+    }
+    
 private:
     PlayerManager player_manager_;     /**< The PlayerManager */
     MonsterManager monster_manager_;     /**< The MonsterManager */

@@ -177,7 +177,14 @@ void AimManager::SetupCrossshair(CrosshairMode mode, int range) {
     mode_ = mode;
     range_ = std::experimental::make_optional(range);
     
-    // Put the crosshair on the player position
-    crosshair_x_ = std::experimental::make_optional(actor_manager_->GetPlayer().GetPosition().first);
-    crosshair_y_ = std::experimental::make_optional(actor_manager_->GetPlayer().GetPosition().second);
+    // Put the crosshair on the closest enemy in range
+    if (auto monster {actor_manager_->GetPlayer().GetClosestActorInFov()}; monster != nullptr) {
+        crosshair_x_ = std::experimental::make_optional(monster->GetPosition().first);
+        crosshair_y_ = std::experimental::make_optional(monster->GetPosition().second);
+    } else {
+        // Otherwise put it on the player
+        crosshair_x_ = std::experimental::make_optional(actor_manager_->GetPlayer().GetPosition().first);
+        crosshair_y_ = std::experimental::make_optional(actor_manager_->GetPlayer().GetPosition().second);
+    }
+    
 }

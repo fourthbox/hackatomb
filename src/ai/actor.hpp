@@ -16,6 +16,7 @@ class ActionManager;
 class ActorManager;
 class MapsManager;
 class PlayerManager;
+class Tile;
 
 /**
  This class represent an intelligent entity on a map
@@ -67,6 +68,12 @@ public:
     float GetDefenseModifier() const;
     size_t GetArmorRating() const;
     void InflictDamage(int total_damage);
+    
+    bool CanSee(size_t x, size_t y) const;
+    bool CanSee(Tile *tile) const;
+    bool CanSee(Actor *actor) const;
+    
+    Actor *GetClosestActorInFov();
     
 protected:
     ActionManager *action_manager_;     /**< Pointer to the ActionManager */

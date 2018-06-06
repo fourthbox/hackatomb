@@ -16,10 +16,8 @@ bool Monster::Update(size_t speed) {
     auto py {actor_manager_->GetPlayer().GetPosition().second};
     
     // Computer fov for the monster
-    maps_manager_->ComputeFov(*this);
-    
-    // If the hero is not in range, don't do anything
-    if (!maps_manager_->IsInFov(px, py))
+    // and check if the hero is not in range, don't do anything
+    if (!CanSee(px, py))
         return false;
     
     size_t dest_x, dest_y;
