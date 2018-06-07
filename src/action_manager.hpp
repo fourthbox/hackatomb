@@ -95,6 +95,8 @@ public:
      */
     bool CanAtttack(size_t x, size_t y);
     
+    bool ShootAction(Actor &source, size_t x, size_t y);
+    
 private:
     TurnPhase current_turn_phase_;                  /**< Keeps the current turn phase */
     ActorManager *actor_manager_;                   /**< Pointer to the ActorManager */

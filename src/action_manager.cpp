@@ -109,7 +109,11 @@ TurnPhase ActionManager::GetTurnPhase() const {
 
 bool ActionManager::PerformAction(Actor &source, size_t x, size_t y) {
     assert(initialized_);
-
+    
+    // If the tile is out of the map, exit
+    if (!maps_manager_->GetTileFromFloor(x, y))
+        return false;
+    
     // Check if can be attacked
     if (CanAtttack(x, y)) {
         Attack(source, x, y);
@@ -121,3 +125,16 @@ bool ActionManager::PerformAction(Actor &source, size_t x, size_t y) {
     
     return false;
 }
+
+bool ActionManager::ShootAction(Actor &source, size_t x, size_t y) {
+    assert(initialized_);
+    
+    // Check if can be attacked
+    if (CanAtttack(x, y)) {
+        Attack(source, x, y);
+        return true;
+    }
+    
+    return false;
+}
+

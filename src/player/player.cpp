@@ -12,7 +12,7 @@ Player::Player() {
 bool Player::Update(size_t speed) {
     assert(initialized_);
     
-    if (!Actor::Update(speed))
+    if (action_manager_->GetTurnPhase() == TurnPhase::ACTION_ || !Actor::Update(speed))
         return false;
 
     int x {0}, y {0};

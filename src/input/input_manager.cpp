@@ -109,6 +109,20 @@ void InputManager::UpdateNormalMode() {
 }
 
 void InputManager::UpdateAimMode() {
+    
+    // Check for enter keys
+    switch (last_key_.vk) {
+        case kSelectOption:
+            aim_manager_->PerformActionOnCrosshair();
+            
+            aim_manager_->ResetCrosshair();
+            
+            action_manager_->ActionPerformed();
+            return;
+        default:
+            break;
+    }
+
     switch (last_key_.c) {
         case kMoveNorth:
             aim_manager_->SetAction(Action::MOVE_N_);
@@ -133,11 +147,6 @@ void InputManager::UpdateAimMode() {
             break;
         case kMoveNorthWest:
             aim_manager_->SetAction(Action::MOVE_NW_);
-            break;
-        case kSelectOption:
-            // TODO: shot arrow
-            aim_manager_->ResetCrosshair();
-            action_manager_->StartTurn();
             break;
         default:
             aim_manager_->SetAction(Action::NONE_);

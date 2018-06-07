@@ -91,6 +91,11 @@ void Engine::Update() {
     // Receive user input
     input_manager_.Update();
     
+    // Update aiming
+    if (action_manager_.GetTurnPhase() == TurnPhase::AIM_) {
+        aim_manager_.Update();
+    }
+    
     // Cycle an update for every speed
     for (auto i {kMinSpeed}; i <= kMaxSpeed; i++) {
         // Update player
@@ -99,16 +104,11 @@ void Engine::Update() {
         // If an action was performed, update all other actors
         if (action_manager_.GetTurnPhase() == TurnPhase::ACTION_) {
             actor_manager_.Update(i);
-            
-            // Everything that needs to be done when no user action has been detected
-            action_manager_.StartTurn();
         }
     }
     
-    // Draw crosshair
-    if (action_manager_.GetTurnPhase() == TurnPhase::AIM_) {
-        aim_manager_.Update();
-    }
+    if (action_manager_.GetTurnPhase() == TurnPhase::ACTION_)
+        action_manager_.StartTurn();
 }
 
 void Engine::UpdateStartScreen() {

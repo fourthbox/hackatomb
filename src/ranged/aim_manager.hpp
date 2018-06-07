@@ -32,6 +32,7 @@ public:
     void SetupCrossshair(CrosshairMode mode, int range);
     
     void ResetCrosshair();
+    void PerformActionOnCrosshair();
     
 private:
     std::experimental::optional<size_t> crosshair_x_, crosshair_y_;

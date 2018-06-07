@@ -188,3 +188,14 @@ void AimManager::SetupCrossshair(CrosshairMode mode, int range) {
     }
     
 }
+
+void AimManager::PerformActionOnCrosshair() {
+    assert(initialized_
+           && crosshair_x_ != std::experimental::nullopt
+           && crosshair_y_ != std::experimental::nullopt
+           && range_ != std::experimental::nullopt
+           && mode_ != CrosshairMode::NONE_
+           && action_manager_->GetTurnPhase() == TurnPhase::AIM_);
+
+    action_manager_->ShootAction(actor_manager_->GetPlayer(), *crosshair_x_, *crosshair_y_);
+}

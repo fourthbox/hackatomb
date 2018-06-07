@@ -80,7 +80,7 @@ static const char kMoveDownstairs = '.';
 static const char kSkipTurn = '.';
 
 static const char kEnterAimMode = 't';
-static const char kSelectOption = TCODK_ENTER;
+static const TCOD_keycode_t kSelectOption = TCODK_ENTER;
 
 // Misc constants
 static const short kStandardDungeonDepth = 27;
