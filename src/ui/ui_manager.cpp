@@ -1,6 +1,7 @@
 #include "ui_manager.hpp"
 
 #include "game_constants.hpp"
+#include "game_strings.hpp"
 
 UiManager::UiManager() {
     environment_window_ = std::make_unique<UiWindow>();
@@ -21,16 +22,19 @@ void UiManager::Initialize() {
 void UiManager::InitializeEnvironmentWindow() {
     assert(!initialized_);
     
-    // Initialize labels
-    auto floor_label { UiLabel(2, 5, "floor:", "floor_label") };
-    auto environment_label { UiLabel(2, 8, "environment:", "environment_label") };
-    auto temperature_label { UiLabel(2, 11, "temperature:", "temperature_label") };
+    // Initialize static labels
+    auto s_floor_label { UiLabel(2, 5, kFloorString + ":", kFloorString + kStaticLabel) };
+    auto s_environment_label { UiLabel(2, 8, kEnvironmentString + ":", kEnvironmentString + kStaticLabel) };
+    
+    // Initialize dynamic labels
+    auto d_floor_label { UiLabel(s_floor_label.x_, s_floor_label.y_+1, "", kFloorString + kDynamicLabel) };
+    auto d_environment_label { UiLabel(2, 7, "", kFloorString + kDynamicLabel) };
     
     // Initialize the window
     environment_window_->Initialize(kEnvironmentConsoleWidth,
                                     kEnvironmentConsoleHeight,
-                                    "environment",
-                                    {floor_label, environment_label, temperature_label} );
+                                    kEnvironmentString,
+                                    {s_floor_label, s_environment_label} );
 }
 
 void UiManager::InitializePlayerInfoWindow() {
@@ -74,3 +78,19 @@ UiWindow *UiManager::GetMessageLogWindow() {
 
     return message_log_window_.get();
 }
+
+bool UiManager::UpdateLabel(std::string const &label_id, std::string const &label_text) {
+    assert(initialized_);
+    
+    auto success {false};
+    
+    for (auto const &window : {environment_window_.get(), player_info_window_.get(), message_log_window_.get()}) {
+        if (auto label {window->GetDynamicLabel(label_id)}; label != nullptr) {
+            label->text_ = label_text;
+            success = true;
+        }
+    }
+    
+    return success;
+}
+

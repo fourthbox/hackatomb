@@ -23,16 +23,16 @@ void StartScreen::Initialize(Engine *engine) {
                                     {start_label, load_label, config_label, quit_label});
     
     // Setup the labels to be cyclable
-    if (auto label {start_screen_window_->GetUiLabelById(kStartLabelId)}; label != nullptr)
+    if (auto label {start_screen_window_->GetStaticLabel(kStartLabelId)}; label != nullptr)
         selectable_labels_.push_back(label);
     
-    if (auto label {start_screen_window_->GetUiLabelById(kLoadLabelId)}; label != nullptr)
+    if (auto label {start_screen_window_->GetStaticLabel(kLoadLabelId)}; label != nullptr)
         selectable_labels_.push_back(label);
 
-    if (auto label {start_screen_window_->GetUiLabelById(kConfigLabelId)}; label != nullptr)
+    if (auto label {start_screen_window_->GetStaticLabel(kConfigLabelId)}; label != nullptr)
         selectable_labels_.push_back(label);
 
-    if (auto label {start_screen_window_->GetUiLabelById(kQuitLabelId)}; label != nullptr)
+    if (auto label {start_screen_window_->GetStaticLabel(kQuitLabelId)}; label != nullptr)
         selectable_labels_.push_back(label);
 
     // Set the first selected label to Start Game
