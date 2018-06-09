@@ -9,10 +9,10 @@ Player::Player() {
     action_ = Action::NONE_;
 }
 
-bool Player::Update(size_t speed) {
+bool Player::Update(size_t speed, ActionManager &action_manager) {
     assert(initialized_);
     
-    if (action_manager_->GetTurnPhase() == TurnPhase::ACTION_ || !Actor::Update(speed))
+    if (action_manager.GetTurnPhase() == TurnPhase::ACTION_ || !Actor::Update(speed, action_manager))
         return false;
 
     int x {0}, y {0};
@@ -56,7 +56,7 @@ bool Player::Update(size_t speed) {
             break;
             
         case Action::SKIP:
-            action_manager_->ActionPerformed();
+            action_manager.ActionPerformed();
             return false;
             
         default:
@@ -65,14 +65,14 @@ bool Player::Update(size_t speed) {
     
     if (x != 0 || y != 0) {
         auto new_x {x_ + x}, new_y {y_ + y};
-        if (action_manager_->CanMove(new_x, new_y)
-            && !action_manager_->CanAtttack(new_x, new_y)) {
+        if (action_manager.CanMove(new_x, new_y)
+            && !action_manager.CanAtttack(new_x, new_y)) {
             x_ = new_x;
             y_ = new_y;
-            action_manager_->ActionPerformed();
+            action_manager.ActionPerformed();
         } else {
-            if (action_manager_->PerformAction(*this, new_x, new_y))
-                action_manager_->ActionPerformed();
+            if (action_manager.PerformAction(*this, new_x, new_y))
+                action_manager.ActionPerformed();
         }
     }
     
@@ -85,8 +85,8 @@ void Player::SetAction(Action action) {
     action_ = action;
 }
 
-void Player::Die() {
+void Player::Die(ActionManager &action_manager) {
     assert(initialized_);
 
-    action_manager_->GameOver();
+    action_manager.GameOver();
 }

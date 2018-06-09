@@ -3,7 +3,7 @@
 #include "actor_manager.hpp"
 #include "game_constants.hpp"
 
-void InputManager::Initialize(ActorManager const &actor_manager, MapsManager &maps_manager, StartScreen &start_screen, AimManager &aim_manager, ActionManager &action_manager) {
+void InputManager::Initialize(ActorManager &actor_manager, MapsManager &maps_manager, StartScreen &start_screen, AimManager &aim_manager, ActionManager &action_manager) {
     assert(!initialized_);
     
     actor_manager_ = &actor_manager;
@@ -96,7 +96,7 @@ void InputManager::UpdateNormalMode() {
                 action_manager_->SwitchToAimMode();
                 
                 // Setup crosshair for arrows
-                aim_manager_->SetupCrossshair(CrosshairMode::ARROW_, player_->GetFovRadius());
+                aim_manager_->SetupCrossshair(CrosshairMode::ARROW_, player_->GetFovRadius(), *actor_manager_);
                 
                 // Set default player action
                 player_->SetAction(Action::NONE_);
@@ -113,7 +113,7 @@ void InputManager::UpdateAimMode() {
     // Check for enter keys
     switch (last_key_.vk) {
         case kSelectOption:
-            aim_manager_->PerformActionOnCrosshair();
+            aim_manager_->PerformActionOnCrosshair(*action_manager_, *actor_manager_);
             
             aim_manager_->ResetCrosshair();
             

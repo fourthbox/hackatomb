@@ -6,7 +6,7 @@
 
 using std::string;
 
-void Actor::Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager) {
+void Actor::Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats) {
     assert(!initialized_);
     
     x_ = x;
@@ -15,10 +15,7 @@ void Actor::Initialize(size_t x, size_t y, int const &sprite, std::string const 
     name_ = name;
     color_ = color;
     stats_ = stats;
-    action_manager_ = &action_manager;
-    actor_manager_ = &actor_manager;
-    maps_manager_ = &maps_manager;
-        
+    
     initialized_ = true;
 }
 
@@ -41,7 +38,7 @@ std::pair<size_t, size_t> Actor::GetPosition() const {
     return std::make_pair(x_, y_);
 }
 
-bool Actor::Update(size_t speed) {
+bool Actor::Update(size_t speed, ActionManager &action_manager) {
     assert(initialized_);
 
     return stats_.speed_ == speed;
@@ -78,40 +75,40 @@ size_t Actor::GetArmorRating() const {
     return 1;
 }
 
-void Actor::InflictDamage(int total_damage) {
+void Actor::InflictDamage(int total_damage, ActionManager &action_manager) {
     assert(initialized_);
     
     stats_.current_hp_ -= total_damage;
     
     if (stats_.current_hp_ <= 0)
-        Die();
+        Die(action_manager);
 }
 
-bool Actor::CanSee(size_t x, size_t y) const {
+bool Actor::CanSee(size_t x, size_t y, MapsManager &maps_manager) const {
     assert(initialized_);
     
-    maps_manager_->ComputeFov(*this);
+    maps_manager.ComputeFov(*this);
     
-    return maps_manager_->IsInFov(x, y);
+    return maps_manager.IsInFov(x, y);
 }
 
-bool Actor::CanSee(Tile *tile) const {
+bool Actor::CanSee(Tile *tile, MapsManager &maps_manager) const {
     assert(tile);
     
-    return CanSee(tile->GetX(), tile->GetY());
+    return CanSee(tile->GetX(), tile->GetY(), maps_manager);
 }
 
-bool Actor::CanSee(Actor *actor) const {
+bool Actor::CanSee(Actor *actor, MapsManager &maps_manager) const {
     assert(actor);
     
-    return CanSee(actor->GetPosition().first, actor->GetPosition().second);
+    return CanSee(actor->GetPosition().first, actor->GetPosition().second, maps_manager);
 }
 
-Actor *Actor::GetClosestActorInFov() {
+Actor *Actor::GetClosestActorInFov(ActorManager &actor_manager, MapsManager &maps_manager) {
     assert (initialized_);
     
     // Compute fov
-    maps_manager_->ComputeFov(*this);
+    maps_manager.ComputeFov(*this);
     
     // Calculate distance between 2 points
     auto distance = [this] (Actor &actor) -> float {
@@ -121,12 +118,12 @@ Actor *Actor::GetClosestActorInFov() {
                     (p1.second - p2.second) * (p1.second - p2.second) );
     };
     
-    auto actor_list {actor_manager_->GetAllActors()};
+    auto actor_list {actor_manager.GetAllActors()};
     
     auto shortest_dist {std::numeric_limits<float>::max()};
     Actor *target {nullptr};
     for (auto &actor : actor_list) {
-        if (CanSee(actor)) {
+        if (CanSee(actor, maps_manager)) {
             if (auto dist {distance(*actor)}; dist < shortest_dist && dist != 0) {
                 shortest_dist = dist;
                 target = actor;

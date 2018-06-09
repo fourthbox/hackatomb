@@ -65,7 +65,7 @@ void Engine::InitializeGame() {
     input_manager_.SetPlayer(player);
     
     // Initialize Aim Manager
-    aim_manager_.Initialize(action_manager_, actor_manager_, maps_manager_);
+    aim_manager_.Initialize(maps_manager_);
     
     // Everything that needs to be done when no user action has been detected
     action_manager_.StartTurn();
@@ -93,13 +93,13 @@ void Engine::Update() {
     
     // Update aiming
     if (action_manager_.GetTurnPhase() == TurnPhase::AIM_) {
-        aim_manager_.Update();
+        aim_manager_.Update(action_manager_, actor_manager_, maps_manager_);
     }
     
     // Cycle an update for every speed
     for (auto i {kMinSpeed}; i <= kMaxSpeed; i++) {
         // Update player
-        actor_manager_.GetPlayer().Update(i);
+        actor_manager_.GetPlayer().Update(i, action_manager_);
         
         // If an action was performed, update all other actors
         if (action_manager_.GetTurnPhase() == TurnPhase::ACTION_) {
@@ -129,7 +129,7 @@ void Engine::Render() {
     // Draw the crosshair's trail
     // The trail is a tile effect, and therefore must be drawn before the actual crosshair
     if (action_manager_.GetTurnPhase() == TurnPhase::AIM_)
-        aim_manager_.DrawTrail(*root_console_manager_.main_view_);
+        aim_manager_.DrawTrail(*root_console_manager_.main_view_, actor_manager_);
 
     // **********************************************************************
     // EVERY DRAW CALL ADDING EFFECTS TO THE TILES MUST BE CALLED BEFORE THIS
@@ -147,7 +147,7 @@ void Engine::Render() {
     // Draw the crosshair's trail
     // The trail is a tile effect, and therefore must be drawn before the actual crosshair
     if (action_manager_.GetTurnPhase() == TurnPhase::AIM_)
-        aim_manager_.DrawCrosshair(*root_console_manager_.main_view_);
+        aim_manager_.DrawCrosshair(*root_console_manager_.main_view_, actor_manager_);
 
     // Draw the Ui
     ui_manager_.Draw();

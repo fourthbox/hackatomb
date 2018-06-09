@@ -33,12 +33,10 @@ public:
      @param name The name of the actor.
      @param color The color to represent this actor.
      @param stats The stats for this actor.
-     @param action_manager Reference to the ActionManager.
-     @param maps_manager Reference to the MapsManager
      */
-    void Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager);
+    void Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats);
     
-    virtual bool Update(size_t speed);
+    virtual bool Update(size_t speed, ActionManager &action_manager);
     
     /**
      Attempts to perform a dodge.
@@ -69,17 +67,13 @@ public:
     size_t GetArmorRating() const;
     void InflictDamage(int total_damage);
     
-    bool CanSee(size_t x, size_t y) const;
-    bool CanSee(Tile *tile) const;
-    bool CanSee(Actor *actor) const;
+    bool CanSee(size_t x, size_t y, MapsManager &maps_manager) const;
+    bool CanSee(Tile *tile, MapsManager &maps_manager) const;
+    bool CanSee(Actor *actor, MapsManager &maps_manager) const;
     
-    Actor *GetClosestActorInFov();
+    Actor *GetClosestActorInFov(ActorManager &actor_manager, MapsManager &maps_manager);
     
-protected:
-    ActionManager *action_manager_;     /**< Pointer to the ActionManager */
-    ActorManager *actor_manager_;       /**< Pointer to the ActionManaer */
-    MapsManager *maps_manager_;         /**< Pointer to the MapsManager */
-    
+protected:    
     size_t x_, y_;      /**< Location on the current map. */
     short floor_;        /**< Current floor. */
     std::string map_category_; /**< Current map category */
@@ -88,7 +82,7 @@ protected:
     std::string name_;  /**< Name of this actor. */
     Stats stats_;       /**< Stats of this actor. */
     
-    virtual void Die() = 0;
+    virtual void Die(ActionManager &action_manager) = 0;
 };
 
 #endif /* ACTOR_HPP_ */

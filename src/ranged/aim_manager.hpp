@@ -21,18 +21,18 @@ enum struct CrosshairMode {
 class AimManager : public InitiableObject {
 public:
     AimManager();
-    void Initialize(ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager);
+    void Initialize(MapsManager &maps_manager);
 
     void SetAction(Action action);
     
-    void Update();
-    void DrawTrail(TCODConsole &console);
-    void DrawCrosshair(TCODConsole &console);
+    void Update(ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager);
+    void DrawTrail(TCODConsole &console, ActorManager &actor_manager);
+    void DrawCrosshair(TCODConsole &console, ActorManager &actor_manager);
     
-    void SetupCrossshair(CrosshairMode mode, int range);
+    void SetupCrossshair(CrosshairMode mode, int range, ActorManager &actor_manager, MapsManager &maps_manager);
     
     void ResetCrosshair();
-    void PerformActionOnCrosshair();
+    void PerformActionOnCrosshair(ActionManager &action_manager, ActorManager &actor_manager);
     
 private:
     std::experimental::optional<size_t> crosshair_x_, crosshair_y_;
@@ -41,9 +41,6 @@ private:
     Action action_;
     PathFinder path_finder_;
     CrosshairMode mode_;
-    
-    ActionManager *action_manager_;
-    ActorManager *actor_manager_;
     
 };
 

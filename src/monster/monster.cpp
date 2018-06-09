@@ -6,7 +6,7 @@
 
 #include "game_globals.hpp"
 
-bool Monster::Update(size_t speed) {
+bool Monster::Update(size_t speed, ActionManager &action_manager) {
     assert(initialized_);
     
     if (is_dead_ || !Actor::Update(speed))
@@ -61,7 +61,7 @@ void Monster::SetPermaVisible(bool is_perma_visible) {
     is_perma_visible_ = is_perma_visible;
 }
 
-void Monster::Die() {
+void Monster::Die(ActionManager &action_manager) {
     sprite_ = kCharCorpse;
     color_ = kCorpseColor;
     
