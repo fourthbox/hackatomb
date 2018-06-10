@@ -7,6 +7,7 @@
 #include "game_globals.hpp"
 #include "libtcod.hpp"
 #include "path_finder.hpp"
+#include "player.hpp"
 
 enum struct CrosshairMode {
     NONE_,
@@ -17,23 +18,22 @@ enum struct CrosshairMode {
     LOLLIPOP_
 };
 
-
 class AimManager : public InitiableObject {
 public:
     AimManager();
-    void Initialize(ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager);
+    void Initialize(MapsManager &maps_manager);
 
     void SetAction(Action action);
     
-    void Update();
-    void DrawTrail(TCODConsole &console);
-    void DrawCrosshair(TCODConsole &console);
+    void Update(Player const &player, ActionManager &action_manager, MapsManager &maps_manager);
+    void DrawTrail(TCODConsole &console, Coordinate player_position);
+    void DrawCrosshair(TCODConsole &console, Coordinate player_position);
     
-    void SetupCrossshair(CrosshairMode mode, int range);
+    void SetupCrossshair(CrosshairMode mode, int range, Player &player, std::vector<Actor*> actor_list, MapsManager &maps_manager);
     
     void ResetCrosshair();
-    void PerformActionOnCrosshair();
-    
+    Coordinate GetCrosshairLocation() const;
+
 private:
     std::experimental::optional<size_t> crosshair_x_, crosshair_y_;
     std::experimental::optional<int> range_;
@@ -41,9 +41,6 @@ private:
     Action action_;
     PathFinder path_finder_;
     CrosshairMode mode_;
-    
-    ActionManager *action_manager_;
-    ActorManager *actor_manager_;
     
 };
 

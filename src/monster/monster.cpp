@@ -6,18 +6,23 @@
 
 #include "game_globals.hpp"
 
-bool Monster::Update(size_t speed) {
+bool Monster::Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager) {
     assert(initialized_);
     
-    if (is_dead_ || !Actor::Update(speed))
+    if (is_dead_ || !Actor::Update(speed, action_manager, maps_manager))
         return false;
     
-    auto px {actor_manager_->GetPlayer().GetPosition().first};
-    auto py {actor_manager_->GetPlayer().GetPosition().second};
+    auto player_position {action_manager.SeekPlayer()};
+    
+    if (player_position == std::experimental::nullopt)
+        return false;
+    
+    auto px {player_position->first};
+    auto py {player_position->second};
     
     // Computer fov for the monster
     // and check if the hero is not in range, don't do anything
-    if (!CanSee(px, py))
+    if (!maps_manager.IsInFov(*this, px, py))
         return false;
     
     size_t dest_x, dest_y;
@@ -26,14 +31,12 @@ bool Monster::Update(size_t speed) {
     auto success {path_finder_.Walk(dest_x, dest_y, x_, y_, px, py)};
     
     // Check if the moster can move to the specified position
-    if (success && action_manager_->CanMove(dest_x, dest_y)
-        && !action_manager_->CanAtttack(dest_x, dest_y)) {
-        x_ = dest_x;
-        y_ = dest_y;
-        
+    if (success && action_manager.CanMove(dest_x, dest_y)
+        && !action_manager.CanAtttack(dest_x, dest_y)) {
+        MoveToPosition(dest_x, dest_y);
         return true;
-    } else if (success && action_manager_->CanAtttack(dest_x, dest_y)) {
-        action_manager_->Attack(*this, dest_x, dest_y);
+    } else if (success && action_manager.CanAtttack(dest_x, dest_y)) {
+        action_manager.Attack(*this, dest_x, dest_y);
         return true;
     }
     
@@ -45,7 +48,7 @@ void Monster::Initialize(size_t x, size_t y, int const &sprite, std::string cons
     
     is_perma_visible_ = false;
     
-    Actor::Initialize(x, y, sprite, name, color, stats, action_manager, actor_manager, maps_manager);
+    Actor::Initialize(x, y, sprite, name, color, stats);
     path_finder_.Initialize(maps_manager);
 }
 
@@ -62,8 +65,8 @@ void Monster::SetPermaVisible(bool is_perma_visible) {
 }
 
 void Monster::Die() {
+    Actor::Die();
+    
     sprite_ = kCharCorpse;
     color_ = kCorpseColor;
-    
-    is_dead_ = true;
 }

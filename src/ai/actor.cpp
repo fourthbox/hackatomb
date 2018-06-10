@@ -6,7 +6,7 @@
 
 using std::string;
 
-void Actor::Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager) {
+void Actor::Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats) {
     assert(!initialized_);
     
     x_ = x;
@@ -15,10 +15,8 @@ void Actor::Initialize(size_t x, size_t y, int const &sprite, std::string const 
     name_ = name;
     color_ = color;
     stats_ = stats;
-    action_manager_ = &action_manager;
-    actor_manager_ = &actor_manager;
-    maps_manager_ = &maps_manager;
-        
+    is_dead_ = false;
+    
     initialized_ = true;
 }
 
@@ -41,7 +39,7 @@ std::pair<size_t, size_t> Actor::GetPosition() const {
     return std::make_pair(x_, y_);
 }
 
-bool Actor::Update(size_t speed) {
+bool Actor::Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager) {
     assert(initialized_);
 
     return stats_.speed_ == speed;
@@ -78,40 +76,26 @@ size_t Actor::GetArmorRating() const {
     return 1;
 }
 
-void Actor::InflictDamage(int total_damage) {
+// Return false if dead
+bool Actor::InflictDamage(int total_damage) {
     assert(initialized_);
     
     stats_.current_hp_ -= total_damage;
     
-    if (stats_.current_hp_ <= 0)
+    if (stats_.current_hp_ <= 0) {
         Die();
+        return false;
+    }
+    
+    return true;
 }
 
-bool Actor::CanSee(size_t x, size_t y) const {
-    assert(initialized_);
-    
-    maps_manager_->ComputeFov(*this);
-    
-    return maps_manager_->IsInFov(x, y);
-}
+Actor *Actor::GetClosestActorInFov(std::vector<Actor*> actor_list, MapsManager &maps_manager) {
+    return GetClosestActorInRange(actor_list, GetFovRadius(), maps_manager);
+};
 
-bool Actor::CanSee(Tile *tile) const {
-    assert(tile);
-    
-    return CanSee(tile->GetX(), tile->GetY());
-}
-
-bool Actor::CanSee(Actor *actor) const {
-    assert(actor);
-    
-    return CanSee(actor->GetPosition().first, actor->GetPosition().second);
-}
-
-Actor *Actor::GetClosestActorInFov() {
+Actor *Actor::GetClosestActorInRange(std::vector<Actor*> actor_list, size_t range, MapsManager &maps_manager) {
     assert (initialized_);
-    
-    // Compute fov
-    maps_manager_->ComputeFov(*this);
     
     // Calculate distance between 2 points
     auto distance = [this] (Actor &actor) -> float {
@@ -121,18 +105,24 @@ Actor *Actor::GetClosestActorInFov() {
                     (p1.second - p2.second) * (p1.second - p2.second) );
     };
     
-    auto actor_list {actor_manager_->GetAllActors()};
-    
     auto shortest_dist {std::numeric_limits<float>::max()};
     Actor *target {nullptr};
     for (auto &actor : actor_list) {
-        if (CanSee(actor)) {
-            if (auto dist {distance(*actor)}; dist < shortest_dist && dist != 0) {
+        if (maps_manager.IsInFov(*this, actor->GetPosition())) {
+            if (auto dist {distance(*actor)};
+                dist < shortest_dist
+                && dist != 0
+                && dist <= range) {
+                
                 shortest_dist = dist;
                 target = actor;
             }
         }
     }
-    
+
     return target;
+}
+
+void Actor::Die() {
+    is_dead_ = true;
 }

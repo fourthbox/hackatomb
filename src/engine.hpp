@@ -9,6 +9,7 @@
 
 #include "action_manager.hpp"
 #include "actor_manager.hpp"
+#include "aim_manager.hpp"
 #include "input_manager.hpp"
 #include "libpmg.hpp"
 #include "maps_manager.hpp"
@@ -16,6 +17,7 @@
 #include "player_manager.hpp"
 #include "root_console_manager.hpp"
 #include "start_screen.hpp"
+#include "turn_manager.hpp"
 #include "ui_manager.hpp"
 #include "world.hpp"
 
@@ -55,6 +57,17 @@ public:
     static size_t GetRandomUintFromRange(size_t min, size_t max) { return libpmg::RndManager::GetInstance().GetRandomUintFromRange(min, max); }
     static size_t GetRandomPercentage() { return GetRandomUintFromRange(0, 100); }
     
+    // Getters
+    inline ActorManager &GetActorManager() { return actor_manager_; }
+    inline MapsManager &GetMapsManager() { return maps_manager_; }
+    inline UiManager &GetUiManager() { return ui_manager_; }
+    inline StartScreen &GetStartScreen() { return start_screen_; }
+    inline RootConsoleManager &GetRootConsoleManager() { return root_console_manager_; }
+    inline ActionManager &GetActionManager() { return action_manager_; }
+    inline InputManager &GetInputManager() { return input_manager_; }
+    inline AimManager &GetAimManager() { return aim_manager_; }
+    inline TurnManager &GetTurnManager() { return turn_manager_; }
+
 private:
     bool start_screen_initialized_;
     bool game_initialized_;
@@ -62,23 +75,15 @@ private:
     bool is_start_screen_first_update_cycle_;
     bool is_main_game_first_update_cycle_;
     
-    // Entities management
     ActorManager actor_manager_;        /**< Manager for all actors of the loaded game */
-    
-    // Map management
     MapsManager maps_manager_;          /**< The manager for the maps used in the game */
-    
-    // Ui management
     UiManager ui_manager_;              /**< The manager for everything UI */
-    
-    // Start Screen
     StartScreen start_screen_;
-    
-    // Game management
-    RootConsoleManager root_console_manager_;   /**< Manager for the root console. It is responsable for drawing every console on the main one */
+    RootConsoleManager root_console_manager_;   /**< Manager for the root console. It's responsable for drawing every console. */
     ActionManager action_manager_; /**< Manager for every movement, attack or interaction done by an actor */
     InputManager input_manager_;        /**< Manager for keyboard and mouse inputs */
     AimManager aim_manager_;
+    TurnManager turn_manager_;
     
     void GameOver();
 };

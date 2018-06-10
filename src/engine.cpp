@@ -33,7 +33,7 @@ void Engine::InitializeStartScreen() {
     root_console_manager_.SetStartScreenWindow(start_screen_.GetWindow());
     
     // Initialize Input Manager
-    input_manager_.Initialize(actor_manager_, maps_manager_, start_screen_, aim_manager_, action_manager_);
+    input_manager_.Initialize(aim_manager_, action_manager_, start_screen_);
 
     start_screen_initialized_ = true;
 }
@@ -48,7 +48,7 @@ void Engine::InitializeGame() {
     actor_manager_.Initialize();
     
     // Initialize the Action Manager
-    action_manager_.Initialize(actor_manager_, maps_manager_);
+    action_manager_.Initialize(*this);
     
     // Initialize the Player
     actor_manager_.InitializePlayer(maps_manager_.GetRandomPosition(), action_manager_, maps_manager_);
@@ -61,14 +61,11 @@ void Engine::InitializeGame() {
     // Compute fov the first time
     maps_manager_.ComputeFov((Actor&)player);
     
-    // Attach player to input manager
-    input_manager_.SetPlayer(player);
-    
     // Initialize Aim Manager
-    aim_manager_.Initialize(action_manager_, actor_manager_, maps_manager_);
+    aim_manager_.Initialize(maps_manager_);
     
     // Everything that needs to be done when no user action has been detected
-    action_manager_.StartTurn();
+    turn_manager_.StartTurn();
     
     // Set as initialized
     game_initialized_ = true;
@@ -84,31 +81,29 @@ void Engine::Update() {
     }
     
     // Checks if a game over has occurred
-    if (action_manager_.GetTurnPhase() == TurnPhase::GAME_OVER_) {
+    if (turn_manager_.GetCurrentTurnPhase() == TurnPhase::GAME_OVER_) {
         GameOver();
     }
     
     // Receive user input
-    input_manager_.Update();
+    assert(turn_manager_.GetCurrentTurnPhase() != TurnPhase::ACTION_);
+    input_manager_.Update(turn_manager_.GetCurrentTurnPhase());
     
     // Update aiming
-    if (action_manager_.GetTurnPhase() == TurnPhase::AIM_) {
-        aim_manager_.Update();
+    if (turn_manager_.GetCurrentTurnPhase() == TurnPhase::AIM_) {
+        aim_manager_.Update(actor_manager_.GetPlayer(), action_manager_, maps_manager_);
     }
     
-    // Cycle an update for every speed
-    for (auto i {kMinSpeed}; i <= kMaxSpeed; i++) {
-        // Update player
-        actor_manager_.GetPlayer().Update(i);
-        
-        // If an action was performed, update all other actors
-        if (action_manager_.GetTurnPhase() == TurnPhase::ACTION_) {
-            actor_manager_.Update(i);
+    if (turn_manager_.GetCurrentTurnPhase() == TurnPhase::ACTION_) {
+        // If an action was performed, cycle an update for every speed
+        for (auto i {kMinSpeed}; i <= kMaxSpeed; i++) {
+            // Update player
+            actor_manager_.GetPlayer().Update(i, action_manager_, maps_manager_);
+            actor_manager_.Update(i, action_manager_, maps_manager_);
         }
+        
+        turn_manager_.StartTurn();
     }
-    
-    if (action_manager_.GetTurnPhase() == TurnPhase::ACTION_)
-        action_manager_.StartTurn();
 }
 
 void Engine::UpdateStartScreen() {
@@ -128,12 +123,12 @@ void Engine::Render() {
     
     // Draw the crosshair's trail
     // The trail is a tile effect, and therefore must be drawn before the actual crosshair
-    if (action_manager_.GetTurnPhase() == TurnPhase::AIM_)
-        aim_manager_.DrawTrail(*root_console_manager_.main_view_);
+    if (turn_manager_.GetCurrentTurnPhase() == TurnPhase::AIM_)
+        aim_manager_.DrawTrail(*root_console_manager_.main_view_, actor_manager_.GetPlayer().GetPosition());
 
-    // **********************************************************************
-    // EVERY DRAW CALL ADDING EFFECTS TO THE TILES MUST BE CALLED BEFORE THIS
-    // **********************************************************************
+    // ******************************************************************************
+    // *** EVERY DRAW CALL ADDING EFFECTS TO THE TILES MUST BE CALLED BEFORE THIS ***
+    // ******************************************************************************
     
     // Draw the map
     maps_manager_.Draw(*root_console_manager_.main_view_, actor_manager_.GetPlayer());
@@ -146,8 +141,8 @@ void Engine::Render() {
     
     // Draw the crosshair's trail
     // The trail is a tile effect, and therefore must be drawn before the actual crosshair
-    if (action_manager_.GetTurnPhase() == TurnPhase::AIM_)
-        aim_manager_.DrawCrosshair(*root_console_manager_.main_view_);
+    if (turn_manager_.GetCurrentTurnPhase() == TurnPhase::AIM_)
+        aim_manager_.DrawCrosshair(*root_console_manager_.main_view_, actor_manager_.GetPlayer().GetPosition());
 
     // Draw the Ui
     ui_manager_.Draw();

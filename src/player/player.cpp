@@ -1,7 +1,6 @@
 #include "player.hpp"
 
 #include "game_constants.hpp"
-#include "maps_manager.hpp"
 
 Player::Player() {
     assert(!initialized_);
@@ -9,17 +8,16 @@ Player::Player() {
     action_ = Action::NONE_;
 }
 
-bool Player::Update(size_t speed) {
+bool Player::Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager) {
     assert(initialized_);
     
-    if (action_manager_->GetTurnPhase() == TurnPhase::ACTION_ || !Actor::Update(speed))
+    if (!Actor::Update(speed, action_manager, maps_manager))
         return false;
 
     int x {0}, y {0};
         
     switch(action_) {
         case Action::MOVE_N_:
-            
             y--;
             break;
             
@@ -56,7 +54,7 @@ bool Player::Update(size_t speed) {
             break;
             
         case Action::SKIP:
-            action_manager_->ActionPerformed();
+            action_manager.ActorWaited();
             return false;
             
         default:
@@ -65,14 +63,13 @@ bool Player::Update(size_t speed) {
     
     if (x != 0 || y != 0) {
         auto new_x {x_ + x}, new_y {y_ + y};
-        if (action_manager_->CanMove(new_x, new_y)
-            && !action_manager_->CanAtttack(new_x, new_y)) {
-            x_ = new_x;
-            y_ = new_y;
-            action_manager_->ActionPerformed();
+        if (action_manager.CanMove(new_x, new_y)
+            && !action_manager.CanAtttack(new_x, new_y)) {
+            MoveToPosition(new_x, new_y);
+            action_manager.ActorMoved();
         } else {
-            if (action_manager_->PerformAction(*this, new_x, new_y))
-                action_manager_->ActionPerformed();
+            if (action_manager.PerformAction(*this, new_x, new_y))
+                action_manager.ActorMoved();
         }
     }
     
@@ -83,10 +80,4 @@ void Player::SetAction(Action action) {
     assert(initialized_);
 
     action_ = action;
-}
-
-void Player::Die() {
-    assert(initialized_);
-
-    action_manager_->GameOver();
 }

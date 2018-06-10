@@ -22,7 +22,7 @@ void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, DungeonCategory map_c
     }
 }
 
-bool MapsManager::CanMoveToPosition(size_t x, size_t y) {
+bool MapsManager::IsTileWalkable(size_t x, size_t y) {
     assert(master_maps_holder_.count(current_map_category_) > 0 &&
            master_maps_holder_[current_map_category_].count(current_floor_) > 0);
     
@@ -75,8 +75,10 @@ void MapsManager::LoadDungeonFloor(DungeonCategory category, short floor) {
     AddMapToMaster(std::move(map_p), category, floor);
 }
 
-bool MapsManager::IsInFov(size_t x, size_t y) {
+bool MapsManager::IsInFov(Actor const &actor, size_t x, size_t y) {
     assert(initialized_);
+    
+    ComputeFov(actor);
 
     assert(master_maps_holder_.count(current_map_category_) > 0 &&
            master_maps_holder_[current_map_category_].count(current_floor_) > 0);

@@ -23,7 +23,7 @@ void ActorManager::InitializeMonsterManager(ActionManager &action_manager, MapsM
 void ActorManager::DrawMonsters(TCODConsole &console) {
     assert(initialized_);
 
-    monster_manager_.Draw(console);
+    monster_manager_.Draw(console, GetPlayer());
 }
 
 void ActorManager::DrawPlayer(TCODConsole &console) {
@@ -44,10 +44,10 @@ Actor *ActorManager::GetActorByCoordinates(size_t x, size_t y) {
     return monster_manager_.GetMonsterByCoordinates(x, y);
 }
 
-void ActorManager::Update(size_t speed) {
+void ActorManager::Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager) {
     assert(initialized_);
     
-    monster_manager_.Update(speed);
+    monster_manager_.Update(speed, action_manager, maps_manager);
 }
 
 void ActorManager::SetAllMonstersVisible() const {

@@ -31,7 +31,7 @@ public:
      Call for Update() on every actor in actor_list_
      @param speed The speed of this update cycle
      */
-    void Update(size_t speed);
+    void Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager);
     
     void SetAllMonstersVisible() const;
     

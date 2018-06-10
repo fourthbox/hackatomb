@@ -7,31 +7,25 @@
 #define INPUT_MANAGER_HPP_
 
 #include "action_manager.hpp"
-#include "aim_manager.hpp"
+#include "initiable_object.hpp"
 #include "libtcod.hpp"
-#include "start_screen.hpp"
+#include "turn_manager.hpp"
 
-class Player;
+class AimManager;
+class StartScreen;
 
-/**
- */
 class InputManager : public InitiableObject {
 public:
-    void Initialize(ActorManager const &actor_manager, MapsManager &maps_manager, StartScreen &start_screen, AimManager &aim_manager, ActionManager &action_manager);
+    void Initialize(AimManager &aim_manager, ActionManager &action_manager, StartScreen &start_screen);
     
-    void Update();
+    void Update(TurnPhase turn_phase);
     
     void UpdateStartScreen();
     
-    inline void SetPlayer(Player &player) { player_ = &player; }
-    
 private:
-    Player *player_;
-    StartScreen *start_screen_;
-    MapsManager *maps_manager_;
-    const ActorManager *actor_manager_;
     AimManager *aim_manager_;
     ActionManager *action_manager_;
+    StartScreen *start_screen_;
     
     TCOD_key_t last_key_;
     TCOD_mouse_t last_mouse_position_;

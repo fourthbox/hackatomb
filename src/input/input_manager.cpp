@@ -1,28 +1,25 @@
 #include "input_manager.hpp"
 
-#include "actor_manager.hpp"
+#include "aim_manager.hpp"
 #include "game_constants.hpp"
+#include "start_screen.hpp"
 
-void InputManager::Initialize(ActorManager const &actor_manager, MapsManager &maps_manager, StartScreen &start_screen, AimManager &aim_manager, ActionManager &action_manager) {
+void InputManager::Initialize(AimManager &aim_manager, ActionManager &action_manager, StartScreen &start_screen) {
     assert(!initialized_);
     
-    actor_manager_ = &actor_manager;
-    maps_manager_ = &maps_manager;
-    start_screen_ = &start_screen;
-    aim_manager_ = &aim_manager;
-    action_manager_ = &action_manager;
-    
-    player_ = nullptr;
+    this->aim_manager_ = &aim_manager;
+    this->action_manager_ = &action_manager;
+    this->start_screen_ = &start_screen;
     
     initialized_ = true;
 }
 
-void InputManager::Update() {
-    assert (initialized_ && player_ != nullptr && action_manager_->GetTurnPhase() != TurnPhase::ACTION_);
+void InputManager::Update(TurnPhase turn_phase) {
+    assert (initialized_);
     
     TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &last_key_, &last_mouse_position_, true);
 
-    switch (action_manager_->GetTurnPhase()) {
+    switch (turn_phase) {
         case TurnPhase::IDLE_:
             UpdateNormalMode();
             break;
@@ -39,21 +36,15 @@ void InputManager::UpdateNormalMode() {
     if (last_key_.shift) {
         switch (last_key_.c) {
             case kMoveUpstairs:
-                if (auto position {maps_manager_->GetEntrancePosition()}; position && *position == player_->GetPosition()) {
-                    if (auto new_coors {maps_manager_->MoveToFloor(true)}; position)
-                        player_->MoveToPosition(new_coors->first, new_coors->second);
-                }
+                action_manager_->MoveUpstairs();
                 
                 break;
             case kMoveDownstairs:
-                if (auto position {maps_manager_->GetExitPosition()}; position && *position == player_->GetPosition()) {
-                    if (auto new_coors {maps_manager_->MoveToFloor(false)}; position)
-                        player_->MoveToPosition(new_coors->first, new_coors->second);
-                }
+                action_manager_->MoveDowstairs();
                 
                 break;
             default:
-                player_->SetAction(Action::NONE_);
+                action_manager_->DoNothing();
                 break;
         }
         
@@ -61,48 +52,41 @@ void InputManager::UpdateNormalMode() {
         // Normal keys
         switch (last_key_.c) {
             case kMoveNorth:
-                player_->SetAction(Action::MOVE_N_);
+                action_manager_->PlayerAction(Action::MOVE_N_);
                 break;
             case kMoveNorthEast:
-                player_->SetAction(Action::MOVE_NE_);
+                action_manager_->PlayerAction(Action::MOVE_NE_);
                 break;
             case kMoveEast:
-                player_->SetAction(Action::MOVE_E_);
+                action_manager_->PlayerAction(Action::MOVE_E_);
                 break;
             case kMoveSouthEast:
-                player_->SetAction(Action::MOVE_SE_);
+                action_manager_->PlayerAction(Action::MOVE_SE_);
                 break;
             case kMoveSouth:
-                player_->SetAction(Action::MOVE_S_);
+                action_manager_->PlayerAction(Action::MOVE_S_);
                 break;
             case kMoveSouthWest:
-                player_->SetAction(Action::MOVE_SW_);
+                action_manager_->PlayerAction(Action::MOVE_SW_);
                 break;
             case kMoveWest:
-                player_->SetAction(Action::MOVE_W_);
+                action_manager_->PlayerAction(Action::MOVE_W_);
                 break;
             case kMoveNorthWest:
-                player_->SetAction(Action::MOVE_NW_);
+                action_manager_->PlayerAction(Action::MOVE_NW_);
                 break;
             case 'q':
-                maps_manager_->SetAllExplored();
-                actor_manager_->SetAllMonstersVisible();
+                action_manager_->PerformFloorMapping();
                 break;
             case kSkipTurn:
-                player_->SetAction(Action::SKIP);
+                action_manager_->PlayerAction(Action::SKIP);
                 break;
             case kEnterAimMode:
                 // Setup aim mode turn phase
-                action_manager_->SwitchToAimMode();
-                
-                // Setup crosshair for arrows
-                aim_manager_->SetupCrossshair(CrosshairMode::ARROW_, player_->GetFovRadius());
-                
-                // Set default player action
-                player_->SetAction(Action::NONE_);
+                action_manager_->StartAiming();
                 break;
             default:
-                player_->SetAction(Action::NONE_);
+                action_manager_->PlayerAction(Action::NONE_);
                 break;
         }
     }
@@ -113,11 +97,8 @@ void InputManager::UpdateAimMode() {
     // Check for enter keys
     switch (last_key_.vk) {
         case kSelectOption:
-            aim_manager_->PerformActionOnCrosshair();
-            
-            aim_manager_->ResetCrosshair();
-            
-            action_manager_->ActionPerformed();
+            action_manager_->PerformActionOnCrosshair();
+            action_manager_->PlayerAction(Action::NONE_);
             return;
         default:
             break;

@@ -46,17 +46,9 @@ public:
      Check whether the specified position is walkable or not.
      @param x The X coordinate.
      @param y The Y coordinate.
-     @param map_category The map category the specified coordinates belongs to.
-     @param floor The floor the specified coordinates belongs to.
      @return True if the player can move to the specified position, false otherwise.
      */
-    bool CanMoveToPosition(size_t x, size_t y);
-    
-    /**
-     Compute the field of view of the specified actor.
-     @param player The player.
-     */
-    void ComputeFov(Actor const &actor);
+    bool IsTileWalkable(size_t x, size_t y);
     
     /**
      Check whether the specified position is in the field of view or not.
@@ -64,7 +56,14 @@ public:
      @param y The Y coordinate.
      @return True if the specified position is in the field of view, false otherwise.
      */
-    bool IsInFov(size_t x, size_t y);
+    bool IsInFov(Actor const &actor, size_t x, size_t y);
+    inline bool IsInFov(Actor const &actor, Coordinate xy) { return IsInFov(actor, xy.first, xy.second); }
+    
+    /**
+     Compute the field of view of the specified actor.
+     @param player The player.
+     */
+    void ComputeFov(Actor const &actor);
     
     std::pair<size_t, size_t> GetRandomPosition(int room_number = -1);
     size_t GetRandomRoom();

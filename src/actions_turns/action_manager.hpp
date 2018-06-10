@@ -6,11 +6,11 @@
 #ifndef ACTION_MANAGER_HPP_
 #define ACTION_MANAGER_HPP_
 
+#include "actor.hpp"
 #include "initiable_object.hpp"
+#include "map.hpp"
 
-class Actor;
-class ActorManager;
-class MapsManager;
+class Engine;
 
 /**
  Enumerator that holds the possible actions performable by an actor
@@ -29,27 +29,12 @@ enum struct Action {
 };
 
 /**
- Enumerator that defines the phases of the turn.
- */
-enum struct TurnPhase {
-    IDLE_,   /**< The game is idle. Waiting for a player input to procede. */
-    ACTION_, /**< The player has performed an action. Every actor will perform an action. */
-    GAME_OVER_, /**< The game is over. Show game over screen */
-    AIM_ /**< The game is in aim mode. */
-};
-
-/**
  This class manages all actions that can be taken by an actor.
  Every actor that want to interact with the map and/or other actors, must call a function from this class.
  */
 class ActionManager : public InitiableObject {
 public:
-    /**
-     Initialize this instance of the class.
-     @param actor_manager A pointer to the ActorManager.
-     @param maps_manager A pointer to the MapsManager.
-     */
-    void Initialize(ActorManager &actor_manager, MapsManager &maps_manager);
+    void Initialize(Engine &engine);
     
     /**
      Check wheter an actor can move to the specified coordinates.
@@ -58,12 +43,6 @@ public:
      @return True if an Actor can move there, false otherwise.
      */
     bool CanMove(size_t x, size_t y);
-    
-    
-    /**
-     Signals that an actor moved in the specified position, setting the current_turn_phase_ to ACTION_.
-     */
-    void ActionPerformed();
     
     /**
      Triggers an action form an actor, to the destination coordinate.
@@ -75,17 +54,18 @@ public:
      @return True if succesfully performed an action, false otherwise.
      */
     bool PerformAction(Actor &source, size_t x, size_t y);
+    void PerformActionOnCrosshair();
     bool Attack(Actor &source, size_t x, size_t y, bool ignore_armor = false);
+    void PlayerAction(Action action);
 
     void Interact(size_t x, size_t y);
+            
+    void StartAiming();
+    void DoNothing();
     
-    void StartTurn();
-    
-    void GameOver();
-    
-    TurnPhase GetTurnPhase() const;
-    
-    void SwitchToAimMode();
+    void ActorMoved();
+    void ActorWaited();
+    void PlayerDied();
     
     /**
      Check wheter an actor can attack on the specified coordinates.
@@ -97,10 +77,15 @@ public:
     
     bool ShootAction(Actor &source, size_t x, size_t y);
     
+    void MoveUpstairs() { MoveToFloor(true); }
+    void MoveDowstairs() { MoveToFloor(false); }
+    
+    void PerformFloorMapping();
+    
+    CoordinateOpt SeekPlayer();
+    
 private:
-    TurnPhase current_turn_phase_;                  /**< Keeps the current turn phase */
-    ActorManager *actor_manager_;                   /**< Pointer to the ActorManager */
-    MapsManager *maps_manager_;                     /**< Pointer to the MapsManager */
+    Engine *engine_;
     
     /**
      Check wheter an actor can interact with the specified coordinates.
@@ -109,6 +94,7 @@ private:
      @return True if an Actor can interact there, false otherwise.
      */
     bool CanInteract(size_t x, size_t y);
+    void MoveToFloor(bool is_upstairs);
 
 };
 

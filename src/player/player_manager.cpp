@@ -15,10 +15,7 @@ void PlayerManager::InitializePlayer(std::pair<size_t, size_t> start_position, A
                         '@',
                         "hero",
                         TCODColor::white,
-                        stats,
-                        action_manager,
-                        actor_manager,
-                        maps_manager);
+                        stats);
     
     player_initialized_ = true;
 }

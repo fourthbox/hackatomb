@@ -22,11 +22,13 @@ void MonsterManager::Initialize(ActionManager &action_manager, ActorManager &act
     initialized_ = true;
 }
 
-void MonsterManager::Draw(TCODConsole &console) {
+void MonsterManager::Draw(TCODConsole &console, Player const &player) {
     assert(initialized_);
     
     for (auto const &monster : monster_list_) {
-        if (monster->IsPermaVisible() || maps_manager_->IsInFov(monster->GetPosition().first, monster->GetPosition().second))
+        if (monster->IsPermaVisible() || maps_manager_->IsInFov((Actor&)player,
+                                                                monster->GetPosition().first,
+                                                                monster->GetPosition().second))
             monster->Draw(console);
     }
 }
@@ -43,11 +45,11 @@ void MonsterManager::SetPermaVisible(bool is_perma_visible, Monster *monster) co
     }
 }
 
-void MonsterManager::Update(size_t speed) const {
+void MonsterManager::Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager) const {
     assert(initialized_);
     
     for (auto const &monster : monster_list_) {
-        monster->Update(speed);
+        monster->Update(speed, action_manager, maps_manager);
     }
 }
 
