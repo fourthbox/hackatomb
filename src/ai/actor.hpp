@@ -80,8 +80,6 @@ public:
     
 protected:
     size_t x_, y_;      /**< Location on the current map. */
-    short floor_;        /**< Current floor. */
-    std::string map_category_; /**< Current map category */
     int sprite_;        /**< Character used to represent this actor. */
     TCODColor color_;   /**< Color used to represent this actor. */
     std::string name_;  /**< Name of this actor. */

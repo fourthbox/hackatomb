@@ -7,6 +7,7 @@ const struct GoblinStats {
     const std::string name_ = "goblin";
     
     const Stats stats_ {
+        1, //lvl
         5, //str
         5, //dex
         5, //con

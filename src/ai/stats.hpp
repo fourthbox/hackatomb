@@ -5,6 +5,7 @@
  This struct holds all the stats an actor have
  */
 struct Stats {
+    std::size_t level_;
     std::size_t str_;
     std::size_t dex_;
     std::size_t con_;
@@ -24,7 +25,7 @@ struct Stats {
     Stats() {
     }
     
-    Stats (std::size_t strength, std::size_t dexterity, std::size_t constitution, std::size_t intelligence, std::size_t max_hp, int current_hp, std::size_t max_mp, int current_mp, std::size_t hp_rec, std::size_t mp_rec, std::size_t xp, std::size_t hunger, std::size_t stealth, int fov, std::size_t speed) :
+    Stats (std::size_t level, std::size_t strength, std::size_t dexterity, std::size_t constitution, std::size_t intelligence, std::size_t max_hp, int current_hp, std::size_t max_mp, int current_mp, std::size_t hp_rec, std::size_t mp_rec, std::size_t xp, std::size_t hunger, std::size_t stealth, int fov, std::size_t speed) :
     str_ {strength},
     dex_ {dexterity},
     con_ {constitution},
@@ -39,7 +40,8 @@ struct Stats {
     hunger_ {hunger},
     stealth_ {stealth},
     fov_ {fov},
-    speed_ {speed} {
+    speed_ {speed},
+    level_ {level} {
     }
     
 };

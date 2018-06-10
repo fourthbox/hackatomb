@@ -63,6 +63,7 @@ static const int kCharClosedDoor = '+';
 static const int kCharOpenDoor = '/';
 static const int kCharUpstairs = '<';
 static const int kCharDownstairs = '>';
+static const int kCharHuman = '@';
 static const int kCharCorpse = '%';
 static const int kCharCrosshair = 'X';
 
@@ -83,7 +84,7 @@ static const char kEnterAimMode = 't';
 static const TCOD_keycode_t kSelectOption = TCODK_ENTER;
 
 // Misc constants
-static const short kStandardDungeonDepth = 27;
+static const int kStandardDungeonDepth = 27;
 
 // Map constants
 static const size_t kMaxRoomPlacementAttempts = 10;

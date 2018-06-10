@@ -38,9 +38,9 @@ public:
      @param map_category The map category this map belongs to.
      @param floor The floor this map belongs to. If floor is -1, it will assign the map with the lowest floor, and append it to the map golder. Default value: -1.
      */
-    void AddMapToMaster(std::unique_ptr<Map> map, DungeonCategory map_category, short floor = -1);
+    void AddMapToMaster(std::unique_ptr<Map> map, DungeonCategory map_category, int floor = -1);
     
-    void LoadDungeonFloor(DungeonCategory category, short floor);
+    void LoadDungeonFloor(DungeonCategory category, int floor);
     
     /**
      Check whether the specified position is walkable or not.
@@ -68,7 +68,7 @@ public:
     std::pair<size_t, size_t> GetRandomPosition(int room_number = -1);
     size_t GetRandomRoom();
     
-    Tile *GetTileFromFloor(size_t x, size_t y, short floor = -1);
+    Tile *GetTileFromFloor(size_t x, size_t y, int floor = -1);
     
     std::unique_ptr<TCODPath> AllocatePathFromCurrentFloor(ITCODPathCallback const *callback, float diagonal_cost);
     
@@ -81,9 +81,11 @@ public:
     CoordinateOpt GetEntrancePosition();
     CoordinateOpt GetExitPosition();
     
+    inline int GetCurrentFloor() const { return current_floor_; }
+    
 private:
     DungeonCategory current_map_category_;      /**< Dungeon type. */
-    short current_floor_;                   /**< Current floor. */
+    int current_floor_;                   /**< Current floor. */
     DungeonFactory dungeon_factory_;
     std::unordered_map<DungeonCategory, std::map< size_t, std::unique_ptr<Map>> > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */
     

@@ -7,7 +7,7 @@
 #include "libtcod.hpp"
 #include "player.hpp"
 
-void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, DungeonCategory map_category, short floor) {
+void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, DungeonCategory map_category, int floor) {
     assert(floor >= -1);
     
     // Set current floor and categoty
@@ -65,7 +65,7 @@ void MapsManager::Initialize() {
     initialized_ = true;
 }
 
-void MapsManager::LoadDungeonFloor(DungeonCategory category, short floor) {
+void MapsManager::LoadDungeonFloor(DungeonCategory category, int floor) {
     assert(floor >= 0 && floor <= kStandardDungeonDepth);
     
     // Generate dungeon floor
@@ -134,7 +134,7 @@ std::pair<size_t, size_t> MapsManager::GetRandomPosition(int room_number) {
     return master_maps_holder_[current_map_category_][current_floor_]->GetRoomList()[room_number]->GetRndCoords();
 }
 
-Tile *MapsManager::GetTileFromFloor(size_t x, size_t y, short floor) {
+Tile *MapsManager::GetTileFromFloor(size_t x, size_t y, int floor) {
     assert(initialized_);
     
     if (floor == -1)

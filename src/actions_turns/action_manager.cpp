@@ -1,6 +1,7 @@
 #include "action_manager.hpp"
 
 #include "engine.hpp"
+#include "game_strings.hpp"
 
 void ActionManager::Initialize(Engine &engine) {
     
@@ -115,10 +116,17 @@ void ActionManager::MoveToFloor(bool is_upstairs) {
     auto maps_manager {&engine_->GetMapsManager()};
     auto player {&engine_->GetActorManager().GetPlayer()};
 
-    if (auto position {maps_manager->GetEntrancePosition()}; position && *position == player->GetPosition()) {
-        if (auto new_coors {maps_manager->MoveToFloor(true)}; position)
+    auto stair_position {is_upstairs ? maps_manager->GetEntrancePosition() : maps_manager->GetExitPosition() };
+
+    // Go Upstairs
+    if (stair_position && *stair_position == player->GetPosition()) {
+        if (auto new_coors {maps_manager->MoveToFloor(is_upstairs)}; new_coors != std::experimental::nullopt)
             player->MoveToPosition(new_coors->first, new_coors->second);
     }
+        
+    // Update UI
+    assert(engine_->GetUiManager().UpdateLabel(kFloorString + kDynamicLabel,
+                                               std::to_string(maps_manager->GetCurrentFloor())));
 }
 
 void ActionManager::DoNothing() {
