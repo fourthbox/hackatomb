@@ -1,20 +1,15 @@
 #include "monster_manager.hpp"
 
-void MonsterManager::Initialize(ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager) {
+void MonsterManager::Initialize(ActorManager &actor_manager, MapsManager &maps_manager) {
     assert(!initialized_);
     
-    action_manager_ = &action_manager;
-    maps_manager_ = &maps_manager;
+    this->actor_manager_ = &actor_manager;
     
     // Get random position in rendom room
-    auto starting_coors {maps_manager_->GetRandomPosition()};
+    auto starting_coors {maps_manager.GetRandomPosition()};
     
     // Generate monster
-    auto monster {monster_factory_.CreateGoblin(starting_coors.first,
-                                                starting_coors.second,
-                                                action_manager,
-                                                actor_manager,
-                                                maps_manager)};
+    auto monster {monster_factory_.CreateGoblin(starting_coors.first, starting_coors.second, maps_manager)};
 
     // Add it to the monster list
     monster_list_.push_back(std::move(monster));
@@ -22,11 +17,11 @@ void MonsterManager::Initialize(ActionManager &action_manager, ActorManager &act
     initialized_ = true;
 }
 
-void MonsterManager::Draw(TCODConsole &console, Player const &player) {
+void MonsterManager::Draw(TCODConsole &console, Player const &player, MapsManager &maps_manager) {
     assert(initialized_);
     
     for (auto const &monster : monster_list_) {
-        if (monster->IsPermaVisible() || maps_manager_->IsInFov((Actor&)player,
+        if (monster->IsPermaVisible() || maps_manager.IsInFov((Actor&)player,
                                                                 monster->GetPosition().first,
                                                                 monster->GetPosition().second))
             monster->Draw(console);

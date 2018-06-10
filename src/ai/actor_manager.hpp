@@ -39,7 +39,7 @@ public:
     void InitializeMonsterManager(ActionManager &action_manager, MapsManager &maps_manager);
     inline Player &GetPlayer() { return player_manager_.GetPlayer(); }
     
-    void DrawMonsters(TCODConsole &console);
+    void DrawMonsters(TCODConsole &console, MapsManager &maps_manager);
     void DrawPlayer(TCODConsole &console);
     
     std::vector<Actor*> GetAllActors() {

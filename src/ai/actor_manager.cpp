@@ -13,17 +13,17 @@ void ActorManager::Initialize() {
 }
 
 void ActorManager::InitializePlayer(Coordinate start_position, ActionManager &action_manager, MapsManager &maps_manager) {
-    player_manager_.InitializePlayer(start_position, action_manager, *this, maps_manager);
+    player_manager_.InitializePlayer(start_position);
 }
 
 void ActorManager::InitializeMonsterManager(ActionManager &action_manager, MapsManager &maps_manager) {
-    monster_manager_.Initialize(action_manager, *this, maps_manager);
+    monster_manager_.Initialize(*this, maps_manager);
 }
 
-void ActorManager::DrawMonsters(TCODConsole &console) {
+void ActorManager::DrawMonsters(TCODConsole &console, MapsManager &maps_manager) {
     assert(initialized_);
 
-    monster_manager_.Draw(console, GetPlayer());
+    monster_manager_.Draw(console, GetPlayer(), maps_manager);
 }
 
 void ActorManager::DrawPlayer(TCODConsole &console) {

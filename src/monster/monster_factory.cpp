@@ -2,10 +2,10 @@
 
 #include "bestiary.hpp"
 
-std::unique_ptr<Monster> MonsterFactory::CreateGoblin(size_t x, size_t y, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager) {
+std::unique_ptr<Monster> MonsterFactory::CreateGoblin(size_t x, size_t y, MapsManager &maps_manager) {
     auto monster {std::make_unique<Monster>()};
     
-    monster->Initialize(x, y, kGoblinStats.sprite_, kGoblinStats.name_, kGoblinStats.color_, kGoblinStats.stats_, action_manager, actor_manager, maps_manager);
+    monster->Initialize(x, y, kGoblinStats.sprite_, kGoblinStats.name_, kGoblinStats.color_, kGoblinStats.stats_, maps_manager);
     
     return std::move(monster);
 }

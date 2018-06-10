@@ -24,10 +24,8 @@ public:
      @param name The name of the actor.
      @param color The color to represent this actor.
      @param stats The stats for this actor.
-     @param action_manager Reference to the ActionManager.
-     @param maps_manager Reference to the MapManager.
      */
-    void Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager);
+    void Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, MapsManager &maps_manager);
     
     bool IsPermaVisible();
     void SetPermaVisible(bool is_perma_visible);

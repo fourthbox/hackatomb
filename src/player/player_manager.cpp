@@ -6,17 +6,17 @@ PlayerManager::PlayerManager() :
 player_initialized_ {false} {
 }
 
-void PlayerManager::InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager) {
+void PlayerManager::InitializePlayer(Coordinate start_position) {
     
     auto stats {Stats(5, 5, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 3)};
     
     player_.Initialize(start_position.first,
-                        start_position.second,
-                        '@',
-                        "hero",
-                        TCODColor::white,
-                        stats);
-    
+                       start_position.second,
+                       '@',
+                       "hero",
+                       TCODColor::white,
+                       stats);
+
     player_initialized_ = true;
 }
 

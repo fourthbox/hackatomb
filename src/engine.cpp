@@ -134,7 +134,7 @@ void Engine::Render() {
     maps_manager_.Draw(*root_console_manager_.main_view_, actor_manager_.GetPlayer());
     
     // Draw monsters
-    actor_manager_.DrawMonsters(*root_console_manager_.main_view_);
+    actor_manager_.DrawMonsters(*root_console_manager_.main_view_, maps_manager_);
     
     // Draw the player
     actor_manager_.DrawPlayer(*root_console_manager_.main_view_);

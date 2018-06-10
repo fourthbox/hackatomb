@@ -43,7 +43,7 @@ bool Monster::Update(size_t speed, ActionManager &action_manager, MapsManager &m
     return false;
 }
 
-void Monster::Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, ActionManager &action_manager, ActorManager &actor_manager, MapsManager &maps_manager) {
+void Monster::Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, MapsManager &maps_manager) {
     assert(!initialized_);
     
     is_perma_visible_ = false;

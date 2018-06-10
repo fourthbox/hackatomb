@@ -6,13 +6,12 @@
 class PlayerManager {
 public:
     PlayerManager();
-    void InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager &action_manager, ActorManager &actor_maanger, MapsManager &maps_manager);
+    void InitializePlayer(std::pair<size_t, size_t> start_position);
     Player &GetPlayer();
         
 private:
     Player player_;
-    bool player_initialized_;
-    
+    bool player_initialized_;    
 };
 
 #endif /* PLAYER_MANAGER_HPP_ */
