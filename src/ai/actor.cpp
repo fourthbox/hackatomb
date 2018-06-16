@@ -26,6 +26,12 @@ int Actor::GetFovRadius() const {
     return stats_.fov_;
 }
 
+int Actor::GetHp() const {
+    assert(initialized_);
+    
+    return stats_.current_hp_;
+}
+
 void Actor::Draw(TCODConsole &console) {
     assert(initialized_);
 

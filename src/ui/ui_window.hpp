@@ -9,6 +9,7 @@
 #include "initiable_object.hpp"
 #include "libtcod.hpp"
 
+#include <experimental/optional>
 #include <string>
 #include <unordered_map>
 
@@ -19,14 +20,26 @@ struct UiLabel {
     size_t x_, y_;              /**< Coordinates of the top-left point of the label. */
     std::string text_, id_;      /**< Label text, and unique id. */
     bool is_highlighted_;
+    std::experimental::optional<TCOD_colctrl_t> color_;
     
-    UiLabel(size_t x, size_t y, std::string text, std::string id) :
+    UiLabel(size_t x, size_t y, std::string const &text, std::string const &id) :
     x_ {x},
     y_ {y},
     text_ {text},
     id_ {id},
-    is_highlighted_ {false} {
+    is_highlighted_ {false},
+    color_ {std::experimental::nullopt} {
     }
+    
+    UiLabel(size_t x, size_t y, std::string const &text, std::string const &id, TCOD_colctrl_t const &color) :
+    x_ {x},
+    y_ {y},
+    text_ {text},
+    id_ {id},
+    is_highlighted_ {false},
+    color_ {std::experimental::make_optional(color)} {
+    }
+
 };
 
 /**
@@ -53,6 +66,8 @@ public:
     
     UiLabel *GetStaticLabel(std::string const &id);
     UiLabel *GetDynamicLabel(std::string const &id);
+    
+    void DrawLabelList(std::unordered_map<std::string, UiLabel> const &label_list);
     
 private:
     size_t width_, height_; /**< Size fo the window. */

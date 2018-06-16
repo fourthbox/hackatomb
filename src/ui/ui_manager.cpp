@@ -42,42 +42,40 @@ void UiManager::InitializeEnvironmentWindow() {
 
 void UiManager::InitializePlayerInfoWindow() {
     assert(!initialized_);
-    
-    static const std::string kLevelString = "lvl";
-    static const std::string kStrString = "str";
-    static const std::string kDexString = "dex";
-    static const std::string kConString = "con";
-    static const std::string kIntString = "int";
-
-    
+        
     // Initialize static labels
     auto s_level_label { UiLabel(2, 4, kLevelString + ":", kLevelString + kStaticLabel) };
     auto s_str_label { UiLabel(2, 9, kStrString + ":", kStrString + kStaticLabel) };
     auto s_dex_label { UiLabel(9, 9, kDexString + ":", kDexString + kStaticLabel) };
     auto s_con_label { UiLabel(2, 11, kConString + ":", kConString + kStaticLabel) };
     auto s_int_label { UiLabel(9, 11, kIntString + ":", kIntString + kStaticLabel) };
+    auto s_hp_label { UiLabel(2, 6, kHpString + ":", kHpString + kStaticLabel) };
     
-    auto d_level_label { UiLabel(s_level_label.x_ + s_level_label.text_.length(),
+    auto d_level_label { UiLabel(s_level_label.x_ + s_level_label.text_.length()+1,
                                  s_level_label.y_,
                                  "", kLevelString + kDynamicLabel) };
-    auto d_str_label { UiLabel(s_str_label.x_ + s_str_label.text_.length(),
+    auto d_str_label { UiLabel(s_str_label.x_ + s_str_label.text_.length()+1,
                                s_str_label.y_,
                                "", kStrString + kDynamicLabel) };
-    auto d_dex_label { UiLabel(s_dex_label.x_ + s_dex_label.text_.length(),
+    auto d_dex_label { UiLabel(s_dex_label.x_ + s_dex_label.text_.length()+1,
                                s_dex_label.y_,
                                "", kDexString + kDynamicLabel) };
-    auto d_con_label { UiLabel(s_con_label.x_ + s_con_label.text_.length(),
+    auto d_con_label { UiLabel(s_con_label.x_ + s_con_label.text_.length()+1,
                                s_con_label.y_,
                                "", kConString + kDynamicLabel) };
-    auto d_int_label { UiLabel(s_int_label.x_ + s_int_label.text_.length(),
+    auto d_int_label { UiLabel(s_int_label.x_ + s_int_label.text_.length()+1,
                                s_int_label.y_,
                                "", kIntString + kDynamicLabel) };
+    auto d_hp_label { UiLabel(s_hp_label.x_ + s_hp_label.text_.length()+1,
+                              s_hp_label.y_,
+                              "", kHpString + kDynamicLabel,
+                              TCOD_COLCTRL_2) };
 
     player_info_window_->Initialize(kPlayerInfoWindowWidth,
                                     kPlayerInfoConsoleHeight,
                                     "@",
-                                    {s_level_label, s_str_label, s_dex_label, s_con_label, s_int_label},
-                                    {d_level_label, d_str_label, d_dex_label, d_con_label, d_int_label});
+                                    {s_level_label, s_str_label, s_dex_label, s_con_label, s_int_label, s_hp_label},
+                                    {d_level_label, d_str_label, d_dex_label, d_con_label, d_int_label, d_hp_label});
 }
 
 void UiManager::InitializeMessageLogWindow() {

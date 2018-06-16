@@ -57,6 +57,7 @@ public:
     std::pair<size_t, size_t> GetPosition() const;
     
     int GetFovRadius() const;
+    int GetHp() const;
     
     inline void MoveToPosition(size_t x, size_t y) { x_ = x; y_ = y; }
     

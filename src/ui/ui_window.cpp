@@ -24,7 +24,8 @@ void UiWindow::Initialize(size_t width, size_t height, std::string const &name, 
     
     // Setup predefined colors
     // Background is not working
-    TCODConsole::setColorControl(TCOD_COLCTRL_1, TCODColor::red, TCODColor::black);
+    TCODConsole::setColorControl(TCOD_COLCTRL_1, TCODColor::white, TCODColor::black);
+    TCODConsole::setColorControl(TCOD_COLCTRL_2, TCODColor::green, TCODColor::black);
     
     initialized_ = true;
 }
@@ -42,36 +43,19 @@ void UiWindow::Draw() {
                          TCOD_bkgnd_flag_t::TCOD_BKGND_DEFAULT,
                          name_.empty() ? NULL : name_.c_str());
     
-    // Draw the static labels
-    for (auto const &label_entry : static_label_list_) {
-        if (!label_entry.second.is_highlighted_) {
-            console_->print(label_entry.second.x_,
-                            label_entry.second.y_,
-                            label_entry.second.text_.c_str());
-        } else if (label_entry.second.is_highlighted_) {
-            console_->print(label_entry.second.x_,
-                            label_entry.second.y_,
-                            "%c%s%c",
-                            TCOD_COLCTRL_1,
-                            label_entry.second.text_.c_str(),
-                            TCOD_COLCTRL_STOP);
-        }
-    }
-    
-    // Draw the dynamic labels
-    for (auto const &label_entry : dynamic_label_list_) {
-        if (!label_entry.second.is_highlighted_) {
-            console_->print(label_entry.second.x_,
-                            label_entry.second.y_,
-                            label_entry.second.text_.c_str());
-        } else if (label_entry.second.is_highlighted_) {
-            console_->print(label_entry.second.x_,
-                            label_entry.second.y_,
-                            "%c%s%c",
-                            TCOD_COLCTRL_1,
-                            label_entry.second.text_.c_str(),
-                            TCOD_COLCTRL_STOP);
-        }
+    // Draw the labels
+    DrawLabelList(static_label_list_);
+    DrawLabelList(dynamic_label_list_);
+}
+
+void UiWindow::DrawLabelList(std::unordered_map<std::string, UiLabel> const &label_list) {
+    for (auto const &label : label_list) {
+        console_->print(label.second.x_,
+                        label.second.y_,
+                        "%c%s%c",
+                        label.second.color_.value_or(TCOD_COLCTRL_1),
+                        label.second.text_.c_str(),
+                        TCOD_COLCTRL_STOP);
     }
 }
 

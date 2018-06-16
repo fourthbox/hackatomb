@@ -11,6 +11,7 @@ static const std::string kStrString = "str";
 static const std::string kDexString = "dex";
 static const std::string kConString = "con";
 static const std::string kIntString = "int";
+static const std::string kHpString = "hp";
 
 // Labels
 static const std::string kStaticLabel = "_static_label";

@@ -72,6 +72,10 @@ bool ActionManager::Attack(Actor &source, size_t x, size_t y, bool ignore_armor)
             engine_->GetTurnManager().GameOver();
     }
     
+    // Update UI
+    assert(engine_->GetUiManager().UpdateLabel(kHpString + kDynamicLabel,
+                                               std::to_string(engine_->GetActorManager().GetPlayer().GetHp())));
+
     return true;
 }
 

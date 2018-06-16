@@ -1,6 +1,7 @@
 #include "engine.hpp"
 
 #include "game_constants.hpp"
+#include "game_strings.hpp"
 #include "game_utils.hpp"
 #include "monster.hpp"
 
@@ -58,6 +59,10 @@ void Engine::InitializeGame() {
     
     auto &player {actor_manager_.GetPlayer()};
     
+    // Add Stats to Ui for the first time
+    assert(ui_manager_.UpdateLabel(kHpString + kDynamicLabel,
+                                   std::to_string(actor_manager_.GetPlayer().GetHp())));
+
     // Compute fov the first time
     maps_manager_.ComputeFov((Actor&)player);
     
@@ -143,6 +148,10 @@ void Engine::Render() {
     // The trail is a tile effect, and therefore must be drawn before the actual crosshair
     if (turn_manager_.GetCurrentTurnPhase() == TurnPhase::AIM_)
         aim_manager_.DrawCrosshair(*root_console_manager_.main_view_, actor_manager_.GetPlayer().GetPosition());
+    
+    // ***********************************************************
+    // *** EVERY DRAW CALL TO THE UI MUST BE CALLED AFTER THIS ***
+    // ***********************************************************
 
     // Draw the Ui
     ui_manager_.Draw();
