@@ -25,10 +25,12 @@ static const size_t kPlayerInfoWindowWidth = 17;
 static const size_t kPlayerInfoConsoleHeight = 22;
 static const size_t kMessageLogWindowHeight = 6;
 
-static const size_t kMapWidth = 100;
-static const size_t kMapHeight = 50;
-static const size_t kRootViewWidth = kMapWidth + kEnvironmentConsoleWidth + kPlayerInfoWindowWidth;
-static const size_t kRootViewHeight = kMapHeight + kMessageLogWindowHeight;
+static const size_t kMapWidth = 120;
+static const size_t kMapHeight = 70;
+static const size_t kCameraWidth = 100;
+static const size_t kCameraHeight = 50;
+static const size_t kRootViewWidth = kCameraWidth + kEnvironmentConsoleWidth + kPlayerInfoWindowWidth;
+static const size_t kRootViewHeight = kCameraHeight + kMessageLogWindowHeight;
 
 // Characher mappings
 static const int kCharEmpty = 0;

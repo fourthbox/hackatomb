@@ -30,6 +30,7 @@ public :
     UiWindow *GetEnvironmentWindow();
     UiWindow *GetPlayerInfoWindow();
     UiWindow *GetMessageLogWindow();
+    UiWindow *GetMenuWindow();
     
     bool UpdateLabel(std::string const &label_id, std::string const &label_text);
         
@@ -37,6 +38,7 @@ private :
     std::unique_ptr<UiWindow> environment_window_;
     std::unique_ptr<UiWindow> player_info_window_;
     std::unique_ptr<UiWindow> message_log_window_;
+    std::unique_ptr<UiWindow> menu_window_;
 
     /**
      Initialize the environment window.
@@ -52,6 +54,8 @@ private :
      Initialize the message log window.
      */
     void InitializeMessageLogWindow();
+    
+    void InitializeMenuWindow();
 
     void InitializeStartScreenWindow();
 };

@@ -9,6 +9,7 @@ UiManager::UiManager() {
     environment_window_ = std::make_unique<UiWindow>();
     player_info_window_ = std::make_unique<UiWindow>();
     message_log_window_ = std::make_unique<UiWindow>();
+    menu_window_ = nullptr;
 }
 
 void UiManager::Initialize() {
@@ -55,6 +56,14 @@ void UiManager::InitializePlayerInfoWindow() {
 void UiManager::InitializeMessageLogWindow() {
     assert(!initialized_);
 
+    message_log_window_->Initialize(kRootViewWidth,
+                                    kMessageLogWindowHeight,
+                                    kLogString);
+}
+
+void UiManager::InitializeMenuWindow() {
+    assert(!initialized_);
+    
     message_log_window_->Initialize(kRootViewWidth,
                                     kMessageLogWindowHeight,
                                     kLogString);

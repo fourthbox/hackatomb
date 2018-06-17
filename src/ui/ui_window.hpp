@@ -17,8 +17,6 @@
  */
 class UiWindow : public InitiableObject {
 public:
-    std::unique_ptr<TCODConsole> console_;  /**< Console upon which the window is drawn. */
-    
     /**
      Initialize the Window, the console and the static labels.
      @param width The width of the window.
@@ -39,9 +37,12 @@ public:
     
     bool TriggerByHandle(int handle);
     
-private:
+    inline TCODConsole *GetConsole() { return console_.get(); }
+    
+protected:
     size_t width_, height_; /**< Size fo the window. */
     std::string name_;      /**< Name that appean on top of the window. */
+    std::unique_ptr<TCODConsole> console_;  /**< Console upon which the window is drawn. */
     
     std::unordered_map<std::string, std::shared_ptr<UiLabel>> label_list_ids_; /**< Id and labels */
     std::unordered_map<int, std::shared_ptr<UiLabel>> label_list_handles_; /**< Handles and labels */

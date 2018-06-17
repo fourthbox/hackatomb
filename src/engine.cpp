@@ -9,8 +9,8 @@ Engine::Engine() :
 start_screen_initialized_ {false},
 game_initialized_ {false},
 is_playing_ {false},
-is_start_screen_first_update_cycle_ {false},
-is_main_game_first_update_cycle_ {false} {
+is_start_screen_first_update_cycle_ {true},
+is_main_game_first_update_cycle_ {true} {
     
     // Initialize Root Console Manager
     root_console_manager_.Initialize(kRootViewWidth, kRootViewHeight, "hackatomb");
@@ -79,9 +79,9 @@ void Engine::Update() {
     assert(game_initialized_);
     
     // Only in the very first update iteration, execute a render beforehand
-    if (!is_main_game_first_update_cycle_) {
+    if (is_main_game_first_update_cycle_) {
         Render();
-        is_main_game_first_update_cycle_ = true;
+        is_main_game_first_update_cycle_ = false;
     }
     
     // Checks if a game over has occurred
@@ -114,9 +114,9 @@ void Engine::UpdateStartScreen() {
     assert(start_screen_initialized_);
     
     // Only in the very first update iteration, execute a render beforehand
-    if (!is_start_screen_first_update_cycle_) {
+    if (is_start_screen_first_update_cycle_) {
         RenderStartScreen();
-        is_start_screen_first_update_cycle_ = true;
+        is_start_screen_first_update_cycle_ = false;
     }
 
     input_manager_.UpdateStartScreen();
@@ -154,6 +154,9 @@ void Engine::Render() {
 
     // Draw the Ui
     ui_manager_.Draw();
+    
+    // Move the camera
+    root_console_manager_.UpdateCameraPosition(actor_manager_.GetPlayer().GetPosition(), is_main_game_first_update_cycle_);
     
     // Blit consoles to screen to screen
     root_console_manager_.Render();
