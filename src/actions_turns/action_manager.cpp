@@ -73,7 +73,7 @@ bool ActionManager::Attack(Actor &source, size_t x, size_t y, bool ignore_armor)
     }
     
     // Update UI
-    assert(engine_->GetUiManager().UpdateLabel(kHpString + kDynamicLabel,
+    assert(engine_->GetUiManager().UpdateLabel(kHpString,
                                                std::to_string(engine_->GetActorManager().GetPlayer().GetHp())));
 
     return true;
@@ -129,7 +129,7 @@ void ActionManager::MoveToFloor(bool is_upstairs) {
     }
         
     // Update UI
-    assert(engine_->GetUiManager().UpdateLabel(kFloorString + kDynamicLabel,
+    assert(engine_->GetUiManager().UpdateLabel(kFloorString,
                                                std::to_string(maps_manager->GetCurrentFloor())));
 }
 

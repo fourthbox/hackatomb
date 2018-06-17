@@ -140,19 +140,5 @@ void InputManager::UpdateStartScreen() {
 
     TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &last_key_, &last_mouse_position_, true);
     
-    switch (last_key_.c) {
-        case kMoveNorth:
-            start_screen_->CycleMenu(0);
-            return;
-        case kMoveSouth:
-            start_screen_->CycleMenu(1);
-            return;
-    }
-    
-    switch (last_key_.vk) {
-        case TCODK_ENTER:
-            start_screen_->SelectMenu();
-            return;
-    }
-
+    start_screen_->TriggerCommand(last_key_.c);
 }

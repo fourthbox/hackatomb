@@ -8,39 +8,9 @@
 
 #include "initiable_object.hpp"
 #include "libtcod.hpp"
+#include "ui_label.hpp"
 
-#include <experimental/optional>
-#include <string>
 #include <unordered_map>
-
-/**
- Struct that defines the labels that can be embedded into windows.
- */
-struct UiLabel {
-    size_t x_, y_;              /**< Coordinates of the top-left point of the label. */
-    std::string text_, id_;      /**< Label text, and unique id. */
-    bool is_highlighted_;
-    std::experimental::optional<TCOD_colctrl_t> color_;
-    
-    UiLabel(size_t x, size_t y, std::string const &text, std::string const &id) :
-    x_ {x},
-    y_ {y},
-    text_ {text},
-    id_ {id},
-    is_highlighted_ {false},
-    color_ {std::experimental::nullopt} {
-    }
-    
-    UiLabel(size_t x, size_t y, std::string const &text, std::string const &id, TCOD_colctrl_t const &color) :
-    x_ {x},
-    y_ {y},
-    text_ {text},
-    id_ {id},
-    is_highlighted_ {false},
-    color_ {std::experimental::make_optional(color)} {
-    }
-
-};
 
 /**
  This class represent a drawable window.
@@ -57,24 +27,24 @@ public:
      @param static_labels The static labels for the window.
      @param dynamic_labels The dynamic labels for the window
      */
-    void Initialize(size_t width, size_t height, std::string const &name = "", std::initializer_list<UiLabel> static_labels = {}, std::initializer_list<UiLabel> dynamic_labels = {});
+    void Initialize(size_t width, size_t height, std::string const &name = "", std::initializer_list<UiLabel> labels = {});
     
     /**
      Draw the window onto the console
      */
     void Draw();
     
-    UiLabel *GetStaticLabel(std::string const &id);
-    UiLabel *GetDynamicLabel(std::string const &id);
+    bool UpdateLabelById(std::string const &label_id, std::string const &label_text);
+    void UpdateTriggerByHandle(int handle, std::function<bool()> callback);
     
-    void DrawLabelList(std::unordered_map<std::string, UiLabel> const &label_list);
+    bool TriggerByHandle(int handle);
     
 private:
     size_t width_, height_; /**< Size fo the window. */
     std::string name_;      /**< Name that appean on top of the window. */
     
-    std::unordered_map<std::string, UiLabel> static_label_list_;    /**< List for static labels. */
-    std::unordered_map<std::string, UiLabel> dynamic_label_list_;   /**< List for dynamic labels. */
+    std::unordered_map<std::string, std::shared_ptr<UiLabel>> label_list_ids_; /**< Id and labels */
+    std::unordered_map<int, std::shared_ptr<UiLabel>> label_list_handles_; /**< Handles and labels */
 };
 
 #endif /* UI_WINDOW_HPP_ */

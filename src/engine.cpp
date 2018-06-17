@@ -60,8 +60,7 @@ void Engine::InitializeGame() {
     auto &player {actor_manager_.GetPlayer()};
     
     // Add Stats to Ui for the first time
-    assert(ui_manager_.UpdateLabel(kHpString + kDynamicLabel,
-                                   std::to_string(actor_manager_.GetPlayer().GetHp())));
+    assert(ui_manager_.UpdateLabel(kHpString, std::to_string(actor_manager_.GetPlayer().GetHp())));
 
     // Compute fov the first time
     maps_manager_.ComputeFov((Actor&)player);

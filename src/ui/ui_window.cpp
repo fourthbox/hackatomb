@@ -2,7 +2,7 @@
 
 using std::string;
 
-void UiWindow::Initialize(size_t width, size_t height, std::string const &name, std::initializer_list<UiLabel> static_labels, std::initializer_list<UiLabel> dynamic_labels) {
+void UiWindow::Initialize(size_t width, size_t height, std::string const &name, std::initializer_list<UiLabel> labels) {
     assert(!initialized_);
     
     width_ = width;
@@ -10,13 +10,11 @@ void UiWindow::Initialize(size_t width, size_t height, std::string const &name, 
     name_ = name;
     
     // Initialize the static labels
-    for (auto const &label : static_labels) {
-        assert( static_label_list_.insert({label.id_, label}).second );
-    }
-    
-    // Initialize the dynamic labels
-    for (auto const &label : dynamic_labels) {
-        assert( dynamic_label_list_.insert({label.id_, label}).second );
+    for (auto const &label : labels) {
+        auto l {std::make_shared<UiLabel>(label)};
+        assert(label_list_ids_.insert({label.GetId(), l}).second);
+        if (auto handle {label.GetHandle()}; handle >= 0)
+            assert(label_list_handles_.insert({handle, l}).second);
     }
     
     // Initialize the console
@@ -44,39 +42,37 @@ void UiWindow::Draw() {
                          name_.empty() ? NULL : name_.c_str());
     
     // Draw the labels
-    DrawLabelList(static_label_list_);
-    DrawLabelList(dynamic_label_list_);
+    std::for_each(label_list_ids_.begin(),
+                  label_list_ids_.end(),
+                  [this] (auto &l) { l.second->Draw(*console_); });
 }
 
-void UiWindow::DrawLabelList(std::unordered_map<std::string, UiLabel> const &label_list) {
-    for (auto const &label : label_list) {
-        console_->print(label.second.x_,
-                        label.second.y_,
-                        "%c%s%c",
-                        label.second.color_.value_or(TCOD_COLCTRL_1),
-                        label.second.text_.c_str(),
-                        TCOD_COLCTRL_STOP);
-    }
-}
-
-UiLabel *UiWindow::GetStaticLabel(std::string const &id) {
-    assert(initialized_);
-
-    for (auto &label_entry : static_label_list_) {
-        if (label_entry.first == id)
-            return &label_entry.second;
-    }
-    
-    return nullptr;
-}
-
-UiLabel *UiWindow::GetDynamicLabel(std::string const &id) {
+bool UiWindow::UpdateLabelById(std::string const &label_id, std::string const &label_text) {
     assert(initialized_);
     
-    for (auto &label_entry : dynamic_label_list_) {
-        if (label_entry.first == id)
-            return &label_entry.second;
+    auto label {std::find_if(std::begin(label_list_ids_),
+                             std::end(label_list_ids_),
+                             [&] (auto const &l) -> bool {
+                                 return l.second->GetId() == label_id;
+                             })};
+    
+    if (label != label_list_ids_.end()) {
+        label->second->SetDynamicText(label_text);
+        return true;
     }
     
-    return nullptr;
+    return false;
+    
+}
+
+void UiWindow::UpdateTriggerByHandle(int handle, std::function<bool()> callback) {
+    assert(initialized_ && label_list_handles_.count(handle) > 0);
+
+    label_list_handles_[handle]->UpdateAction(callback);
+}
+
+bool UiWindow::TriggerByHandle(int handle) {
+    assert(initialized_ && label_list_handles_.count(handle) > 0);
+        
+    return label_list_handles_[handle]->TriggerAction();
 }

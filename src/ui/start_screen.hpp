@@ -11,16 +11,13 @@ class StartScreen : public InitiableObject {
 public:
     void Initialize(Engine *engine);
     UiWindow *GetWindow();
+    void TriggerCommand(char cmd);
 
     void Draw();
-    void CycleMenu(bool direction);
-    void SelectMenu();
     
 private:
     Engine *engine_;
     std::unique_ptr<UiWindow> start_screen_window_;
-    std::vector<UiLabel*>::iterator selected_label_;
-    std::vector<UiLabel*> selectable_labels_;
 };
 
 #endif /* START_SCREEN_HPP_ */
