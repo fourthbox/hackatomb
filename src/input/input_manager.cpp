@@ -82,8 +82,10 @@ void InputManager::UpdateNormalMode() {
                 action_manager_->PlayerAction(Action::SKIP);
                 break;
             case kEnterAimMode:
-                // Setup aim mode turn phase
                 action_manager_->StartAiming();
+                break;
+            case kOpenInventory:
+                action_manager_->OpenInventory();
                 break;
             default:
                 action_manager_->PlayerAction(Action::NONE_);

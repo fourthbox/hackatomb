@@ -83,10 +83,12 @@ static const char kMoveDownstairs = '.';
 static const char kSkipTurn = '.';
 
 static const char kEnterAimMode = 't';
+static const char kOpenInventory = 'i';
 static const TCOD_keycode_t kSelectOption = TCODK_ENTER;
 
 // Misc constants
 static const int kStandardDungeonDepth = 27;
+static const int kDefaultFrameRate = 30;
 
 // Map constants
 static const size_t kMaxRoomPlacementAttempts = 10;

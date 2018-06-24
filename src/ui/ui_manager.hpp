@@ -7,6 +7,8 @@
 #define UI_MANAGER_HPP_
 
 #include "initiable_object.hpp"
+#include "turn_manager.hpp"
+#include "ui_inventory.hpp"
 #include "ui_window.hpp"
 
 /**
@@ -27,18 +29,13 @@ public :
      */
     void Draw();
     
-    UiWindow *GetEnvironmentWindow();
-    UiWindow *GetPlayerInfoWindow();
-    UiWindow *GetMessageLogWindow();
-    UiWindow *GetMenuWindow();
+    UiWindow *GetEnvironmentWindow(), *GetPlayerInfoWindow(), *GetMessageLogWindow(), *GetInventoryWindow();
     
     bool UpdateLabel(std::string const &label_id, std::string const &label_text);
         
 private :
-    std::unique_ptr<UiWindow> environment_window_;
-    std::unique_ptr<UiWindow> player_info_window_;
-    std::unique_ptr<UiWindow> message_log_window_;
-    std::unique_ptr<UiWindow> menu_window_;
+    std::unique_ptr<UiWindow> environment_window_, player_info_window_, message_log_window_;
+    std::unique_ptr<UiInventory> inventory_window_;
 
     /**
      Initialize the environment window.
@@ -55,7 +52,7 @@ private :
      */
     void InitializeMessageLogWindow();
     
-    void InitializeMenuWindow();
+    void InitializeInventoryWindow();
 
     void InitializeStartScreenWindow();
 };

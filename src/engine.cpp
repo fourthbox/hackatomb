@@ -18,10 +18,11 @@ is_main_game_first_update_cycle_ {true} {
     // Initialize the UI Manager
     ui_manager_.Initialize();
     
-    // Set the window on the root console
+    // Set the windows on the root console
     root_console_manager_.SetLeftWindow(ui_manager_.GetEnvironmentWindow());
     root_console_manager_.SetRightWindow(ui_manager_.GetPlayerInfoWindow());
     root_console_manager_.SetBottomWindow(ui_manager_.GetMessageLogWindow());
+    root_console_manager_.SetFullScreenWindow(ui_manager_.GetInventoryWindow());
 }
 
 void Engine::InitializeStartScreen() {
@@ -125,9 +126,12 @@ void Engine::UpdateStartScreen() {
 void Engine::Render() {
     assert(game_initialized_);
     
+    // Get turn phase
+    auto turn_phase {turn_manager_.GetCurrentTurnPhase()};
+    
     // Draw the crosshair's trail
     // The trail is a tile effect, and therefore must be drawn before the actual crosshair
-    if (turn_manager_.GetCurrentTurnPhase() == TurnPhase::AIM_)
+    if (turn_phase == TurnPhase::AIM_)
         aim_manager_.DrawTrail(*root_console_manager_.main_view_, actor_manager_.GetPlayer().GetPosition());
 
     // ******************************************************************************
@@ -145,7 +149,7 @@ void Engine::Render() {
     
     // Draw the crosshair's trail
     // The trail is a tile effect, and therefore must be drawn before the actual crosshair
-    if (turn_manager_.GetCurrentTurnPhase() == TurnPhase::AIM_)
+    if (turn_phase == TurnPhase::AIM_)
         aim_manager_.DrawCrosshair(*root_console_manager_.main_view_, actor_manager_.GetPlayer().GetPosition());
     
     // ***********************************************************
@@ -159,7 +163,7 @@ void Engine::Render() {
     root_console_manager_.UpdateCameraPosition(actor_manager_.GetPlayer().GetPosition(), is_main_game_first_update_cycle_);
     
     // Blit consoles to screen to screen
-    root_console_manager_.Render();
+    root_console_manager_.Render(turn_phase);
 }
 
 void Engine::RenderStartScreen() {

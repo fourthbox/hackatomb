@@ -23,6 +23,9 @@ void RootConsoleManager::Initialize(size_t width, size_t height, std::string con
     TCODConsole::initRoot(width,
                           height,
                           root_name.c_str());
+    
+    // Set the framerate
+    TCODSystem::setFps(kDefaultFrameRate);
 
     // Map missing characters
     MapCharacters();
@@ -36,26 +39,30 @@ void RootConsoleManager::Clear() {
     TCODConsole::root->clear();
 }
 
-void RootConsoleManager::Render() {
-    assert(initialized_ && right_window_ && left_window_ && bottom_window_);
+void RootConsoleManager::Render(TurnPhase turn_phase) {
+    assert(initialized_ && right_window_ && left_window_ && bottom_window_ && full_screen_window_);
     
     // Clear the screen
     Clear();
     
     // Blit the consoles on the root console
-    TCODConsole::blit(main_view_.get(), camera_x_, camera_y_, kCameraWidth, kCameraHeight,
-                      TCODConsole::root, kEnvironmentConsoleWidth, 0);
-    
-    // Blit the windows on the windows on the root console
-    TCODConsole::blit(left_window_->GetConsole(), 0, 0, 0, 0,
-                      TCODConsole::root, 0, 0);
-    
-    TCODConsole::blit(right_window_->GetConsole(), 0, 0, 0, 0,
-                      TCODConsole::root, TCODConsole::root->getWidth() - kPlayerInfoWindowWidth, 0);
-    
-    TCODConsole::blit(bottom_window_->GetConsole(), 0, 0, 0, 0,
-                      TCODConsole::root, 0, TCODConsole::root->getHeight() - kMessageLogWindowHeight);
-    
+    if (turn_phase == TurnPhase::MENU_) {
+        TCODConsole::blit(full_screen_window_->GetConsole(), 0, 0, 0, 0,
+                          TCODConsole::root, 0, 0);
+    } else {
+        TCODConsole::blit(main_view_.get(), camera_x_, camera_y_, kCameraWidth, kCameraHeight,
+                          TCODConsole::root, kEnvironmentConsoleWidth, 0);
+        
+        TCODConsole::blit(left_window_->GetConsole(), 0, 0, 0, 0,
+                          TCODConsole::root, 0, 0);
+        
+        TCODConsole::blit(right_window_->GetConsole(), 0, 0, 0, 0,
+                          TCODConsole::root, TCODConsole::root->getWidth() - kPlayerInfoWindowWidth, 0);
+        
+        TCODConsole::blit(bottom_window_->GetConsole(), 0, 0, 0, 0,
+                          TCODConsole::root, 0, TCODConsole::root->getHeight() - kMessageLogWindowHeight);
+    }
+
     TCODConsole::flush();
 }
 
@@ -104,6 +111,12 @@ void RootConsoleManager::SetStartScreenWindow(UiWindow *window) {
     assert(initialized_);
     
     start_screen_window_ = window;
+}
+
+void RootConsoleManager::SetFullScreenWindow(UiWindow *window) {
+    assert(initialized_);
+    
+    full_screen_window_ = window;
 }
 
 void RootConsoleManager::UpdateCameraPosition(Coordinate position, bool ignore_map_bounds) {

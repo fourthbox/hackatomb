@@ -5,6 +5,7 @@
 static const std::string kEnvironmentString = "environment";
 static const std::string kFloorString = "floor";
 static const std::string kLogString = "log";
+static const std::string kInventoryString = "inventory";
 
 static const std::string kLevelString = "lvl";
 static const std::string kStrString = "str";

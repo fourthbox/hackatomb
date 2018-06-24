@@ -9,7 +9,7 @@ UiManager::UiManager() {
     environment_window_ = std::make_unique<UiWindow>();
     player_info_window_ = std::make_unique<UiWindow>();
     message_log_window_ = std::make_unique<UiWindow>();
-    menu_window_ = nullptr;
+    inventory_window_ = std::make_unique<UiInventory>();
 }
 
 void UiManager::Initialize() {
@@ -18,6 +18,7 @@ void UiManager::Initialize() {
     InitializeEnvironmentWindow();
     InitializePlayerInfoWindow();
     InitializeMessageLogWindow();
+    InitializeInventoryWindow();
     
     initialized_ = true;
 }
@@ -61,17 +62,18 @@ void UiManager::InitializeMessageLogWindow() {
                                     kLogString);
 }
 
-void UiManager::InitializeMenuWindow() {
+void UiManager::InitializeInventoryWindow() {
     assert(!initialized_);
     
-    message_log_window_->Initialize(kRootViewWidth,
-                                    kMessageLogWindowHeight,
-                                    kLogString);
+    inventory_window_->Initialize(kRootViewWidth,
+                                  kRootViewHeight,
+                                  kInventoryString);
 }
 
 void UiManager::Draw() {
     assert(initialized_);
     
+    inventory_window_->Draw();
     environment_window_->Draw();
     player_info_window_->Draw();
     message_log_window_->Draw();
@@ -95,6 +97,12 @@ UiWindow *UiManager::GetMessageLogWindow() {
     return message_log_window_.get();
 }
 
+UiWindow *UiManager::GetInventoryWindow() {
+    assert(initialized_);
+    
+    return inventory_window_.get();
+}
+
 bool UiManager::UpdateLabel(std::string const &label_id, std::string const &label_text) {
     assert(initialized_);
     
@@ -107,4 +115,3 @@ bool UiManager::UpdateLabel(std::string const &label_id, std::string const &labe
     
     return success;
 }
-

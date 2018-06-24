@@ -25,12 +25,12 @@ public:
      @param static_labels The static labels for the window.
      @param dynamic_labels The dynamic labels for the window
      */
-    void Initialize(size_t width, size_t height, std::string const &name = "", std::initializer_list<UiLabel> labels = {});
+    virtual void Initialize(size_t width, size_t height, std::string const &name = "", std::initializer_list<UiLabel> labels = {});
     
     /**
      Draw the window onto the console
      */
-    void Draw();
+    virtual void Draw();
     
     bool UpdateLabelById(std::string const &label_id, std::string const &label_text);
     void UpdateTriggerByHandle(int handle, std::function<bool()> callback);

@@ -179,6 +179,13 @@ void ActionManager::StartAiming() {
                                              engine_->GetMapsManager());
 }
 
+void ActionManager::OpenInventory() {
+    assert(initialized_);
+    
+    // Change the turn phase
+    engine_->GetTurnManager().SwitchToMenuMode();
+}
+
 CoordinateOpt ActionManager::SeekPlayer() {
     assert(initialized_);
 

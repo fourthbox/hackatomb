@@ -9,6 +9,7 @@
 #include <string>
 
 #include "map.hpp"
+#include "turn_manager.hpp"
 #include "ui_window.hpp"
 
 /**
@@ -31,7 +32,7 @@ public:
     /**
      Blit the consoles onto the root console.
      */
-    void Render();
+    void Render(TurnPhase turn_phase);
     
     void RenderStartScreen();
     
@@ -55,11 +56,13 @@ public:
     
     void SetStartScreenWindow(UiWindow *window);
     
+    void SetFullScreenWindow(UiWindow *window);
+    
     void UpdateCameraPosition(Coordinate position, bool ignore_map_bounds = false);
     
 private:
     size_t width_, height_;     /**< Size of the root console. */
-    UiWindow *left_window_, *right_window_, *bottom_window_, *start_screen_window_;   /**< Pointers to the fixed windows. */
+    UiWindow *left_window_, *right_window_, *bottom_window_, *start_screen_window_, *full_screen_window_;   /**< Pointers to the fixed windows. */
     int camera_x_, camera_y_;
     
     /**
