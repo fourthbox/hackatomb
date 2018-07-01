@@ -20,7 +20,7 @@ static const size_t kArmPieceHeight = 22;
 static const size_t kPantsPieceWidth = 16;
 static const size_t kPantsPieceHeight = 18;
 
-void UiInventory::Initialize(size_t width, size_t height, std::string const &name, std::initializer_list<UiLabel> labels) {
+void UiInventory::Initialize(size_t width, size_t height, std::string const &name, std::initializer_list<UiLabel_sp> labels) {
     assert(!initialized_);
 
     UiWindow::Initialize(width, height, name, labels);

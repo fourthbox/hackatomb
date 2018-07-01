@@ -25,7 +25,7 @@ public:
      @param static_labels The static labels for the window.
      @param dynamic_labels The dynamic labels for the window
      */
-    virtual void Initialize(size_t width, size_t height, std::string const &name = "", std::initializer_list<UiLabel> labels = {});
+    virtual void Initialize(size_t width, size_t height, std::string const &name = "", std::initializer_list<UiLabel_sp> labels = {});
     
     /**
      Draw the window onto the console
@@ -44,8 +44,8 @@ protected:
     std::string name_;      /**< Name that appean on top of the window. */
     std::unique_ptr<TCODConsole> console_;  /**< Console upon which the window is drawn. */
     
-    std::unordered_map<std::string, std::shared_ptr<UiLabel>> label_list_ids_; /**< Id and labels */
-    std::unordered_map<int, std::shared_ptr<UiLabel>> label_list_handles_; /**< Handles and labels */
+    std::unordered_map<std::string, UiLabel_sp> label_list_ids_; /**< Id and labels */
+    std::unordered_map<int, UiLabel_sp> label_list_handles_; /**< Handles and labels */
 };
 
 #endif /* UI_WINDOW_HPP_ */

@@ -1,8 +1,8 @@
-#include "ui_window.hpp"
+    #include "ui_window.hpp"
 
 using std::string;
 
-void UiWindow::Initialize(size_t width, size_t height, std::string const &name, std::initializer_list<UiLabel> labels) {
+void UiWindow::Initialize(size_t width, size_t height, std::string const &name, std::initializer_list<UiLabel_sp> labels) {
     assert(!initialized_);
     
     width_ = width;
@@ -11,10 +11,12 @@ void UiWindow::Initialize(size_t width, size_t height, std::string const &name, 
     
     // Initialize the static labels
     for (auto const &label : labels) {
-        auto l {std::make_shared<UiLabel>(label)};
-        assert(label_list_ids_.insert({label.GetId(), l}).second);
-        if (auto handle {label.GetHandle()}; handle >= 0)
-            assert(label_list_handles_.insert({handle, l}).second);
+        assert(label_list_ids_.insert({label->GetId(), label}).second);
+        auto label_hnd {std::static_pointer_cast<UiLabelWithHandler>(label)};
+        if (label_hnd) {
+            if (auto handle {label_hnd->GetHandle()}; handle != std::experimental::nullopt && *handle >= 0)
+                assert(label_list_handles_.insert({*handle, label}).second);
+        }
     }
     
     // Initialize the console
@@ -40,11 +42,11 @@ void UiWindow::Draw() {
                          true,
                          TCOD_bkgnd_flag_t::TCOD_BKGND_DEFAULT,
                          name_.empty() ? NULL : name_.c_str());
-    
+        
     // Draw the labels
     std::for_each(label_list_ids_.begin(),
                   label_list_ids_.end(),
-                  [this] (auto &l) { l.second->Draw(*console_); });
+                  [&] (auto &l) { l.second->Draw(console_.get()); });
 }
 
 bool UiWindow::UpdateLabelById(std::string const &label_id, std::string const &label_text) {
@@ -57,7 +59,11 @@ bool UiWindow::UpdateLabelById(std::string const &label_id, std::string const &l
                              })};
     
     if (label != label_list_ids_.end()) {
-        label->second->SetDynamicText(label_text);
+        auto label_txt {std::static_pointer_cast<UiLabelAndText>(label->second)};
+        
+        assert(label_txt);
+
+        label_txt->SetDynamicText(label_text);
         return true;
     }
     
@@ -67,12 +73,20 @@ bool UiWindow::UpdateLabelById(std::string const &label_id, std::string const &l
 
 void UiWindow::UpdateTriggerByHandle(int handle, std::function<bool()> callback) {
     assert(initialized_ && label_list_handles_.count(handle) > 0);
+    
+    auto label {std::static_pointer_cast<UiLabelWithHandler>(label_list_handles_[handle])};
+    
+    assert(label);
 
-    label_list_handles_[handle]->UpdateAction(callback);
+    label->UpdateAction(callback);
 }
 
 bool UiWindow::TriggerByHandle(int handle) {
     assert(initialized_ && label_list_handles_.count(handle) > 0);
-        
-    return label_list_handles_[handle]->TriggerAction();
+    
+    auto label {std::static_pointer_cast<UiLabelWithHandler>(label_list_handles_[handle])};
+    
+    assert(label);
+
+    return label->TriggerAction();
 }

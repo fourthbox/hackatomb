@@ -27,8 +27,8 @@ void UiManager::InitializeEnvironmentWindow() {
     assert(!initialized_);
     
     // Initialize static labels
-    auto floor_label { UiLabel(2, 5, kFloorString) };
-    auto environment_label { UiLabel(2, 8, kEnvironmentString) };
+    UiLabel_sp floor_label { std::make_shared<UiSimpleLabel>(2, 5, kFloorString)};
+    UiLabel_sp environment_label { std::make_shared<UiSimpleLabel>(2, 8, kEnvironmentString) };
     
     // Initialize the window
     environment_window_->Initialize(kEnvironmentConsoleWidth,
@@ -41,12 +41,12 @@ void UiManager::InitializePlayerInfoWindow() {
     assert(!initialized_);
         
     // Initialize static labels
-    auto level_label { UiLabel(2, 4, kLevelString) };
-    auto str_label { UiLabel(2, 9, kStrString) };
-    auto dex_label { UiLabel(9, 9, kDexString) };
-    auto con_label { UiLabel(2, 11, kConString) };
-    auto int_label { UiLabel(9, 11, kIntString) };
-    auto hp_label { UiLabel(2, 6, kHpString, "", std::experimental::nullopt, TCOD_COLCTRL_2) };
+    auto level_label { std::make_shared<UiLabelAndText>(2, 4, kLevelString) };
+    auto str_label { std::make_shared<UiLabelAndText>(2, 9, kStrString) };
+    auto dex_label { std::make_shared<UiLabelAndText>(9, 9, kDexString) };
+    auto con_label { std::make_shared<UiLabelAndText>(2, 11, kConString) };
+    auto int_label { std::make_shared<UiLabelAndText>(9, 11, kIntString) };
+    auto hp_label { std::make_shared<UiLabelAndText>(2, 6, kHpString, "", TCOD_COLCTRL_1, TCOD_COLCTRL_2) };
 
     player_info_window_->Initialize(kPlayerInfoWindowWidth,
                                     kPlayerInfoConsoleHeight,

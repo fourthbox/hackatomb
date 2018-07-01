@@ -7,7 +7,7 @@
 
 class UiInventory : public UiWindow {
 public:
-    void Initialize(size_t width, size_t height, std::string const &name = "", std::initializer_list<UiLabel> labels = {}) override;
+    void Initialize(size_t width, size_t height, std::string const &name = "", std::initializer_list<UiLabel_sp> labels = {}) override;
     
     void Draw() override;
     
