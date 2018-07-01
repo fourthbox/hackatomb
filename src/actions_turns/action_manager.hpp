@@ -83,7 +83,8 @@ public:
     void PerformFloorMapping();
     
     void OpenInventory();
-    
+    void CloseMenu();
+
     CoordinateOpt SeekPlayer();
     
 private:

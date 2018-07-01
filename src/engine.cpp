@@ -35,7 +35,7 @@ void Engine::InitializeStartScreen() {
     root_console_manager_.SetStartScreenWindow(start_screen_.GetWindow());
     
     // Initialize Input Manager
-    input_manager_.Initialize(aim_manager_, action_manager_, start_screen_);
+    input_manager_.Initialize(aim_manager_, action_manager_, start_screen_, ui_manager_);
 
     start_screen_initialized_ = true;
 }

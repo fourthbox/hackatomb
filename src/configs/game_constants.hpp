@@ -85,6 +85,7 @@ static const char kSkipTurn = '.';
 static const char kEnterAimMode = 't';
 static const char kOpenInventory = 'i';
 static const TCOD_keycode_t kSelectOption = TCODK_ENTER;
+static const TCOD_keycode_t kExitMenu = TCODK_ESCAPE;
 
 // Misc constants
 static const int kStandardDungeonDepth = 27;

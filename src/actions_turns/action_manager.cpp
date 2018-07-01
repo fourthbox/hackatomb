@@ -186,6 +186,13 @@ void ActionManager::OpenInventory() {
     engine_->GetTurnManager().SwitchToMenuMode();
 }
 
+void ActionManager::CloseMenu() {
+    assert(initialized_);
+    
+    // Change the turn phase
+    engine_->GetTurnManager().StartTurn();
+}
+
 CoordinateOpt ActionManager::SeekPlayer() {
     assert(initialized_);
 

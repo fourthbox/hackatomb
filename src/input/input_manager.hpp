@@ -13,10 +13,11 @@
 
 class AimManager;
 class StartScreen;
+class UiManager;
 
 class InputManager : public InitiableObject {
 public:
-    void Initialize(AimManager &aim_manager, ActionManager &action_manager, StartScreen &start_screen);
+    void Initialize(AimManager &aim_manager, ActionManager &action_manager, StartScreen &start_screen, UiManager &ui_manager);
     
     void Update(TurnPhase turn_phase);
     
@@ -26,12 +27,14 @@ private:
     AimManager *aim_manager_;
     ActionManager *action_manager_;
     StartScreen *start_screen_;
+    UiManager *ui_manager_;
     
     TCOD_key_t last_key_;
     TCOD_mouse_t last_mouse_position_;
     
     void UpdateNormalMode();
     void UpdateAimMode();
+    void UpdateMenuMode();
     
 };
 

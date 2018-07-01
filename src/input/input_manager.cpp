@@ -4,12 +4,13 @@
 #include "game_constants.hpp"
 #include "start_screen.hpp"
 
-void InputManager::Initialize(AimManager &aim_manager, ActionManager &action_manager, StartScreen &start_screen) {
+void InputManager::Initialize(AimManager &aim_manager, ActionManager &action_manager, StartScreen &start_screen, UiManager &ui_manager) {
     assert(!initialized_);
     
     this->aim_manager_ = &aim_manager;
     this->action_manager_ = &action_manager;
     this->start_screen_ = &start_screen;
+    this->ui_manager_ = &ui_manager;
     
     initialized_ = true;
 }
@@ -26,6 +27,9 @@ void InputManager::Update(TurnPhase turn_phase) {
         case TurnPhase::AIM_:
             UpdateAimMode();
             break;
+        case TurnPhase::MENU_:
+            UpdateMenuMode();
+            break;
         default:
             break;
     }
@@ -37,11 +41,9 @@ void InputManager::UpdateNormalMode() {
         switch (last_key_.c) {
             case kMoveUpstairs:
                 action_manager_->MoveUpstairs();
-                
                 break;
             case kMoveDownstairs:
                 action_manager_->MoveDowstairs();
-                
                 break;
             default:
                 action_manager_->DoNothing();
@@ -95,7 +97,6 @@ void InputManager::UpdateNormalMode() {
 }
 
 void InputManager::UpdateAimMode() {
-    
     // Check for enter keys
     switch (last_key_.vk) {
         case kSelectOption:
@@ -105,7 +106,7 @@ void InputManager::UpdateAimMode() {
         default:
             break;
     }
-
+    
     switch (last_key_.c) {
         case kMoveNorth:
             aim_manager_->SetAction(Action::MOVE_N_);
@@ -135,6 +136,26 @@ void InputManager::UpdateAimMode() {
             aim_manager_->SetAction(Action::NONE_);
             break;
     }
+}
+
+void InputManager::UpdateMenuMode() {
+    // Check for enter keys
+    switch (last_key_.vk) {
+        case kExitMenu:
+            action_manager_->CloseMenu();
+            return;
+        default:
+            break;
+    }
+    
+    switch (last_key_.c) {
+        case kOpenInventory:
+            action_manager_->CloseMenu();
+            break;
+        default:
+            break;
+    }
+
 }
 
 void InputManager::UpdateStartScreen() {

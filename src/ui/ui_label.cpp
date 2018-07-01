@@ -91,7 +91,7 @@ void UiLabelAndText::Draw(TCODConsole *console) {
                    dynamic_text_.c_str(),
                    TCOD_colctrl_t::TCOD_COLCTRL_STOP);
 }
-8
+
 UiCenteredLabel::UiCenteredLabel(size_t width, size_t height,
                                  std::string const &static_text,
                                  TCOD_colctrl_t static_color,
