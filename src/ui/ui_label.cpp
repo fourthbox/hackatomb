@@ -17,6 +17,16 @@ x_ {x},
 y_ {y} {
 }
 
+void UiSimpleLabel::Draw(TCODConsole *console) {
+    assert(!static_text_.empty());
+    
+    console->print(x_, y_,
+                   "%c%s%c",
+                   static_color_,
+                   static_text_.c_str(),
+                   TCOD_colctrl_t::TCOD_COLCTRL_STOP);
+}
+
 UiLabelWithHandler::UiLabelWithHandler(size_t x, size_t y,
                                        int handle,
                                        std::string const &static_text,
@@ -28,34 +38,6 @@ handle_ {handle},
 action_ {callback} {
 }
 
-UiLabelAndText::UiLabelAndText(size_t x, size_t y,
-                               std::string const &static_text, std::string const &dynamic_text,
-                               TCOD_colctrl_t static_color, TCOD_colctrl_t dynamic_color,
-                               std::string const &id) :
-UiSimpleLabel(x, y, static_text, static_color, id),
-dynamic_text_ {dynamic_text},
-dynamic_color_ {dynamic_color} {
-}
-
-UiCenteredLabel::UiCenteredLabel(size_t width, size_t height,
-                                 std::string const &static_text,
-                                 TCOD_colctrl_t static_color,
-                                 std::string const &id) :
-UiLabel(static_text, static_color, id),
-width_ {width},
-height_ {height} {
-}
-
-void UiSimpleLabel::Draw(TCODConsole *console) {
-    assert(!static_text_.empty());
-    
-    console->print(x_, y_,
-                   "%c%s%c",
-                   static_color_,
-                   static_text_.c_str(),
-                   TCOD_COLCTRL_STOP);
-}
-
 void UiLabelWithHandler::Draw(TCODConsole *console) {
     assert(!static_text_.empty());
     
@@ -64,7 +46,7 @@ void UiLabelWithHandler::Draw(TCODConsole *console) {
                    static_color_,
                    (char)*handle_,
                    static_text_.c_str(),
-                   TCOD_COLCTRL_STOP);
+                   TCOD_colctrl_t::TCOD_COLCTRL_STOP);
 }
 
 bool UiLabelWithHandler::TriggerAction() const {
@@ -79,7 +61,7 @@ void UiLabelWithHandler::UpdateAction(std::function<bool()> callback) {
     action_ = callback;
 }
 
-Int_n UiLabelWithHandler::GetHandle() const {    
+Int_n UiLabelWithHandler::GetHandle() const {
     return handle_;
 }
 
@@ -89,25 +71,45 @@ void UiLabelWithHandler::SetHandle(int handle) {
     handle_ = handle;
 }
 
+UiLabelAndText::UiLabelAndText(size_t x, size_t y,
+                               std::string const &static_text, std::string const &dynamic_text,
+                               TCOD_colctrl_t static_color, TCOD_colctrl_t dynamic_color,
+                               std::string const &id) :
+UiSimpleLabel(x, y, static_text, static_color, id),
+dynamic_text_ {dynamic_text},
+dynamic_color_ {dynamic_color} {
+}
+
 void UiLabelAndText::Draw(TCODConsole *console) {
     assert(!static_text_.empty());
-
+    
     console->print(x_, y_,
                    "%c%s %c%s%c",
                    static_color_,
                    static_text_.c_str(),
                    dynamic_color_,
                    dynamic_text_.c_str(),
-                   TCOD_COLCTRL_STOP);
+                   TCOD_colctrl_t::TCOD_COLCTRL_STOP);
+}
+8
+UiCenteredLabel::UiCenteredLabel(size_t width, size_t height,
+                                 std::string const &static_text,
+                                 TCOD_colctrl_t static_color,
+                                 std::string const &id) :
+UiLabel(static_text, static_color, id),
+width_ {width},
+height_ {height} {
 }
 
 void UiCenteredLabel::Draw(TCODConsole *console) {
     assert(!static_text_.empty());
     
-    console->printRect(0, 0,
-                       width_, height_,
-                       "%c%s%c",
-                       static_color_,
-                       static_text_.c_str(),
-                       TCOD_COLCTRL_STOP);
+    console->printRectEx(width_/2, (height_-4)/2,
+                         width_, height_,
+                         TCOD_bkgnd_flag_t::TCOD_BKGND_DEFAULT,
+                         TCOD_alignment_t::TCOD_CENTER,
+                         "%c%s%c",
+                         static_color_,
+                         static_text_.c_str(),
+                         TCOD_colctrl_t::TCOD_COLCTRL_STOP);
 }

@@ -51,24 +51,61 @@ void UiInventory::Initialize(size_t width, size_t height, std::string const &nam
     ring_1_piece_ = std::make_unique<UiWindow>();
     ring_2_piece_ = std::make_unique<UiWindow>();
     
+    auto helmet_label {std::make_shared<UiCenteredLabel>(kHelmetPieceWidth, kHelmetPieceHeight, "stats\nstr +1\ndex +2")};
+    auto amulet_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth, kTrinketPieceHeight, "stats\nstr +1\ndex +2")};
+    auto left_arm_label {std::make_shared<UiCenteredLabel>(kArmPieceWidth, kArmPieceHeight, "stats\nstr +1\ndex +2")};
+    auto right_arm_label {std::make_shared<UiCenteredLabel>(kArmPieceWidth, kArmPieceHeight, "stats\nstr +1\ndex +2")};
+    auto torso_label {std::make_shared<UiCenteredLabel>(kTorsoPieceWidth, kTorsoPieceHeight, "stats\nstr +1\ndex +2")};
+    auto gaunlet_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth, kTrinketPieceHeight, "stats\nstr +1\ndex +2")};
+    auto pants_label {std::make_shared<UiCenteredLabel>(kPantsPieceWidth, kPantsPieceHeight, "stats\nstr +1\ndex +2")};
+    auto ring_1_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth, kTrinketPieceHeight, "stats\nstr +1\ndex +2")};
+    auto ring_2_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth, kTrinketPieceHeight, "stats\nstr +1\ndex +2")};
+    
     helmet_piece_->Initialize(kHelmetPieceWidth,
-                              kHelmetPieceHeight);
+                              kHelmetPieceHeight,
+                              "",
+                              {helmet_label});
+    
     amulet_piece_->Initialize(kTrinketPieceWidth,
-                              kTrinketPieceHeight);
+                              kTrinketPieceHeight,
+                              "",
+                              {amulet_label});
+
     left_arm_piece_->Initialize(kArmPieceWidth,
-                                kArmPieceHeight);
+                                kArmPieceHeight,
+                                "",
+                                {left_arm_label});
+
     right_arm_piece_->Initialize(kArmPieceWidth,
-                                 kArmPieceHeight);
+                                 kArmPieceHeight,
+                                 "",
+                                 {right_arm_label});
+
     torso_piece_->Initialize(kTorsoPieceWidth,
-                             kTorsoPieceHeight);
+                             kTorsoPieceHeight,
+                             "",
+                             {torso_label});
+
     gaunlet_piece_->Initialize(kTrinketPieceWidth,
-                               kTrinketPieceHeight);
+                               kTrinketPieceHeight,
+                               "",
+                               {gaunlet_label});
+
     pants_piece_->Initialize(kPantsPieceWidth,
-                             kPantsPieceHeight);
+                             kPantsPieceHeight,
+                             "",
+                             {pants_label});
+
     ring_1_piece_->Initialize(kTrinketPieceWidth,
-                              kTrinketPieceHeight);
+                              kTrinketPieceHeight,
+                              "",
+                              {ring_1_label});
+
     ring_2_piece_->Initialize(kTrinketPieceWidth,
-                              kTrinketPieceHeight);
+                              kTrinketPieceHeight,
+                              "",
+                              {ring_2_label});
+
 }
 
 void UiInventory::Draw() {
