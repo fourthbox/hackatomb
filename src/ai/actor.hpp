@@ -26,6 +26,12 @@ class Actor : public InitiableObject {
     
 public:
     /**
+     Draw the actor onto the selected console
+     @param console The console upon which to draw the actor.
+     */
+    void Draw(TCODConsole &console);
+
+    /**
      Initialize this instance.
      @param x The X coordinate.
      @param y The Y coordinate.
@@ -36,39 +42,6 @@ public:
      */
     void Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats);
     
-    virtual bool Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager);
-    
-    /**
-     Attempts to perform a dodge.
-     @return True if the dodge was succesfully performed, false otherwise.
-     */
-    bool PerformDodge() const;
-        
-    /**
-     Draw the actor onto the selected console
-     @param console The console upon which to draw the actor.
-     */
-    void Draw(TCODConsole &console);
-    
-    /**
-     Gets the current position of the actor.
-     @return A pair containing the coordinates on the current map.
-     */
-    std::pair<size_t, size_t> GetPosition() const;
-    
-    int GetFovRadius() const;
-    int GetHp() const;
-    
-    inline void MoveToPosition(size_t x, size_t y) { x_ = x; y_ = y; }
-    
-    inline std::string const &GetName() { return name_; } const;
-    
-    inline bool IsDead() { return is_dead_; } const;
-    
-    int GetAttackPower() const;
-    float GetDefenseModifier() const;
-    size_t GetArmorRating() const;
-    
     /**
      Inflicts the specified damage to the actor. Check if it dies afterwards.
      @param total_damage The total damage inflicted to the actor
@@ -76,7 +49,53 @@ public:
      */
     bool InflictDamage(int total_damage);
     
+    /**
+     Move the actor to the specified position
+     @param x The X coordinate
+     @param y The Y coordinate
+     */
+    inline void MoveToPosition(size_t x, size_t y) { x_ = x; y_ = y; }
+    
+    /**
+     Attempts to perform a dodge.
+     @return True if the dodge was succesfully performed, false otherwise.
+     */
+    bool PerformDodge() const;
+
+    /**
+     Update cycle.
+     @param speed The speed for this update cycle.
+     @param action_manager The actor manager.
+     @param maps_manager The maps manager.
+     */
+    virtual bool Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager);
+    
+    
+    // Getters
+    int GetFovRadius() const;
+    inline std::string const &GetName() { return name_; } const;
+    std::pair<size_t, size_t> GetPosition() const;
+    int GetHp() const;
+    int GetAttackPower() const;
+    float GetDefenseModifier() const;
+    size_t GetArmorRating() const;
+    inline bool IsDead() { return is_dead_; } const;
+    
+    /**
+     Get the closest actor in fov, if any, nullptr utherwise.
+     @param actor_list The actor list to check inside of the fov.
+     @param maps_manager The maps_manager
+     @return The closest actor in fov, if any, nullptr utherwise.
+     */
     Actor *GetClosestActorInFov(std::vector<Actor*> actor_list, MapsManager &maps_manager);
+    
+    /**
+     Get the closest actor in a given range, if any, nullptr utherwise.
+     @param actor_list The actor list to check inside of the fov.
+     @param range The range of needed to check.
+     @param maps_manager The maps manager.
+     @return The closest actor in fov, if any, nullptr utherwise.
+     */
     Actor *GetClosestActorInRange(std::vector<Actor*> actor_list, size_t range, MapsManager &maps_manager);
     
 protected:

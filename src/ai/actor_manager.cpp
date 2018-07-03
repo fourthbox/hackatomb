@@ -53,5 +53,14 @@ void ActorManager::Update(size_t speed, ActionManager &action_manager, MapsManag
 void ActorManager::SetAllMonstersVisible() const {
     assert(initialized_);
     
-    monster_manager_.SetPermaVisible(true);
+    monster_manager_.TogglePermaVisible(true);
+}
+
+std::vector<Actor*> ActorManager::GetAllActors() {
+    assert (initialized_);
+    
+    std::vector<Actor*> actor_list {monster_manager_.GetMonsterList()};
+    actor_list.push_back(&GetPlayer());
+    
+    return actor_list;
 }

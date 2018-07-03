@@ -34,6 +34,9 @@ public:
      */
     void InitializeGame();
     
+    /**
+     Initialize the start screen.
+     */
     void InitializeStartScreen();
     
     /**
@@ -42,6 +45,9 @@ public:
      */
     void Update();
     
+    /**
+     Update cycle for the start screen.
+     */
     void UpdateStartScreen();
     
     /**
@@ -49,6 +55,9 @@ public:
      */
     void Render();
     
+    /**
+     Render cycle for the start screen.
+     */
     void RenderStartScreen();
     
     inline bool IsPlaying() { return is_playing_; }

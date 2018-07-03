@@ -37,35 +37,24 @@ public:
     void Initialize(Engine &engine);
     
     /**
-     Check wheter an actor can move to the specified coordinates.
-     @param x The X coordinate.
-     @param y The Y coordinate.
-     @return True if an Actor can move there, false otherwise.
+     Set the turn phase to idle mode.
      */
-    bool CanMove(size_t x, size_t y);
+    void ActorMoved();
     
     /**
-     Triggers an action form an actor, to the destination coordinate.
-     First it checks if it's attackable, and triggers an attack.
-     Then if it's interactable, and triggers an interaction.
-     @param source The actor that performs the action
+     Set the turn phase to idle mode.
+     */
+    void ActorWaited();
+    
+    /**
+     The source actor performs an attack on the specified tile.
+     @param source The actor that performs the action.
      @param x The X coordinate.
      @param y The Y coordinate.
+     @param ignore_armor If true, it will ignore the defender armor.
      @return True if succesfully performed an action, false otherwise.
      */
-    bool PerformAction(Actor &source, size_t x, size_t y);
-    void PerformActionOnCrosshair();
     bool Attack(Actor &source, size_t x, size_t y, bool ignore_armor = false);
-    void PlayerAction(Action action);
-
-    void Interact(size_t x, size_t y);
-            
-    void StartAiming();
-    void DoNothing();
-    
-    void ActorMoved();
-    void ActorWaited();
-    void PlayerDied();
     
     /**
      Check wheter an actor can attack on the specified coordinates.
@@ -75,16 +64,93 @@ public:
      */
     bool CanAtttack(size_t x, size_t y);
     
-    bool ShootAction(Actor &source, size_t x, size_t y);
+    /**
+     Check wheter an actor can move to the specified coordinates.
+     @param x The X coordinate.
+     @param y The Y coordinate.
+     @return True if an Actor can move there, false otherwise.
+     */
+    bool CanMove(size_t x, size_t y);
     
-    void MoveUpstairs() { MoveToFloor(true); }
+    /**
+     Set the turn phase to aim mode.
+     Use this when no action has been performed.
+     To wait/skip a turn use ActorWaited()
+     */
+    void DoNothing();
+    
+    /**
+     Dispatch an action executed by the player.
+     @param action The executed action.
+     */
+    void Interact(size_t x, size_t y);
+    
+    /**
+     Move the player to the lower floor.
+     */
     void MoveDowstairs() { MoveToFloor(false); }
     
+    /**
+     Move the player to the higher floor.
+     */
+    void MoveUpstairs() { MoveToFloor(true); }
+    
+    /**
+     Triggers an action form an actor, to the destination coordinate.
+     First it checks if it's attackable, and eventually triggers an attack.
+     Then if it's interactable, and eventually triggers an interaction.
+     @param source The actor that performs the action.
+     @param x The X coordinate.
+     @param y The Y coordinate.
+     @return True if succesfully performed an action, false otherwise.
+     */
+    bool PerformAction(Actor &source, size_t x, size_t y);
+    
+    /**
+     Triggers an action form an actor, to the destination under the crosshair.
+     */
+    void PerformActionOnCrosshair();
+
+    /**
+     Dispatch an action executed by the player.
+     @param action The executed action.
+     */
+    void PlayerAction(Action action);
+
+    /**
+     Set the turn phase to aim mode.
+     */
+    void StartAiming();
+    
+    /**
+     Set the turn phase to aim mode.
+     @param source The actor that performs the action.
+     @param x The X coordinate.
+     @param y The Y coordinate.
+     @return True if succesfully performed an action, false otherwise.
+     */
+    bool ShootAction(Actor &source, size_t x, size_t y);
+    
+    /**
+     Make all tiles explored and all actors visibles.
+     */
     void PerformFloorMapping();
     
+    /**
+     Open the inventory menu.
+     */
     void OpenInventory();
+    
+    /**
+     Close any open menu window.
+     */
     void CloseMenu();
-
+    
+    
+    /**
+     Search for the player and return the position.
+     @return Player position.
+     */
     CoordinateOpt SeekPlayer();
     
 private:
@@ -97,6 +163,11 @@ private:
      @return True if an Actor can interact there, false otherwise.
      */
     bool CanInteract(size_t x, size_t y);
+    
+    /**
+     Move the player to the next flooe.
+     @param is_upstairs If true, will move upstairs. If false, will move downstairs.
+     */
     void MoveToFloor(bool is_upstairs);
 
 };

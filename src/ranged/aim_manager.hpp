@@ -22,16 +22,54 @@ class AimManager : public InitiableObject {
 public:
     AimManager();
     void Initialize(MapsManager &maps_manager);
+    
+    /**
+     Draw the crosshair on position.
+     @param console The player.
+     @param player_position The action manager.
+     */
+    void DrawCrosshair(TCODConsole &console, Coordinate player_position);
 
+    /**
+     Draw the trail highlight of the crosshair.
+     @param console The player.
+     @param player_position The action manager.
+     */
+    void DrawTrail(TCODConsole &console, Coordinate player_position);
+    
+    /**
+     Reset the crosshair, disabling it.
+     */
+    void ResetCrosshair();
+
+    /**
+     Set the action to the selected one.
+     @param action The selected action.
+     */
     void SetAction(Action action);
     
-    void Update(Player const &player, ActionManager &action_manager, MapsManager &maps_manager);
-    void DrawTrail(TCODConsole &console, Coordinate player_position);
-    void DrawCrosshair(TCODConsole &console, Coordinate player_position);
-    
+    /**
+     Setup the crosshair and place it to the closest enemy, if possible, or on the player otherwise.
+     @param mode The crosshair mode.
+     @param range The max range of the crosshair.
+     @param player The player.
+     @param actor_list The list of actors on the current floor.
+     @param maps_manager The maps manager.
+     */
     void SetupCrossshair(CrosshairMode mode, int range, Player &player, std::vector<Actor*> actor_list, MapsManager &maps_manager);
     
-    void ResetCrosshair();
+    /**
+     Update the crosshair position.
+     @param player The player.
+     @param action_manager The action manager.
+     @param maps_manager The maps manager.
+     */
+    void Update(Player const &player, ActionManager &action_manager, MapsManager &maps_manager);
+    
+    /**
+     Returns the current crosshair location.
+     @return The current crosshair location coordinates.
+     */
     Coordinate GetCrosshairLocation() const;
 
 private:

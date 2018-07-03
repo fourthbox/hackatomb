@@ -8,11 +8,38 @@ class Player;
 class MonsterManager : public InitiableObject {
 public:
     void Initialize(ActorManager &actor_manager, MapsManager &maps_manager);
+    
+    /**
+     Draw all the monsters on the specified console.
+     @param console The consone upon which to draw.
+     @param player The player.
+     @param maps_manager The maps manager.
+     */
     void Draw(TCODConsole &console, Player const &player, MapsManager &maps_manager);
-    void SetPermaVisible(bool is_perma_visible, Monster *monster = nullptr) const;
-    void Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager) const;
+    
+    /**
+     Get a monster by the coordinates on the current floor, if present.
+     @param x The X coordinate.
+     @param y The Y coordinate.
+     @return Returns a pointer to the monster. nullptr if no monster is present to the specified location.
+     */
     Monster *GetMonsterByCoordinates(size_t x, size_t y) const;
-    std::vector<Actor*> GetMonsterList() const;
+
+    /**
+     Toggle one or every monster to be always visible.
+     @param is_perma_visible If true, the monsters will be set to always visible.
+     @param monster The monster upon which to toggle the visibility.
+     */
+    void TogglePermaVisible(bool is_perma_visible, Monster *monster = nullptr) const;
+    
+    /**
+     Update the monster ai. Eventually perform an action.
+     @param speed The speed of this update cycle.
+     @param action_manager The action manager.
+     @param maps_manager The maps manager.
+     */
+    void Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager) const;
+        std::vector<Actor*> GetMonsterList() const;
 
 private:
     ActorManager *actor_manager_;

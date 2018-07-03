@@ -58,7 +58,7 @@ bool Monster::IsPermaVisible() {
     return is_perma_visible_;
 }
 
-void Monster::SetPermaVisible(bool is_perma_visible) {
+void Monster::TogglePermaVisible(bool is_perma_visible) {
     assert(initialized_);
     
     is_perma_visible_ = is_perma_visible;

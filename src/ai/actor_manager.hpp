@@ -17,6 +17,34 @@
 class ActorManager : public InitiableObject {
 public:
     void Initialize();
+    
+    /**
+     Draw all monsters on the current floor.
+     @param console The console to drow upon.
+     @param maps_manager The maps manager.
+     */
+    void DrawMonsters(TCODConsole &console, MapsManager &maps_manager);
+    
+    /**
+     Draw the player.
+     @param console The console to drow upon.
+     */
+    void DrawPlayer(TCODConsole &console);
+    
+    /**
+     Initialize the monster manager.
+     @param action_manager The action manager.
+     @param maps_manager The maps manager.
+     */
+    void InitializeMonsterManager(ActionManager &action_manager, MapsManager &maps_manager);
+
+    /**
+     Initialize the player and place it in its starting position.
+     @param start_position The start position coordinates.
+     @param action_manager The action manager.
+     @param maps_manager The maps manager.
+     */
+    void InitializePlayer(Coordinate start_position, ActionManager &action_manager, MapsManager &maps_manager);
 
     /**
      Cycles the actor list and return the actor on the specified coordinates.
@@ -26,30 +54,31 @@ public:
      @return A pointer to the actor if an actor is find, nullptr otherwise.
      */
     Actor *GetActorByCoordinates(size_t x, size_t y);
+    
+    /**
+     Gett all the actors on this floow.
+     @return A vector of pointers to actors..
+     */
+    std::vector<Actor*> GetAllActors();
+    
+    /**
+     Get the player.
+     @return Return the player by reference.
+     */
+    inline Player &GetPlayer() { return player_manager_.GetPlayer(); }
+    
+    /**
+     Set all monsters on the floor to be visible
+     */
+    void SetAllMonstersVisible() const;
         
     /**
      Call for Update() on every actor in actor_list_
-     @param speed The speed of this update cycle
+     @param speed The speed of this update cycle.
+     @param action_manager The action manager.
+     @param maps_manager The maps manager.
      */
     void Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager);
-    
-    void SetAllMonstersVisible() const;
-    
-    void InitializePlayer(std::pair<size_t, size_t> start_position, ActionManager &action_manager, MapsManager &maps_manager);
-    void InitializeMonsterManager(ActionManager &action_manager, MapsManager &maps_manager);
-    inline Player &GetPlayer() { return player_manager_.GetPlayer(); }
-    
-    void DrawMonsters(TCODConsole &console, MapsManager &maps_manager);
-    void DrawPlayer(TCODConsole &console);
-    
-    std::vector<Actor*> GetAllActors() {
-        assert (initialized_);
-        
-        std::vector<Actor*> actor_list {monster_manager_.GetMonsterList()};
-        actor_list.push_back(&GetPlayer());
-        
-        return actor_list;
-    }
     
 private:
     PlayerManager player_manager_;     /**< The PlayerManager */

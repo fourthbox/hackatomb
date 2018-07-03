@@ -28,15 +28,15 @@ void MonsterManager::Draw(TCODConsole &console, Player const &player, MapsManage
     }
 }
 
-void MonsterManager::SetPermaVisible(bool is_perma_visible, Monster *monster) const {
+void MonsterManager::TogglePermaVisible(bool is_perma_visible, Monster *monster) const {
     assert(initialized_);
 
     if (monster == nullptr) {
         for (auto const &mnst : monster_list_) {
-            mnst->SetPermaVisible(is_perma_visible);
+            mnst->TogglePermaVisible(is_perma_visible);
         }
     } else {
-        monster->SetPermaVisible(is_perma_visible);
+        monster->TogglePermaVisible(is_perma_visible);
     }
 }
 

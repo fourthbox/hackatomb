@@ -19,8 +19,15 @@ class InputManager : public InitiableObject {
 public:
     void Initialize(AimManager &aim_manager, ActionManager &action_manager, StartScreen &start_screen, UiManager &ui_manager);
     
+    /**
+     Dispatch the input events based on the turn phase.
+     @param turn_phase The current turn phase.
+     */
     void Update(TurnPhase turn_phase);
     
+    /**
+     Dispatch the input events based on the turn phase.
+     */
     void UpdateStartScreen();
     
 private:
@@ -32,8 +39,19 @@ private:
     TCOD_key_t last_key_;
     TCOD_mouse_t last_mouse_position_;
     
+    /**
+     Dispatch input events for normal gameplay
+     */
     void UpdateNormalMode();
+    
+    /**
+     Dispatch input events for aim mode.
+     */
     void UpdateAimMode();
+    
+    /**
+     Dispatch input events for menu mode.
+     */
     void UpdateMenuMode();
     
 };
