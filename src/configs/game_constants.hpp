@@ -9,6 +9,8 @@
 
 #include "libtcod.hpp"
 
+// TODO: this whole file is deprecated and every constant should be in the header of the most related class
+
 // Colors
 static const TCOD_color_t kDefaultGroundColor {TCOD_light_grey};
 static const TCOD_color_t kDefaultWallColor {TCOD_darker_grey};

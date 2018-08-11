@@ -151,7 +151,7 @@ public:
      Search for the player and return the position.
      @return Player position.
      */
-    CoordinateOpt SeekPlayer();
+    CoordinateOpt_n SeekPlayer();
     
 private:
     Engine *engine_;

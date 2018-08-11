@@ -147,7 +147,7 @@ Tile *MapsManager::GetTileFromFloor(size_t x, size_t y, int floor) {
     return master_maps_holder_[current_map_category_][floor]->GetTile(x, y);
 }
 
-CoordinateOpt MapsManager::MoveToFloor(bool is_upstairs) {
+CoordinateOpt_n MapsManager::MoveToFloor(bool is_upstairs) {
     assert(initialized_);
     
     if (is_upstairs)
@@ -174,7 +174,7 @@ CoordinateOpt MapsManager::MoveToFloor(bool is_upstairs) {
     return (is_upstairs ? GetExitPosition() : GetEntrancePosition());
 }
 
-CoordinateOpt MapsManager::GetEntrancePosition() {
+CoordinateOpt_n MapsManager::GetEntrancePosition() {
     assert(initialized_);
     
     assert(master_maps_holder_.count(current_map_category_) > 0 &&
@@ -188,7 +188,7 @@ CoordinateOpt MapsManager::GetEntrancePosition() {
     return std::experimental::make_optional(tile->GetXY());
 }
 
-CoordinateOpt MapsManager::GetExitPosition() {
+CoordinateOpt_n MapsManager::GetExitPosition() {
     assert(initialized_);
     
     assert(master_maps_holder_.count(current_map_category_) > 0 &&

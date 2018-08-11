@@ -12,13 +12,13 @@ UiManager::UiManager() {
     inventory_window_ = std::make_unique<UiInventory>();
 }
 
-void UiManager::Initialize() {
+void UiManager::Initialize(InventoryManager &inventory_manager) {
     assert(!initialized_);
     
     InitializeEnvironmentWindow();
     InitializePlayerInfoWindow();
     InitializeMessageLogWindow();
-    InitializeInventoryWindow();
+    InitializeInventoryWindow(inventory_manager);
     
     initialized_ = true;
 }
@@ -62,10 +62,11 @@ void UiManager::InitializeMessageLogWindow() {
                                     kLogString);
 }
 
-void UiManager::InitializeInventoryWindow() {
+void UiManager::InitializeInventoryWindow(InventoryManager &inventory_manager) {
     assert(!initialized_);
     
-    inventory_window_->Initialize(kRootViewWidth,
+    inventory_window_->Initialize(inventory_manager,
+                                  kRootViewWidth,
                                   kRootViewHeight,
                                   kInventoryString);
 }
@@ -114,4 +115,10 @@ bool UiManager::UpdateLabel(std::string const &label_id, std::string const &labe
     }
     
     return success;
+}
+
+void UiManager::LogManager::LogAttack(Actor const &source, Actor const &target, int damage) {
+    // {source} attacked {target} for {damage} physical damage
+    
+    // TODO: formatting string with cool c++17 functions
 }

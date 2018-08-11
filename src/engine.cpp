@@ -16,7 +16,7 @@ is_main_game_first_update_cycle_ {true} {
     root_console_manager_.Initialize(kRootViewWidth, kRootViewHeight, "hackatomb");
     
     // Initialize the UI Manager
-    ui_manager_.Initialize();
+    ui_manager_.Initialize(inventory_manager_);
     
     // Set the windows on the root console
     root_console_manager_.SetLeftWindow(ui_manager_.GetEnvironmentWindow());

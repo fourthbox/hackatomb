@@ -75,6 +75,8 @@ bool ActionManager::Attack(Actor &source, size_t x, size_t y, bool ignore_armor)
     // Update UI
     assert(engine_->GetUiManager().UpdateLabel(kHpString,
                                                std::to_string(engine_->GetActorManager().GetPlayer().GetHp())));
+    // Log message to console
+    engine_->GetUiManager().log_manager_.LogAttack(source, *target, total_damage);
 
     return true;
 }
@@ -193,7 +195,7 @@ void ActionManager::CloseMenu() {
     engine_->GetTurnManager().StartTurn();
 }
 
-CoordinateOpt ActionManager::SeekPlayer() {
+CoordinateOpt_n ActionManager::SeekPlayer() {
     assert(initialized_);
 
     return std::experimental::make_optional(engine_->GetActorManager().GetPlayer().GetPosition());

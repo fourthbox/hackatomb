@@ -77,9 +77,9 @@ public:
     bool IsInteractable(size_t x, size_t y);
     void OpenDoor(size_t x, size_t y);
     
-    CoordinateOpt MoveToFloor(bool is_upstairs);
-    CoordinateOpt GetEntrancePosition();
-    CoordinateOpt GetExitPosition();
+    CoordinateOpt_n MoveToFloor(bool is_upstairs);
+    CoordinateOpt_n GetEntrancePosition();
+    CoordinateOpt_n GetExitPosition();
     
     inline int GetCurrentFloor() const { return current_floor_; }
     

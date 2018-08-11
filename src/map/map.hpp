@@ -96,7 +96,7 @@ private:
 };
 
 typedef std::pair<size_t, size_t> Coordinate;
-typedef std::experimental::optional<Coordinate> CoordinateOpt;
+typedef std::experimental::optional<Coordinate> CoordinateOpt_n;
 
 
 #endif /* MAP_HPP_ */

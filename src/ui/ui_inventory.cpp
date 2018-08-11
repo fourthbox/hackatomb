@@ -20,10 +20,12 @@ static const size_t kArmPieceHeight = 22;
 static const size_t kPantsPieceWidth = 16;
 static const size_t kPantsPieceHeight = 18;
 
-void UiInventory::Initialize(size_t width, size_t height, std::string const &name, std::initializer_list<UiLabel_sp> labels) {
+void UiInventory::Initialize(InventoryManager &inventory_manager, size_t width, size_t height, std::string const &name, std::initializer_list<UiLabel_sp> labels) {
     assert(!initialized_);
 
     UiWindow::Initialize(width, height, name, labels);
+    
+    inventory_manager_ = &inventory_manager;
     
     // Window Frames
     body_armor_frame_ = std::make_unique<UiWindow>();
@@ -41,75 +43,69 @@ void UiInventory::Initialize(size_t width, size_t height, std::string const &nam
                                   kItemStatsFrameHeight);
 
     // Body armor pieces
-    helmet_piece_ = std::make_unique<UiWindow>();
-    amulet_piece_ = std::make_unique<UiWindow>();
-    left_arm_piece_ = std::make_unique<UiWindow>();
-    right_arm_piece_ = std::make_unique<UiWindow>();
-    torso_piece_ = std::make_unique<UiWindow>();
-    gaunlet_piece_ = std::make_unique<UiWindow>();
-    pants_piece_ = std::make_unique<UiWindow>();
-    ring_1_piece_ = std::make_unique<UiWindow>();
-    ring_2_piece_ = std::make_unique<UiWindow>();
+    helmet_frame_ = std::make_unique<UiWindow>();
+    amulet_frame_ = std::make_unique<UiWindow>();
+    left_arm_frame_ = std::make_unique<UiWindow>();
+    right_arm_frame_ = std::make_unique<UiWindow>();
+    torso_frame_ = std::make_unique<UiWindow>();
+    gauntlets_frame_ = std::make_unique<UiWindow>();
+    pants_frame_ = std::make_unique<UiWindow>();
+    ring_1_frame_ = std::make_unique<UiWindow>();
+    ring_2_frame_ = std::make_unique<UiWindow>();
     
-    auto helmet_label {std::make_shared<UiCenteredLabel>(kHelmetPieceWidth, kHelmetPieceHeight, "stats\nstr +1\ndex +2")};
-    auto amulet_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth, kTrinketPieceHeight, "stats\nstr +1\ndex +2")};
-    auto left_arm_label {std::make_shared<UiCenteredLabel>(kArmPieceWidth, kArmPieceHeight, "stats\nstr +1\ndex +2")};
-    auto right_arm_label {std::make_shared<UiCenteredLabel>(kArmPieceWidth, kArmPieceHeight, "stats\nstr +1\ndex +2")};
-    auto torso_label {std::make_shared<UiCenteredLabel>(kTorsoPieceWidth, kTorsoPieceHeight, "stats\nstr +1\ndex +2")};
-    auto gaunlet_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth, kTrinketPieceHeight, "stats\nstr +1\ndex +2")};
-    auto pants_label {std::make_shared<UiCenteredLabel>(kPantsPieceWidth, kPantsPieceHeight, "stats\nstr +1\ndex +2")};
-    auto ring_1_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth, kTrinketPieceHeight, "stats\nstr +1\ndex +2")};
-    auto ring_2_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth, kTrinketPieceHeight, "stats\nstr +1\ndex +2")};
+    auto helmet_label {std::make_shared<UiCenteredLabel>(kHelmetPieceWidth,
+                                                         kHelmetPieceHeight,
+                                                         inventory_manager_->GetHelmet()->GetShortDescription())};
+    auto amulet_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth,
+                                                         kTrinketPieceHeight,
+                                                         inventory_manager_->GetAmulet()->GetShortDescription())};
+    auto left_arm_label {std::make_shared<UiCenteredLabel>(kArmPieceWidth,
+                                                           kArmPieceHeight,
+                                                           inventory_manager_->GetLeftArm()->GetShortDescription())};
+    auto right_arm_label {std::make_shared<UiCenteredLabel>(kArmPieceWidth,
+                                                            kArmPieceHeight,
+                                                            inventory_manager_->GetRightArm()->GetShortDescription())};
+    auto torso_label {std::make_shared<UiCenteredLabel>(kTorsoPieceWidth,
+                                                        kTorsoPieceHeight,
+                                                        inventory_manager_->GetBodyArmor()->GetShortDescription())};
+    auto gauntlets_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth,
+                                                            kTrinketPieceHeight,
+                                                            inventory_manager_->GetGauntlets()->GetShortDescription())};
+    auto pants_label {std::make_shared<UiCenteredLabel>(kPantsPieceWidth,
+                                                        kPantsPieceHeight,
+                                                        inventory_manager_->GetPants()->GetShortDescription())};
+    auto ring_1_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth,
+                                                         kTrinketPieceHeight,
+                                                         inventory_manager_->GetRing1()->GetShortDescription())};
+    auto ring_2_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth,
+                                                         kTrinketPieceHeight,
+                                                         inventory_manager_->GetRing2()->GetShortDescription())};
     
-    helmet_piece_->Initialize(kHelmetPieceWidth,
-                              kHelmetPieceHeight,
-                              "",
-                              {helmet_label});
-    
-    amulet_piece_->Initialize(kTrinketPieceWidth,
-                              kTrinketPieceHeight,
-                              "",
-                              {amulet_label});
-
-    left_arm_piece_->Initialize(kArmPieceWidth,
-                                kArmPieceHeight,
-                                "",
-                                {left_arm_label});
-
-    right_arm_piece_->Initialize(kArmPieceWidth,
-                                 kArmPieceHeight,
-                                 "",
-                                 {right_arm_label});
-
-    torso_piece_->Initialize(kTorsoPieceWidth,
-                             kTorsoPieceHeight,
-                             "",
-                             {torso_label});
-
-    gaunlet_piece_->Initialize(kTrinketPieceWidth,
-                               kTrinketPieceHeight,
-                               "",
-                               {gaunlet_label});
-
-    pants_piece_->Initialize(kPantsPieceWidth,
-                             kPantsPieceHeight,
-                             "",
-                             {pants_label});
-
-    ring_1_piece_->Initialize(kTrinketPieceWidth,
-                              kTrinketPieceHeight,
-                              "",
-                              {ring_1_label});
-
-    ring_2_piece_->Initialize(kTrinketPieceWidth,
-                              kTrinketPieceHeight,
-                              "",
-                              {ring_2_label});
+    helmet_frame_->Initialize(kHelmetPieceWidth, kHelmetPieceHeight, "", {helmet_label});
+    amulet_frame_->Initialize(kTrinketPieceWidth, kTrinketPieceHeight, "", {amulet_label});
+    left_arm_frame_->Initialize(kArmPieceWidth, kArmPieceHeight, "", {left_arm_label});
+    right_arm_frame_->Initialize(kArmPieceWidth, kArmPieceHeight, "", {right_arm_label});
+    torso_frame_->Initialize(kTorsoPieceWidth, kTorsoPieceHeight, "", {torso_label});
+    gauntlets_frame_->Initialize(kTrinketPieceWidth, kTrinketPieceHeight, "", {gauntlets_label});
+    pants_frame_->Initialize(kPantsPieceWidth, kPantsPieceHeight, "", {pants_label});
+    ring_1_frame_->Initialize(kTrinketPieceWidth, kTrinketPieceHeight, "", {ring_1_label});
+    ring_2_frame_->Initialize(kTrinketPieceWidth, kTrinketPieceHeight, "", {ring_2_label});
 
 }
 
 void UiInventory::Draw() {
     assert(initialized_);
+    
+    // Update equipment labels
+    helmet_frame_->UpdateLabelById("", inventory_manager_->GetHelmet()->GetShortDescription());
+    amulet_frame_->UpdateLabelById("", inventory_manager_->GetAmulet()->GetShortDescription());
+    left_arm_frame_->UpdateLabelById("", inventory_manager_->GetLeftArm()->GetShortDescription());
+    right_arm_frame_->UpdateLabelById("", inventory_manager_->GetRightArm()->GetShortDescription());
+    torso_frame_->UpdateLabelById("", inventory_manager_->GetBodyArmor()->GetShortDescription());
+    gauntlets_frame_->UpdateLabelById("", inventory_manager_->GetGauntlets()->GetShortDescription());
+    pants_frame_->UpdateLabelById("", inventory_manager_->GetPants()->GetShortDescription());
+    ring_1_frame_->UpdateLabelById("", inventory_manager_->GetRing1()->GetShortDescription());
+    ring_2_frame_->UpdateLabelById("", inventory_manager_->GetRing2()->GetShortDescription());
     
     UiWindow::Draw();
     
@@ -129,32 +125,32 @@ void UiInventory::Draw() {
                       console_.get(), kBodyArmorFrameWidth + 1, kItemListFrameHeight + 1);
     
     // Draw body armor pieces
-    helmet_piece_->Draw();
-    amulet_piece_->Draw();
-    left_arm_piece_->Draw();
-    right_arm_piece_->Draw();
-    torso_piece_->Draw();
-    gaunlet_piece_->Draw();
-    pants_piece_->Draw();
-    ring_1_piece_->Draw();
-    ring_2_piece_->Draw();
+    helmet_frame_->Draw();
+    amulet_frame_->Draw();
+    left_arm_frame_->Draw();
+    right_arm_frame_->Draw();
+    torso_frame_->Draw();
+    gauntlets_frame_->Draw();
+    pants_frame_->Draw();
+    ring_1_frame_->Draw();
+    ring_2_frame_->Draw();
     
-    TCODConsole::blit(helmet_piece_->GetConsole(), 0, 0, 0, 0,
+    TCODConsole::blit(helmet_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), 18, 3);
-    TCODConsole::blit(left_arm_piece_->GetConsole(), 0, 0, 0, 0,
+    TCODConsole::blit(left_arm_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), 3, 15);
-    TCODConsole::blit(torso_piece_->GetConsole(), 0, 0, 0, 0,
+    TCODConsole::blit(torso_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), 14, 14);
-    TCODConsole::blit(right_arm_piece_->GetConsole(), 0, 0, 0, 0,
+    TCODConsole::blit(right_arm_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), 36, 15);
-    TCODConsole::blit(pants_piece_->GetConsole(), 0, 0, 0, 0,
+    TCODConsole::blit(pants_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), 16, 35);
-    TCODConsole::blit(amulet_piece_->GetConsole(), 0, 0, 0, 0,
+    TCODConsole::blit(amulet_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), 3, 5);
-    TCODConsole::blit(gaunlet_piece_->GetConsole(), 0, 0, 0, 0,
+    TCODConsole::blit(gauntlets_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), 3, 38);
-    TCODConsole::blit(ring_1_piece_->GetConsole(), 0, 0, 0, 0,
+    TCODConsole::blit(ring_1_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), 36, 38);
-    TCODConsole::blit(ring_2_piece_->GetConsole(), 0, 0, 0, 0,
+    TCODConsole::blit(ring_2_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), 36, 45);
 }

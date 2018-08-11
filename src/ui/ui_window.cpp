@@ -44,9 +44,9 @@ void UiWindow::Draw() {
                          name_.empty() ? NULL : name_.c_str());
         
     // Draw the labels
-    std::for_each(label_list_ids_.begin(),
-                  label_list_ids_.end(),
-                  [&] (auto &l) { l.second->Draw(console_.get()); });
+    for (auto &label : label_list_ids_) {
+        label.second->Draw(console_.get());
+    }
 }
 
 bool UiWindow::UpdateLabelById(std::string const &label_id, std::string const &label_text) {

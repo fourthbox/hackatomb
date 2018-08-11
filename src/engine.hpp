@@ -93,6 +93,7 @@ private:
     InputManager input_manager_;        /**< Manager for keyboard and mouse inputs */
     AimManager aim_manager_;
     TurnManager turn_manager_;
+    InventoryManager inventory_manager_;
     
     void GameOver();
 };

@@ -6,6 +6,7 @@
 #ifndef UI_MANAGER_HPP_
 #define UI_MANAGER_HPP_
 
+#include "actor.hpp"
 #include "initiable_object.hpp"
 #include "turn_manager.hpp"
 #include "ui_inventory.hpp"
@@ -22,7 +23,7 @@ public :
     /**
      Initializes the fixed windows.
      */
-    void Initialize();
+    void Initialize(InventoryManager &inventory_manager);
     
     /**
      Draw the windows on the consoles.
@@ -32,6 +33,19 @@ public :
     UiWindow *GetEnvironmentWindow(), *GetPlayerInfoWindow(), *GetMessageLogWindow(), *GetInventoryWindow();
     
     bool UpdateLabel(std::string const &label_id, std::string const &label_text);
+    
+    /**
+     Class that manages all the functions for logging messages.
+     */
+    struct LogManager {
+        /**
+         Log a simple attack.
+         @param source The actor attacker.
+         @param target The actor being attacked.
+         @param damage The damage inflicted.
+         */
+        void LogAttack(Actor const &source, Actor const &target, int damage);
+    } log_manager_;
         
 private :
     std::unique_ptr<UiWindow> environment_window_, player_info_window_, message_log_window_;
@@ -52,7 +66,7 @@ private :
      */
     void InitializeMessageLogWindow();
     
-    void InitializeInventoryWindow();
+    void InitializeInventoryWindow(InventoryManager &inventory_manager);
 
     void InitializeStartScreenWindow();
 };
