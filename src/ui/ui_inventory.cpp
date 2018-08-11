@@ -12,13 +12,15 @@ static const size_t kItemStatsFrameHeight = 20;
 static const size_t kTrinketPieceWidth = 9;
 static const size_t kTrinketPieceHeight = 6;
 static const size_t kHelmetPieceWidth = 12;
-static const size_t kHelmetPieceHeight = 10;
+static const size_t kHelmetPieceHeight = 8;
 static const size_t kTorsoPieceWidth = 20;
-static const size_t kTorsoPieceHeight = 20;
+static const size_t kTorsoPieceHeight = 18;
 static const size_t kArmPieceWidth = 9;
 static const size_t kArmPieceHeight = 22;
 static const size_t kPantsPieceWidth = 16;
-static const size_t kPantsPieceHeight = 18;
+static const size_t kPantsPieceHeight = 16;
+static const size_t kBootsPieceWidth = 16;
+static const size_t kBootsPieceHeight = 6;
 
 void UiInventory::Initialize(InventoryManager &inventory_manager, size_t width, size_t height, std::string const &name, std::initializer_list<UiLabel_sp> labels) {
     assert(!initialized_);
@@ -52,6 +54,7 @@ void UiInventory::Initialize(InventoryManager &inventory_manager, size_t width, 
     pants_frame_ = std::make_unique<UiWindow>();
     ring_1_frame_ = std::make_unique<UiWindow>();
     ring_2_frame_ = std::make_unique<UiWindow>();
+    boots_frame_ = std::make_unique<UiWindow>();
     
     auto helmet_label {std::make_shared<UiCenteredLabel>(kHelmetPieceWidth,
                                                          kHelmetPieceHeight,
@@ -80,7 +83,10 @@ void UiInventory::Initialize(InventoryManager &inventory_manager, size_t width, 
     auto ring_2_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth,
                                                          kTrinketPieceHeight,
                                                          inventory_manager_->GetRing2()->GetShortDescription())};
-    
+    auto boots_label {std::make_shared<UiCenteredLabel>(kBootsPieceWidth,
+                                                        kBootsPieceHeight,
+                                                        inventory_manager_->GetBoots()->GetShortDescription())};
+
     helmet_frame_->Initialize(kHelmetPieceWidth, kHelmetPieceHeight, "", {helmet_label});
     amulet_frame_->Initialize(kTrinketPieceWidth, kTrinketPieceHeight, "", {amulet_label});
     left_arm_frame_->Initialize(kArmPieceWidth, kArmPieceHeight, "", {left_arm_label});
@@ -90,6 +96,7 @@ void UiInventory::Initialize(InventoryManager &inventory_manager, size_t width, 
     pants_frame_->Initialize(kPantsPieceWidth, kPantsPieceHeight, "", {pants_label});
     ring_1_frame_->Initialize(kTrinketPieceWidth, kTrinketPieceHeight, "", {ring_1_label});
     ring_2_frame_->Initialize(kTrinketPieceWidth, kTrinketPieceHeight, "", {ring_2_label});
+    boots_frame_->Initialize(kBootsPieceWidth, kBootsPieceHeight, "", {boots_label});
 
 }
 
@@ -106,6 +113,7 @@ void UiInventory::Draw() {
     pants_frame_->UpdateLabelById("", inventory_manager_->GetPants()->GetShortDescription());
     ring_1_frame_->UpdateLabelById("", inventory_manager_->GetRing1()->GetShortDescription());
     ring_2_frame_->UpdateLabelById("", inventory_manager_->GetRing2()->GetShortDescription());
+    boots_frame_->UpdateLabelById("", inventory_manager_->GetBoots()->GetShortDescription());
     
     UiWindow::Draw();
     
@@ -134,17 +142,18 @@ void UiInventory::Draw() {
     pants_frame_->Draw();
     ring_1_frame_->Draw();
     ring_2_frame_->Draw();
+    boots_frame_->Draw();
     
     TCODConsole::blit(helmet_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), 18, 3);
     TCODConsole::blit(left_arm_frame_->GetConsole(), 0, 0, 0, 0,
-                      console_.get(), 3, 15);
+                      console_.get(), 3, 13);
     TCODConsole::blit(torso_frame_->GetConsole(), 0, 0, 0, 0,
-                      console_.get(), 14, 14);
+                      console_.get(), 14, 12);
     TCODConsole::blit(right_arm_frame_->GetConsole(), 0, 0, 0, 0,
-                      console_.get(), 36, 15);
+                      console_.get(), 36, 13);
     TCODConsole::blit(pants_frame_->GetConsole(), 0, 0, 0, 0,
-                      console_.get(), 16, 35);
+                      console_.get(), 16, 31);
     TCODConsole::blit(amulet_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), 3, 5);
     TCODConsole::blit(gauntlets_frame_->GetConsole(), 0, 0, 0, 0,
@@ -153,4 +162,6 @@ void UiInventory::Draw() {
                       console_.get(), 36, 38);
     TCODConsole::blit(ring_2_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), 36, 45);
+    TCODConsole::blit(boots_frame_->GetConsole(), 0, 0, 0, 0,
+                      console_.get(), 16, 48);
 }
