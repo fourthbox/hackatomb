@@ -33,9 +33,7 @@ public:
     virtual void Draw();
     
     bool UpdateLabelById(std::string const &label_id, std::string const &label_text);
-    void UpdateTriggerByHandle(int handle, std::function<bool()> callback);
-    
-    bool TriggerByHandle(int handle);
+    bool UpdateColoredLabelById(std::string const &label_id, std::string const &label_text);
     
     inline TCODConsole *GetConsole() { return console_.get(); }
     

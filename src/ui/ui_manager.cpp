@@ -1,9 +1,22 @@
 #include "ui_manager.hpp"
 
 #include <experimental/optional>
+#include <sstream>
 
 #include "game_constants.hpp"
+#include "game_globals.hpp"
 #include "game_strings.hpp"
+
+#define COLOR_WHITE_    "#1"
+#define COLOR_RED_      "#2"
+#define COLOR_GREEN_    "#3"
+#define COLOR_BLUE_     "#4"
+#define COLOR_YELLOW_   "#5"
+
+static const std::string kLine0Label = "line_0";
+static const std::string kLine1Label = "line_1";
+static const std::string kLine2Label = "line_2";
+static const std::string kLine3Label = "line_3";
 
 UiManager::UiManager() {
     environment_window_ = std::make_unique<UiWindow>();
@@ -15,6 +28,15 @@ UiManager::UiManager() {
 void UiManager::Initialize(InventoryManager &inventory_manager) {
     assert(!initialized_);
     
+    // Setup predefined colors
+    // Background is not working
+    TCODConsole::setColorControl(TCOD_COLCTRL_1, TCODColor::white, TCODColor::black);
+    TCODConsole::setColorControl(TCOD_COLCTRL_2, TCODColor::red, TCODColor::black);
+    TCODConsole::setColorControl(TCOD_COLCTRL_3, TCODColor::green, TCODColor::black);
+    TCODConsole::setColorControl(TCOD_COLCTRL_4, TCODColor::blue, TCODColor::black);
+    TCODConsole::setColorControl(TCOD_COLCTRL_5, TCODColor::yellow, TCODColor::black);
+
+    // Initialize windows
     InitializeEnvironmentWindow();
     InitializePlayerInfoWindow();
     InitializeMessageLogWindow();
@@ -58,10 +80,10 @@ void UiManager::InitializeMessageLogWindow() {
     assert(!initialized_);
     
     // Initialize static labels
-    auto line_0 { std::make_shared<UiColoredTextLabel>(2, 4, "", "first_line") };
-    auto line_1 { std::make_shared<UiColoredTextLabel>(2, 3, "", "second_line") };
-    auto line_2 { std::make_shared<UiColoredTextLabel>(2, 2, "", "third_line") };
-    auto line_3 { std::make_shared<UiColoredTextLabel>(2, 1, "", "fourth_line") };
+    auto line_0 { std::make_shared<UiColoredTextLabel>(2, 4, "", "line_0") };
+    auto line_1 { std::make_shared<UiColoredTextLabel>(2, 3, "", "line_1") };
+    auto line_2 { std::make_shared<UiColoredTextLabel>(2, 2, "", "line_2") };
+    auto line_3 { std::make_shared<UiColoredTextLabel>(2, 1, "", "line_3") };
     
     message_log_window_->Initialize(kRootViewWidth,
                                     kMessageLogWindowHeight,
@@ -84,6 +106,13 @@ void UiManager::Draw() {
     inventory_window_->Draw();
     environment_window_->Draw();
     player_info_window_->Draw();
+    
+    // Shift Log messages
+    message_log_window_->UpdateColoredLabelById(kLine0Label, log_manager_.GetStringFromTop(0));
+    message_log_window_->UpdateColoredLabelById(kLine1Label, log_manager_.GetStringFromTop(1));
+    message_log_window_->UpdateColoredLabelById(kLine2Label, log_manager_.GetStringFromTop(2));
+    message_log_window_->UpdateColoredLabelById(kLine3Label, log_manager_.GetStringFromTop(3));
+
     message_log_window_->Draw();
 }
 
@@ -121,8 +150,23 @@ bool UiManager::UpdateLabel(std::string const &label_id, std::string const &labe
                        [&] (auto &w) { return w->UpdateLabelById(label_id, label_text); });
 }
 
-void UiManager::LogManager::LogAttack(Actor const &source, Actor const &target, int damage) {
+void UiManager::LogManager::LogAttack(Actor &source, Actor &target, int damage) {
     // {source} attacked {target} for {damage} physical damage
-    
-    AddMessage("stocazzoooooooooo");
+    std::ostringstream stream;
+    stream
+    << COLOR_GREEN_ << source.GetName()
+    << COLOR_WHITE_ << " attacked "
+    << COLOR_BLUE_ << target.GetName()
+    << COLOR_WHITE_ << " for "
+    << COLOR_RED_ << std::to_string(damage)
+    << COLOR_WHITE_ << " physical damage.";
+
+    AddMessage(stream.str());
+}
+
+std::string UiManager::LogManager::GetStringFromTop(size_t position) {
+    if (position >= message_queue_.size())
+        return "";
+        
+    return message_queue_.at(position);
 }

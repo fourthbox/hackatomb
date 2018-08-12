@@ -136,12 +136,16 @@ void UiColoredTextLabel::Draw(TCODConsole *console) {
     
     // Create the text queue
     std::deque<std::string> substring_queue;
-    std::regex delimiter_token {"\%\\d"};
+    std::regex delimiter_token {"#\\d"};
     std::regex_token_iterator<std::string::iterator> text_iter {static_text_.begin(), static_text_.end(), delimiter_token, -1};
     std::regex_token_iterator<std::string::iterator> text_end_it;
     
-    while (text_iter != text_end_it)
-        substring_queue.push_front(*text_iter++);
+    while (text_iter != text_end_it) {
+        if (auto str {text_iter->str()}; !str.empty())
+            substring_queue.push_front(str);
+        
+        text_iter++;
+    }
     
     // Create the color queue
     std::deque<TCOD_colctrl_t> color_queue;
@@ -150,25 +154,23 @@ void UiColoredTextLabel::Draw(TCODConsole *console) {
     
     while(color_iter != color_end_it) {
         for (auto const &match : *color_iter) {
-            cout << match.str() << endl;
-            
             assert(match.str().length() == 2);
             
             switch (match.str().at(1)) {
                 case '1':
-                    color_queue.push_back(TCOD_COLCTRL_1);
+                    color_queue.push_front(TCOD_COLCTRL_1);
                     break;
                 case '2':
-                    color_queue.push_back(TCOD_COLCTRL_2);
+                    color_queue.push_front(TCOD_COLCTRL_2);
                     break;
                 case '3':
-                    color_queue.push_back(TCOD_COLCTRL_3);
+                    color_queue.push_front(TCOD_COLCTRL_3);
                     break;
                 case '4':
-                    color_queue.push_back(TCOD_COLCTRL_4);
+                    color_queue.push_front(TCOD_COLCTRL_4);
                     break;
                 case '5':
-                    color_queue.push_back(TCOD_COLCTRL_5);
+                    color_queue.push_front(TCOD_COLCTRL_5);
                     break;
                 default:
                     abort();
@@ -184,6 +186,7 @@ void UiColoredTextLabel::Draw(TCODConsole *console) {
             return TCOD_COLCTRL_1;
         
         auto col {color_queue.back()};
+
         color_queue.pop_back();
         return col;
     };
@@ -193,6 +196,7 @@ void UiColoredTextLabel::Draw(TCODConsole *console) {
             return "";
 
         auto text {substring_queue.back()};
+
         substring_queue.pop_back();
         return text;
     };

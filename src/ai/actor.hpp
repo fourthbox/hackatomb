@@ -73,7 +73,7 @@ public:
     
     // Getters
     int GetFovRadius() const;
-    inline std::string const &GetName() { return name_; } const;
+    inline std::string GetName() { return name_; } const;
     std::pair<size_t, size_t> GetPosition() const;
     int GetHp() const;
     int GetAttackPower() const;

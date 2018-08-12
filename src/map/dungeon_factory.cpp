@@ -8,7 +8,7 @@ static const size_t kMinRoomSizeWidthNormal =                         12;
 static const size_t kMinRoomSizeHeightNormal =                        12;
 static const size_t kMaxRoomSizeWidthNormal =                         20;
 static const size_t kMaxRoomSizeHeightNormal =                        20;
-static const size_t kMaxRoomsNormal =                                 15;
+static const size_t kMaxRoomsNormal =                                 3;
 static const libpmg::PathAlgorithm kDefaultPathAlgorithmNormal =      libpmg::PathAlgorithm::ASTAR_BFS_MIX;
 static const bool kDiagonalCorridorsNormal =                          false;
 

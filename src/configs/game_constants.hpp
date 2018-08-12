@@ -25,6 +25,9 @@ static const size_t kPlayerInfoWindowWidth = 17;
 static const size_t kPlayerInfoConsoleHeight = 22;
 static const size_t kMessageLogWindowHeight = 6;
 
+// Map constants
+static const size_t kMaxRoomPlacementAttempts = 10;
+
 // Rootview Sizes
 static const size_t kMapWidth = 120;
 static const size_t kMapHeight = 70;
@@ -91,9 +94,6 @@ static const TCOD_keycode_t kExitMenu = TCODK_ESCAPE;
 // Misc constants
 static const int kStandardDungeonDepth = 27;
 static const int kDefaultFrameRate = 30;
-
-// Map constants
-static const size_t kMaxRoomPlacementAttempts = 10;
 
 // Stats constants
 static const size_t kMinSpeed = 1;

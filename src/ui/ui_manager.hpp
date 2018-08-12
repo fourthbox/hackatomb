@@ -48,7 +48,7 @@ public :
          Log a simple string
          @param message The message to show
          */
-        void AddMessage(std::string const &message) { message_queue_.push_back(message); }
+        void AddMessage(std::string const &message) { message_queue_.push_front(message); }
 
         /**
          Log a simple attack.
@@ -56,7 +56,14 @@ public :
          @param target The actor being attacked.
          @param damage The damage inflicted.
          */
-        void LogAttack(Actor const &source, Actor const &target, int damage);
+        void LogAttack(Actor &source, Actor &target, int damage);
+        
+        /**
+         Get strings from the bottom of the top of the deque
+         @param position The position, 0 being the string on top
+         @return The string requested
+         */
+        std::string GetStringFromTop(size_t position);
         
     private:
         std::deque<std::string> message_queue_;

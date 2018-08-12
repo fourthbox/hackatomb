@@ -21,15 +21,7 @@ void UiWindow::Initialize(size_t width, size_t height, std::string const &name, 
     
     // Initialize the console
     console_ = std::make_unique<TCODConsole>(width_, height_);
-    
-    // Setup predefined colors
-    // Background is not working
-    TCODConsole::setColorControl(TCOD_COLCTRL_1, TCODColor::white, TCODColor::black);
-    TCODConsole::setColorControl(TCOD_COLCTRL_2, TCODColor::green, TCODColor::black);
-    TCODConsole::setColorControl(TCOD_COLCTRL_3, TCODColor::blue, TCODColor::black);
-    TCODConsole::setColorControl(TCOD_COLCTRL_4, TCODColor::red, TCODColor::black);
-    TCODConsole::setColorControl(TCOD_COLCTRL_5, TCODColor::yellow, TCODColor::black);
-    
+        
     initialized_ = true;
 }
 
@@ -71,25 +63,25 @@ bool UiWindow::UpdateLabelById(std::string const &label_id, std::string const &l
     }
     
     return false;
-    
 }
 
-void UiWindow::UpdateTriggerByHandle(int handle, std::function<bool()> callback) {
-    assert(initialized_ && label_list_handles_.count(handle) > 0);
+bool UiWindow::UpdateColoredLabelById(std::string const &label_id, std::string const &label_text) {
+    assert(initialized_);
     
-    auto label {std::static_pointer_cast<UiLabelWithHandler>(label_list_handles_[handle])};
+    auto label {std::find_if(std::begin(label_list_ids_),
+                             std::end(label_list_ids_),
+                             [&] (auto const &l) -> bool {
+                                 return l.second->GetId() == label_id;
+                             })};
     
-    assert(label);
-
-    label->UpdateAction(callback);
-}
-
-bool UiWindow::TriggerByHandle(int handle) {
-    assert(initialized_ && label_list_handles_.count(handle) > 0);
+    if (label != label_list_ids_.end()) {
+        auto label_txt {std::static_pointer_cast<UiColoredTextLabel>(label->second)};
+        
+        assert(label_txt);
+        
+        label_txt->SetColoredText(label_text);
+        return true;
+    }
     
-    auto label {std::static_pointer_cast<UiLabelWithHandler>(label_list_handles_[handle])};
-    
-    assert(label);
-
-    return label->TriggerAction();
+    return false;
 }
