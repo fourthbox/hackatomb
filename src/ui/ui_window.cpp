@@ -26,6 +26,9 @@ void UiWindow::Initialize(size_t width, size_t height, std::string const &name, 
     // Background is not working
     TCODConsole::setColorControl(TCOD_COLCTRL_1, TCODColor::white, TCODColor::black);
     TCODConsole::setColorControl(TCOD_COLCTRL_2, TCODColor::green, TCODColor::black);
+    TCODConsole::setColorControl(TCOD_COLCTRL_3, TCODColor::blue, TCODColor::black);
+    TCODConsole::setColorControl(TCOD_COLCTRL_4, TCODColor::red, TCODColor::black);
+    TCODConsole::setColorControl(TCOD_COLCTRL_5, TCODColor::yellow, TCODColor::black);
     
     initialized_ = true;
 }

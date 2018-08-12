@@ -64,13 +64,12 @@ public:
                    TCOD_colctrl_t dynamic_color = TCOD_COLCTRL_1,
                    std::string const &id = "");
 
-    inline void SetDynamicText(std::string text) { dynamic_text_ = text; }
+    inline void SetDynamicText(std::string const &text) { dynamic_text_ = text; }
     void Draw(TCODConsole *console) override;
 
 private:
     std::string dynamic_text_;
     TCOD_colctrl_t dynamic_color_;
-    
 };
 
 class UiCenteredLabel : public UiLabel {
@@ -84,6 +83,16 @@ public:
     
 private:
     size_t width_, height_;
+};
+
+class UiColoredTextLabel : public UiSimpleLabel {
+public:
+    UiColoredTextLabel(size_t x, size_t y,
+                       std::string const &colored_text = "",
+                       std::string const &id = "");
+
+    void Draw(TCODConsole *console) override;
+    inline void SetColoredText(std::string const &text) { static_text_ = text; }
 };
 
 typedef std::shared_ptr<UiLabel> UiLabel_sp;

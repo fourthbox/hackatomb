@@ -37,7 +37,19 @@ public :
     /**
      Class that manages all the functions for logging messages.
      */
-    struct LogManager {
+    class LogManager {
+    public:
+        /**
+         Clears the message queue
+         */
+        void CleanupQueue() { message_queue_.clear(); }
+        
+        /**
+         Log a simple string
+         @param message The message to show
+         */
+        void AddMessage(std::string const &message) { message_queue_.push_back(message); }
+
         /**
          Log a simple attack.
          @param source The actor attacker.
@@ -45,6 +57,9 @@ public :
          @param damage The damage inflicted.
          */
         void LogAttack(Actor const &source, Actor const &target, int damage);
+        
+    private:
+        std::deque<std::string> message_queue_;
     } log_manager_;
         
 private :

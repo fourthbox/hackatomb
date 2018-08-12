@@ -9,8 +9,6 @@
 
 #include "libtcod.hpp"
 
-// TODO: this whole file is deprecated and every constant should be in the header of the most related class
-
 // Colors
 static const TCOD_color_t kDefaultGroundColor {TCOD_light_grey};
 static const TCOD_color_t kDefaultWallColor {TCOD_darker_grey};
@@ -27,6 +25,7 @@ static const size_t kPlayerInfoWindowWidth = 17;
 static const size_t kPlayerInfoConsoleHeight = 22;
 static const size_t kMessageLogWindowHeight = 6;
 
+// Rootview Sizes
 static const size_t kMapWidth = 120;
 static const size_t kMapHeight = 70;
 static const size_t kCameraWidth = 100;

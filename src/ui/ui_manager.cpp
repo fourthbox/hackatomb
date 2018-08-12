@@ -56,10 +56,17 @@ void UiManager::InitializePlayerInfoWindow() {
 
 void UiManager::InitializeMessageLogWindow() {
     assert(!initialized_);
-
+    
+    // Initialize static labels
+    auto line_0 { std::make_shared<UiColoredTextLabel>(2, 4, "", "first_line") };
+    auto line_1 { std::make_shared<UiColoredTextLabel>(2, 3, "", "second_line") };
+    auto line_2 { std::make_shared<UiColoredTextLabel>(2, 2, "", "third_line") };
+    auto line_3 { std::make_shared<UiColoredTextLabel>(2, 1, "", "fourth_line") };
+    
     message_log_window_->Initialize(kRootViewWidth,
                                     kMessageLogWindowHeight,
-                                    kLogString);
+                                    kLogString,
+                                    {line_0, line_1, line_2, line_3});
 }
 
 void UiManager::InitializeInventoryWindow(InventoryManager &inventory_manager) {
@@ -107,18 +114,15 @@ UiWindow *UiManager::GetInventoryWindow() {
 bool UiManager::UpdateLabel(std::string const &label_id, std::string const &label_text) {
     assert(initialized_);
     
-    auto success {false};
+    auto windows = {environment_window_.get(), player_info_window_.get(), message_log_window_.get()};
     
-    for (auto const &window : {environment_window_.get(), player_info_window_.get(), message_log_window_.get()}) {
-        auto ret {window->UpdateLabelById(label_id, label_text)};
-        if (ret) success = true;
-    }
-    
-    return success;
+    return std::any_of(windows.begin(),
+                       windows.end(),
+                       [&] (auto &w) { return w->UpdateLabelById(label_id, label_text); });
 }
 
 void UiManager::LogManager::LogAttack(Actor const &source, Actor const &target, int damage) {
     // {source} attacked {target} for {damage} physical damage
     
-    // TODO: formatting string with cool c++17 functions
+    AddMessage("stocazzoooooooooo");
 }
