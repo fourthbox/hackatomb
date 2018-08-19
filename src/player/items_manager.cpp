@@ -1,6 +1,6 @@
-#include "inventory_manager.hpp"
+#include "items_manager.hpp"
 
-InventoryManager::InventoryManager() {
+ItemsManager::ItemsManager() {
     // Initialize every slot to nullptr
     for (auto &slot : inventory_slots_) {
         slot = nullptr;

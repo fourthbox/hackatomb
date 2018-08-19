@@ -1,4 +1,4 @@
-#include "ui_inventory.hpp"
+#include "ui_equipment.hpp"
 
 static const size_t kBodyArmorFrameWidth = 46;
 static const size_t kBodyArmorFrameHeight = 54;
@@ -22,12 +22,12 @@ static const size_t kPantsPieceHeight = 16;
 static const size_t kBootsPieceWidth = 16;
 static const size_t kBootsPieceHeight = 6;
 
-void UiInventory::Initialize(InventoryManager &inventory_manager, size_t width, size_t height, std::string const &name, std::initializer_list<UiLabel_sp> labels) {
+void UiEquipment::Initialize(ItemsManager &items_manager, size_t width, size_t height, std::string const &name, std::initializer_list<UiLabel_sp> labels) {
     assert(!initialized_);
 
     UiWindow::Initialize(width, height, name, labels);
     
-    inventory_manager_ = &inventory_manager;
+    items_manager_ = &items_manager;
     
     // Window Frames
     body_armor_frame_ = std::make_unique<UiWindow>();
@@ -44,7 +44,7 @@ void UiInventory::Initialize(InventoryManager &inventory_manager, size_t width, 
     item_stats_frame_->Initialize(kItemStatsFrameWidth,
                                   kItemStatsFrameHeight);
 
-    // Body armor pieces
+    // Initialize equipment slots
     helmet_frame_ = std::make_unique<UiWindow>();
     amulet_frame_ = std::make_unique<UiWindow>();
     left_arm_frame_ = std::make_unique<UiWindow>();
@@ -56,36 +56,37 @@ void UiInventory::Initialize(InventoryManager &inventory_manager, size_t width, 
     ring_2_frame_ = std::make_unique<UiWindow>();
     boots_frame_ = std::make_unique<UiWindow>();
     
+    // Initialize equipment strings
     auto helmet_label {std::make_shared<UiCenteredLabel>(kHelmetPieceWidth,
                                                          kHelmetPieceHeight,
-                                                         inventory_manager_->GetHelmet()->GetShortDescription())};
+                                                         items_manager_->GetHelmet()->GetShortDescription())};
     auto amulet_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth,
                                                          kTrinketPieceHeight,
-                                                         inventory_manager_->GetAmulet()->GetShortDescription())};
+                                                         items_manager_->GetAmulet()->GetShortDescription())};
     auto left_arm_label {std::make_shared<UiCenteredLabel>(kArmPieceWidth,
                                                            kArmPieceHeight,
-                                                           inventory_manager_->GetLeftArm()->GetShortDescription())};
+                                                           items_manager_->GetLeftArm()->GetShortDescription())};
     auto right_arm_label {std::make_shared<UiCenteredLabel>(kArmPieceWidth,
                                                             kArmPieceHeight,
-                                                            inventory_manager_->GetRightArm()->GetShortDescription())};
+                                                            items_manager_->GetRightArm()->GetShortDescription())};
     auto torso_label {std::make_shared<UiCenteredLabel>(kTorsoPieceWidth,
                                                         kTorsoPieceHeight,
-                                                        inventory_manager_->GetBodyArmor()->GetShortDescription())};
+                                                        items_manager_->GetBodyArmor()->GetShortDescription())};
     auto gauntlets_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth,
                                                             kTrinketPieceHeight,
-                                                            inventory_manager_->GetGauntlets()->GetShortDescription())};
+                                                            items_manager_->GetGauntlets()->GetShortDescription())};
     auto pants_label {std::make_shared<UiCenteredLabel>(kPantsPieceWidth,
                                                         kPantsPieceHeight,
-                                                        inventory_manager_->GetPants()->GetShortDescription())};
+                                                        items_manager_->GetPants()->GetShortDescription())};
     auto ring_1_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth,
                                                          kTrinketPieceHeight,
-                                                         inventory_manager_->GetRing1()->GetShortDescription())};
+                                                         items_manager_->GetRing1()->GetShortDescription())};
     auto ring_2_label {std::make_shared<UiCenteredLabel>(kTrinketPieceWidth,
                                                          kTrinketPieceHeight,
-                                                         inventory_manager_->GetRing2()->GetShortDescription())};
+                                                         items_manager_->GetRing2()->GetShortDescription())};
     auto boots_label {std::make_shared<UiCenteredLabel>(kBootsPieceWidth,
                                                         kBootsPieceHeight,
-                                                        inventory_manager_->GetBoots()->GetShortDescription())};
+                                                        items_manager_->GetBoots()->GetShortDescription())};
 
     helmet_frame_->Initialize(kHelmetPieceWidth, kHelmetPieceHeight, "", {helmet_label});
     amulet_frame_->Initialize(kTrinketPieceWidth, kTrinketPieceHeight, "", {amulet_label});
@@ -97,23 +98,32 @@ void UiInventory::Initialize(InventoryManager &inventory_manager, size_t width, 
     ring_1_frame_->Initialize(kTrinketPieceWidth, kTrinketPieceHeight, "", {ring_1_label});
     ring_2_frame_->Initialize(kTrinketPieceWidth, kTrinketPieceHeight, "", {ring_2_label});
     boots_frame_->Initialize(kBootsPieceWidth, kBootsPieceHeight, "", {boots_label});
-
+    
+    // Initialize the inventory slots
+    std::string alphabet {"abcdefghijklmnopqrstuvwxyz"};
+    assert(kInventorySize <= alphabet.size());
+    alphabet.resize(kInventorySize);
+    
+    auto base_x {6}, base_y {2};
+    for (auto const &c : alphabet) {
+        auto label {std::make_shared<UiLabelWithHandler>(base_x, base_y, c, "stocazzo")};
+    }
 }
 
-void UiInventory::Draw() {
+void UiEquipment::Draw() {
     assert(initialized_);
     
     // Update equipment labels
-    helmet_frame_->UpdateLabelById("", inventory_manager_->GetHelmet()->GetShortDescription());
-    amulet_frame_->UpdateLabelById("", inventory_manager_->GetAmulet()->GetShortDescription());
-    left_arm_frame_->UpdateLabelById("", inventory_manager_->GetLeftArm()->GetShortDescription());
-    right_arm_frame_->UpdateLabelById("", inventory_manager_->GetRightArm()->GetShortDescription());
-    torso_frame_->UpdateLabelById("", inventory_manager_->GetBodyArmor()->GetShortDescription());
-    gauntlets_frame_->UpdateLabelById("", inventory_manager_->GetGauntlets()->GetShortDescription());
-    pants_frame_->UpdateLabelById("", inventory_manager_->GetPants()->GetShortDescription());
-    ring_1_frame_->UpdateLabelById("", inventory_manager_->GetRing1()->GetShortDescription());
-    ring_2_frame_->UpdateLabelById("", inventory_manager_->GetRing2()->GetShortDescription());
-    boots_frame_->UpdateLabelById("", inventory_manager_->GetBoots()->GetShortDescription());
+    helmet_frame_->UpdateLabelById("", items_manager_->GetHelmet()->GetShortDescription());
+    amulet_frame_->UpdateLabelById("", items_manager_->GetAmulet()->GetShortDescription());
+    left_arm_frame_->UpdateLabelById("", items_manager_->GetLeftArm()->GetShortDescription());
+    right_arm_frame_->UpdateLabelById("", items_manager_->GetRightArm()->GetShortDescription());
+    torso_frame_->UpdateLabelById("", items_manager_->GetBodyArmor()->GetShortDescription());
+    gauntlets_frame_->UpdateLabelById("", items_manager_->GetGauntlets()->GetShortDescription());
+    pants_frame_->UpdateLabelById("", items_manager_->GetPants()->GetShortDescription());
+    ring_1_frame_->UpdateLabelById("", items_manager_->GetRing1()->GetShortDescription());
+    ring_2_frame_->UpdateLabelById("", items_manager_->GetRing2()->GetShortDescription());
+    boots_frame_->UpdateLabelById("", items_manager_->GetBoots()->GetShortDescription());
     
     UiWindow::Draw();
     

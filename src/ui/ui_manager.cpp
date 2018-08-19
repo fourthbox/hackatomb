@@ -22,10 +22,10 @@ UiManager::UiManager() {
     environment_window_ = std::make_unique<UiWindow>();
     player_info_window_ = std::make_unique<UiWindow>();
     message_log_window_ = std::make_unique<UiWindow>();
-    inventory_window_ = std::make_unique<UiInventory>();
+    inventory_window_ = std::make_unique<UiEquipment>();
 }
 
-void UiManager::Initialize(InventoryManager &inventory_manager) {
+void UiManager::Initialize(ItemsManager &inventory_manager) {
     assert(!initialized_);
     
     // Setup predefined colors
@@ -91,7 +91,7 @@ void UiManager::InitializeMessageLogWindow() {
                                     {line_0, line_1, line_2, line_3});
 }
 
-void UiManager::InitializeInventoryWindow(InventoryManager &inventory_manager) {
+void UiManager::InitializeInventoryWindow(ItemsManager &inventory_manager) {
     assert(!initialized_);
     
     inventory_window_->Initialize(inventory_manager,

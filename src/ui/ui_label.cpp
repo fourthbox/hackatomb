@@ -49,7 +49,7 @@ void UiLabelWithHandler::Draw(TCODConsole *console) {
     console->print(x_, y_,
                    "%c%c %s%c",
                    static_color_,
-                   (char)*handle_,
+                   handle_,
                    static_text_.c_str(),
                    TCOD_colctrl_t::TCOD_COLCTRL_STOP);
 }
@@ -66,7 +66,7 @@ void UiLabelWithHandler::UpdateAction(std::function<bool()> callback) {
     action_ = callback;
 }
 
-Int_n UiLabelWithHandler::GetHandle() const {
+int UiLabelWithHandler::GetHandle() const {
     return handle_;
 }
 

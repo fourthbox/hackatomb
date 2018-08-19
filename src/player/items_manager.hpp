@@ -1,5 +1,5 @@
-#ifndef INVENTORY_MANAGER_HPP_
-#define INVENTORY_MANAGER_HPP_
+#ifndef ITEMS_MANAGER_HPP_
+#define ITEMS_MANAGER_HPP_
 
 #include <array>
 
@@ -7,9 +7,9 @@
 
 static const int kInventorySize = 10;
 
-class InventoryManager {
+class ItemsManager {
 public:
-    InventoryManager();
+    ItemsManager();
     
     inline Item* GetHelmet() { return helmet_.get(); }
     inline Item* GetAmulet() { return amulet_.get(); }
@@ -22,10 +22,13 @@ public:
     inline Item* GetRing2() { return ring_2_.get(); }
     inline Item* GetBoots() { return boots_.get(); }
     
+    inline Item* GetItemBySlot(size_t slot) { assert(slot <= kInventorySize); return inventory_slots_[slot].get(); }
+    
 private:
-    std::array<Item_up, kInventorySize> inventory_slots_;
+    std::array<Item_up, kInventorySize> inventory_slots_; /**< This is the actual inventory*/
+    // Those are the equipped items
     Item_up body_armor_, player_stats_, helmet_, amulet_, left_arm_, right_arm_, gauntlets_, pants_, ring_1_, ring_2_, boots_;
 
 };
 
-#endif /* INVENTORY_MANAGER_HPP_ */
+#endif /* ITEMS_MANAGER_HPP_ */

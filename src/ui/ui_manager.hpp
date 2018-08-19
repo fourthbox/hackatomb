@@ -9,7 +9,7 @@
 #include "actor.hpp"
 #include "initiable_object.hpp"
 #include "turn_manager.hpp"
-#include "ui_inventory.hpp"
+#include "ui_equipment.hpp"
 #include "ui_window.hpp"
 
 /**
@@ -23,7 +23,7 @@ public :
     /**
      Initializes the fixed windows.
      */
-    void Initialize(InventoryManager &inventory_manager);
+    void Initialize(ItemsManager &inventory_manager);
     
     /**
      Draw the windows on the consoles.
@@ -71,7 +71,7 @@ public :
         
 private :
     std::unique_ptr<UiWindow> environment_window_, player_info_window_, message_log_window_;
-    std::unique_ptr<UiInventory> inventory_window_;
+    std::unique_ptr<UiEquipment> inventory_window_;
 
     /**
      Initialize the environment window.
@@ -88,7 +88,7 @@ private :
      */
     void InitializeMessageLogWindow();
     
-    void InitializeInventoryWindow(InventoryManager &inventory_manager);
+    void InitializeInventoryWindow(ItemsManager &inventory_manager);
 
     void InitializeStartScreenWindow();
 };

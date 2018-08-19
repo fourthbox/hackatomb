@@ -5,6 +5,7 @@
 
 class Item {
 public:
+    Item();
     std::string GetShortDescription() { return "asdasd"; }
     
 private:

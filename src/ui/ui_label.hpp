@@ -1,7 +1,6 @@
 #ifndef UI_LABEL_HPP_
 #define UI_LABEL_HPP_
 
-#include <experimental/optional>
 #include <functional>
 #include <string>
 
@@ -45,14 +44,14 @@ public:
                        std::string const &id = "");
 
     void SetHandle(int handle);
-    std::experimental::optional<int> GetHandle() const;
+    int GetHandle() const;
     bool TriggerAction() const;
     void UpdateAction(std::function<bool()> callback);
     
     void Draw(TCODConsole *console) override;
 
 private:
-    std::experimental::optional<int> handle_;
+    int handle_;
     std::function<bool()> action_;
 };
 
@@ -96,6 +95,5 @@ public:
 };
 
 typedef std::shared_ptr<UiLabel> UiLabel_sp;
-typedef std::experimental::optional<int> Int_n;
 
 #endif /* UI_LABEL_HPP_ */
