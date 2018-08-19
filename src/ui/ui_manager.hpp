@@ -6,10 +6,12 @@
 #ifndef UI_MANAGER_HPP_
 #define UI_MANAGER_HPP_
 
+#include <deque>
+
 #include "actor.hpp"
 #include "initiable_object.hpp"
 #include "turn_manager.hpp"
-#include "ui_equipment.hpp"
+#include "ui_inventory.hpp"
 #include "ui_window.hpp"
 
 /**
@@ -71,7 +73,7 @@ public :
         
 private :
     std::unique_ptr<UiWindow> environment_window_, player_info_window_, message_log_window_;
-    std::unique_ptr<UiEquipment> inventory_window_;
+    std::unique_ptr<UiInventory> inventory_window_;
 
     /**
      Initialize the environment window.

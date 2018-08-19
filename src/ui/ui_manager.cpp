@@ -22,7 +22,7 @@ UiManager::UiManager() {
     environment_window_ = std::make_unique<UiWindow>();
     player_info_window_ = std::make_unique<UiWindow>();
     message_log_window_ = std::make_unique<UiWindow>();
-    inventory_window_ = std::make_unique<UiEquipment>();
+    inventory_window_ = std::make_unique<UiInventory>();
 }
 
 void UiManager::Initialize(ItemsManager &inventory_manager) {

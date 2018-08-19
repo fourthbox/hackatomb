@@ -1,4 +1,4 @@
-#include "ui_equipment.hpp"
+#include "ui_inventory.hpp"
 
 static const size_t kBodyArmorFrameWidth = 46;
 static const size_t kBodyArmorFrameHeight = 54;
@@ -22,9 +22,9 @@ static const size_t kPantsPieceHeight = 16;
 static const size_t kBootsPieceWidth = 16;
 static const size_t kBootsPieceHeight = 6;
 
-void UiEquipment::Initialize(ItemsManager &items_manager, size_t width, size_t height, std::string const &name, std::initializer_list<UiLabel_sp> labels) {
+void UiInventory::Initialize(ItemsManager &items_manager, size_t width, size_t height, std::string const &name, std::initializer_list<UiLabel_sp> labels) {
     assert(!initialized_);
-
+    
     UiWindow::Initialize(width, height, name, labels);
     
     items_manager_ = &items_manager;
@@ -43,7 +43,7 @@ void UiEquipment::Initialize(ItemsManager &items_manager, size_t width, size_t h
                                     kPlayerStatsFrameHeight);
     item_stats_frame_->Initialize(kItemStatsFrameWidth,
                                   kItemStatsFrameHeight);
-
+    
     // Initialize equipment slots
     helmet_frame_ = std::make_unique<UiWindow>();
     amulet_frame_ = std::make_unique<UiWindow>();
@@ -87,7 +87,7 @@ void UiEquipment::Initialize(ItemsManager &items_manager, size_t width, size_t h
     auto boots_label {std::make_shared<UiCenteredLabel>(kBootsPieceWidth,
                                                         kBootsPieceHeight,
                                                         items_manager_->GetBoots()->GetShortDescription())};
-
+    
     helmet_frame_->Initialize(kHelmetPieceWidth, kHelmetPieceHeight, "", {helmet_label});
     amulet_frame_->Initialize(kTrinketPieceWidth, kTrinketPieceHeight, "", {amulet_label});
     left_arm_frame_->Initialize(kArmPieceWidth, kArmPieceHeight, "", {left_arm_label});
@@ -101,16 +101,19 @@ void UiEquipment::Initialize(ItemsManager &items_manager, size_t width, size_t h
     
     // Initialize the inventory slots
     std::string alphabet {"abcdefghijklmnopqrstuvwxyz"};
+    
     assert(kInventorySize <= alphabet.size());
+    
     alphabet.resize(kInventorySize);
     
     auto base_x {6}, base_y {2};
     for (auto const &c : alphabet) {
-        auto label {std::make_shared<UiLabelWithHandler>(base_x, base_y, c, "stocazzo")};
+        auto label {std::make_shared<UiLabelWithHandler>(base_x, base_y++, c, "stocazzo")};
     }
+    
 }
 
-void UiEquipment::Draw() {
+void UiInventory::Draw() {
     assert(initialized_);
     
     // Update equipment labels
