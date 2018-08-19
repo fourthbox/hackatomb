@@ -68,7 +68,7 @@ void UiManager::InitializePlayerInfoWindow() {
     auto dex_label { std::make_shared<UiLabelAndText>(9, 9, kDexString) };
     auto con_label { std::make_shared<UiLabelAndText>(2, 11, kConString) };
     auto int_label { std::make_shared<UiLabelAndText>(9, 11, kIntString) };
-    auto hp_label { std::make_shared<UiLabelAndText>(2, 6, kHpString, "", TCOD_COLCTRL_1, TCOD_COLCTRL_2) };
+    auto hp_label { std::make_shared<UiLabelAndText>(2, 6, kHpString, "", TCOD_COLCTRL_1, TCOD_COLCTRL_3) };
 
     player_info_window_->Initialize(kPlayerInfoWindowWidth,
                                     kPlayerInfoConsoleHeight,

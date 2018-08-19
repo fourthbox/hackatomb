@@ -12,7 +12,7 @@ void UiWindow::Initialize(size_t width, size_t height, std::string const &name, 
     // Initialize the static labels
     for (auto const &label : labels) {
         assert(label_list_ids_.insert({label->GetId(), label}).second);
-        auto label_hnd {std::static_pointer_cast<UiLabelWithHandler>(label)};
+        auto label_hnd {std::dynamic_pointer_cast<UiLabelWithHandler>(label)};
         if (label_hnd) {
             if (auto handle {label_hnd->GetHandle()}; handle != std::experimental::nullopt && *handle >= 0)
                 assert(label_list_handles_.insert({*handle, label}).second);
