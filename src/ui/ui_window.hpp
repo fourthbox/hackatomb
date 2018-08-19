@@ -32,6 +32,19 @@ public:
      */
     virtual void Draw();
     
+    /**
+     Add a label into the window
+     @param label The label to add
+     */
+    void AddLabel(UiLabel_sp label);
+    
+    /**
+     Removes a label into the window by id.
+     Will crash if wrong id.
+     @param id The id of the label to add
+     */
+    void RemoveLabel(std::string id);
+    
     bool UpdateLabelById(std::string const &label_id, std::string const &label_text);
     bool UpdateColoredLabelById(std::string const &label_id, std::string const &label_text);
     

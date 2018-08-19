@@ -1,5 +1,7 @@
 #include "ui_inventory.hpp"
 
+#include <vector>
+
 static const size_t kBodyArmorFrameWidth = 46;
 static const size_t kBodyArmorFrameHeight = 54;
 static const size_t kItemListFrameWidth = 60;
@@ -30,19 +32,19 @@ void UiInventory::Initialize(ItemsManager &items_manager, size_t width, size_t h
     items_manager_ = &items_manager;
     
     // Window Frames
-    body_armor_frame_ = std::make_unique<UiWindow>();
-    item_list_frame_ = std::make_unique<UiWindow>();
+    equipment_frame_ = std::make_unique<UiWindow>();
     player_stats_frame_ = std::make_unique<UiWindow>();
     item_stats_frame_ = std::make_unique<UiWindow>();
+    inventory_frame_ = std::make_unique<UiWindow>();
     
-    body_armor_frame_->Initialize(kBodyArmorFrameWidth,
+    equipment_frame_->Initialize(kBodyArmorFrameWidth,
                                   kBodyArmorFrameHeight);
-    item_list_frame_->Initialize(kItemListFrameWidth,
-                                 kItemListFrameHeight);
     player_stats_frame_->Initialize(kPlayerStatsFrameWidth,
                                     kPlayerStatsFrameHeight);
     item_stats_frame_->Initialize(kItemStatsFrameWidth,
                                   kItemStatsFrameHeight);
+    inventory_frame_->Initialize(kItemListFrameWidth,
+                                 kItemListFrameHeight);
     
     // Initialize equipment slots
     helmet_frame_ = std::make_unique<UiWindow>();
@@ -99,18 +101,23 @@ void UiInventory::Initialize(ItemsManager &items_manager, size_t width, size_t h
     ring_2_frame_->Initialize(kTrinketPieceWidth, kTrinketPieceHeight, "", {ring_2_label});
     boots_frame_->Initialize(kBootsPieceWidth, kBootsPieceHeight, "", {boots_label});
     
-    // Initialize the inventory slots
+    // Initialize strings for the inventory slots
     std::string alphabet {"abcdefghijklmnopqrstuvwxyz"};
     
     assert(kInventorySize <= alphabet.size());
     
     alphabet.resize(kInventorySize);
     
-    auto base_x {6}, base_y {2};
+    auto base_x {6}, base_y {2}, counter {0};
     for (auto const &c : alphabet) {
-        auto label {std::make_shared<UiLabelWithHandler>(base_x, base_y++, c, "stocazzo")};
+        auto label {std::make_shared<UiLabelWithHandler>(base_x, base_y, c,
+                                                         items_manager_->GetItemBySlot(counter++)->GetShortDescription(),
+                                                         nullptr, TCOD_COLCTRL_1, std::to_string(c))};
+        
+        inventory_frame_->AddLabel(label);
+
+        base_y += 2;
     }
-    
 }
 
 void UiInventory::Draw() {
@@ -131,14 +138,14 @@ void UiInventory::Draw() {
     UiWindow::Draw();
     
     // Draw frames
-    body_armor_frame_->Draw();
-    item_list_frame_->Draw();
+    equipment_frame_->Draw();
+    inventory_frame_->Draw();
     player_stats_frame_->Draw();
     item_stats_frame_->Draw();
     
-    TCODConsole::blit(body_armor_frame_->GetConsole(), 0, 0, 0, 0,
+    TCODConsole::blit(equipment_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), 1, 1);
-    TCODConsole::blit(item_list_frame_->GetConsole(), 0, 0, 0, 0,
+    TCODConsole::blit(inventory_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), kBodyArmorFrameWidth + 1, 1);
     TCODConsole::blit(player_stats_frame_->GetConsole(), 0, 0, 0, 0,
                       console_.get(), kBodyArmorFrameWidth + kItemListFrameWidth + 1, 1);

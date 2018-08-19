@@ -85,3 +85,13 @@ bool UiWindow::UpdateColoredLabelById(std::string const &label_id, std::string c
     
     return false;
 }
+
+void UiWindow::AddLabel(UiLabel_sp label)
+{
+    assert(label_list_ids_.insert({label->GetId(), label}).second);
+}
+
+void UiWindow::RemoveLabel(std::string id)
+{
+    assert(label_list_ids_.erase(id) > 0);
+}
