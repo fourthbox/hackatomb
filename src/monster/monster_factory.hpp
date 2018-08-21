@@ -12,7 +12,7 @@ public:
      @param maps_manager The maps manager
      @return A unique pointer to the generated monster.
      */
-    std::unique_ptr<Monster> CreateGoblin(size_t x, size_t y, MapsManager &maps_manager);
+    std::unique_ptr<Monster> BuildGoblin(size_t x, size_t y, MapsManager &maps_manager);
 };
 
 #endif /* MONSTER_FACTORY_HPP_ */

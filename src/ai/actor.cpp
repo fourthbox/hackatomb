@@ -39,12 +39,6 @@ void Actor::Draw(TCODConsole &console) {
     console.setCharForeground(x_, y_, color_);
 }
 
-std::pair<size_t, size_t> Actor::GetPosition() const {
-    assert(initialized_);
-    
-    return std::make_pair(x_, y_);
-}
-
 bool Actor::Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager) {
     assert(initialized_);
 

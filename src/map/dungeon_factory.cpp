@@ -41,7 +41,7 @@ void DungeonFactory::SetupBuilder(libpmg::DungeonBuilder &builder) {
     builder.SetDigStairsOnlyInRooms(kDigStairsOnlyInRoomsNormal);
 }
 
-std::shared_ptr<libpmg::DungeonMap> DungeonFactory::GenerateDungeon(DungeonCategory const &category, int floor) {
+std::shared_ptr<libpmg::DungeonMap> DungeonFactory::BuildDungeon(DungeonCategory const &category, int floor) {
     // Reset map
     category_builders_[category]->ResetMap();
     

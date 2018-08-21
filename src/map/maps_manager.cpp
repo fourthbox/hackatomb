@@ -69,7 +69,7 @@ void MapsManager::LoadDungeonFloor(DungeonCategory category, int floor) {
     assert(floor >= 0 && floor <= kStandardDungeonDepth);
     
     // Generate dungeon floor
-    auto map_p {std::make_unique<Map>(*dungeon_factory_.GenerateDungeon(category, floor))};
+    auto map_p {std::make_unique<Map>(*dungeon_factory_.BuildDungeon(category, floor))};
     
     // Add to map master
     AddMapToMaster(std::move(map_p), category, floor);

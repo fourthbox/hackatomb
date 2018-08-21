@@ -43,9 +43,7 @@ handle_ {handle},
 action_ {callback} {
 }
 
-void UiLabelWithHandler::Draw(TCODConsole *console) {
-    assert(!static_text_.empty());
-    
+void UiLabelWithHandler::Draw(TCODConsole *console) {    
     console->print(x_, y_,
                    "%c%c %s%c",
                    static_color_,
@@ -106,9 +104,7 @@ width_ {width},
 height_ {height} {
 }
 
-void UiCenteredLabel::Draw(TCODConsole *console) {
-    assert(!static_text_.empty());
-    
+void UiCenteredLabel::Draw(TCODConsole *console) {    
     console->printRectEx(width_/2, (height_-4)/2,
                          width_, height_,
                          TCOD_bkgnd_flag_t::TCOD_BKGND_DEFAULT,

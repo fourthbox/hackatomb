@@ -20,7 +20,7 @@ class DungeonFactory {
 public:
     DungeonFactory();
     
-    std::shared_ptr<libpmg::DungeonMap> GenerateDungeon(DungeonCategory const &category, int floor);
+    std::shared_ptr<libpmg::DungeonMap> BuildDungeon(DungeonCategory const &category, int floor);
     
 private:
     std::unordered_map<DungeonCategory, std::unique_ptr<libpmg::DungeonBuilder>> category_builders_;

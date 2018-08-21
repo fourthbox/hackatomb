@@ -8,8 +8,7 @@
 
 #include <string>
 
-#include "initiable_object.hpp"
-#include "libtcod.hpp"
+#include "map_entity.hpp"
 #include "stats.hpp"
 
 class ActionManager;
@@ -21,7 +20,7 @@ class Tile;
 /**
  This class represent an intelligent entity on a map
  */
-class Actor : public InitiableObject {
+class Actor : public MapEntity {
     friend class ActorManager;
     
 public:
@@ -73,8 +72,6 @@ public:
     
     // Getters
     int GetFovRadius() const;
-    inline std::string GetName() { return name_; } const;
-    std::pair<size_t, size_t> GetPosition() const;
     int GetHp() const;
     int GetAttackPower() const;
     float GetDefenseModifier() const;
@@ -99,10 +96,6 @@ public:
     Actor *GetClosestActorInRange(std::vector<Actor*> actor_list, size_t range, MapsManager &maps_manager);
     
 protected:
-    size_t x_, y_;      /**< Location on the current map. */
-    int sprite_;        /**< Character used to represent this actor. */
-    TCODColor color_;   /**< Color used to represent this actor. */
-    std::string name_;  /**< Name of this actor. */
     Stats stats_;       /**< Stats of this actor. */
     bool is_dead_;
     
