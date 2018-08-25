@@ -71,6 +71,9 @@ void MapsManager::LoadDungeonFloor(DungeonCategory category, int floor) {
     // Generate dungeon floor
     auto map_p {std::make_unique<Map>(*dungeon_factory_.BuildDungeon(category, floor))};
     
+    // Setup dungeon category
+    map_p->SetDungeonCategory(category);
+            
     // Add to map master
     AddMapToMaster(std::move(map_p), category, floor);
 }
@@ -202,3 +205,8 @@ CoordinateOpt_n MapsManager::GetExitPosition() {
     return std::experimental::make_optional(tile->GetXY());
 }
 
+std::map<size_t, std::unique_ptr<Map>> *MapsManager::GetDungeonByCategory(DungeonCategory category) {
+    assert(initialized_ && master_maps_holder_.count(category) > 0);
+
+    return &master_maps_holder_[category];
+}

@@ -6,16 +6,34 @@
 #include "empty_tile.hpp"
 #include "engine.hpp"
 #include "game_utils.hpp"
+#include "map_config.hpp"
 #include "stairs_tile.hpp"
 #include "wall_tile.hpp"
+
+struct NormalDungeonMap : public MapConfig {
+    NormalDungeonMap() :
+    MapConfig(100) {
+    }
+};
 
 Map::Map(libpmg::DungeonMap &map) :
 TCODMap {(int)map.GetConfigs().map_width_, (int)map.GetConfigs().map_height_},
 entrance_stair_ {nullptr},
 exit_stair_ {nullptr} {
 
+    // Dig maps
     DigPmgMap(map);
     DigTcodMap();
+    
+    // Setup map specific parameters
+    std::unique_ptr<MapConfig> specific_stats {nullptr};
+    switch (dungeon_category_) {
+        case DungeonCategory::NORMAL_:
+            specific_stats = std::make_unique<NormalDungeonMap>();
+            break;
+    }
+    
+    this->experience_yield_ = specific_stats->experience_yield_;
 }
 
 void Map::DigTcodMap() {

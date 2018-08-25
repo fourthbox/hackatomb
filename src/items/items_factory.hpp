@@ -4,6 +4,8 @@
 #include "armor.hpp"
 #include "weapon.hpp"
 
+class Map;
+
 // Classe totalmente temporanea e placeholder
 class ItemsFactory {
 public:
@@ -12,6 +14,9 @@ public:
         armor_ = new Armor("a leather armor", 1);
     }
     
+    void PopulateMap(Map const &map);
+    
+private:
     Weapon* sword_;
     Armor* armor_;
 };

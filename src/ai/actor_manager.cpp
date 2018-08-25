@@ -17,7 +17,11 @@ void ActorManager::InitializePlayer(Coordinate start_position, ActionManager &ac
 }
 
 void ActorManager::InitializeMonsterManager(ActionManager &action_manager, MapsManager &maps_manager) {
-    monster_manager_.Initialize(*this, maps_manager);
+    monster_manager_.Initialize(*this);
+}
+
+void ActorManager::PopulateMap(MapsManager &maps_manager, DungeonCategory category) {
+    monster_manager_.PopulateMap(maps_manager, category);
 }
 
 void ActorManager::DrawMonsters(TCODConsole &console, MapsManager &maps_manager) {

@@ -58,6 +58,12 @@ void Engine::InitializeGame() {
     // Initialize the Monsters
     actor_manager_.InitializeMonsterManager(action_manager_, maps_manager_);
     
+    // Populate the dungeon with Monsters
+    actor_manager_.PopulateMap(maps_manager_, DungeonCategory::NORMAL_);
+    
+    // Distribute Items across the dungeon
+//    items_manager_.PopulateMap();
+    
     auto &player {actor_manager_.GetPlayer()};
     
     // Add Stats to Ui for the first time

@@ -8,6 +8,7 @@
 
 #include <experimental/optional>
 
+#include "dungeon_factory.hpp"
 #include "libtcod.hpp"
 #include "libpmg.hpp"
 #include "tile.hpp"
@@ -42,11 +43,16 @@ public:
     inline Tile *GetEntranceTile() { return entrance_stair_; }
     inline Tile *GetExitTile() { return exit_stair_; }
     
+    inline void SetDungeonCategory(DungeonCategory category) { dungeon_category_ = category; }
+    
 private:
     std::vector<std::unique_ptr<Tile>> map_;
     std::vector<std::unique_ptr<libpmg::Room>> room_list_;
     std::unique_ptr<libpmg::MapConfigs> map_configs_;
     Tile *entrance_stair_, *exit_stair_;
+    DungeonCategory dungeon_category_;
+    
+    std::size_t experience_yield_; /**< The amount of experience that can be yield from this dungeon */
     
     /**
      Draws the contents of the Map on a TCODConsole.

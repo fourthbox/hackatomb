@@ -68,6 +68,13 @@ public:
     inline Player &GetPlayer() { return player_manager_.GetPlayer(); }
     
     /**
+     Populates the dungeon map with all monsters and NPCs
+     @param maps_manager The Maps Manager
+     @param category The selected dungeon category to populate
+     */
+    void PopulateMap(MapsManager &maps_manager, DungeonCategory category);
+    
+    /**
      Set all monsters on the floor to be visible
      */
     void SetAllMonstersVisible() const;

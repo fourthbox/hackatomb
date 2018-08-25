@@ -10,7 +10,7 @@
 #include <map>
 
 #include "dungeon_factory.hpp"
-#include "initiable_object.hpp"
+#include "items_factory.hpp"
 #include "map.hpp"
 
 class Actor;
@@ -65,6 +65,13 @@ public:
      */
     void ComputeFov(Actor const &actor);
     
+    /**
+     Get a dictionary containing all the dungeon floors, by category.
+     @param category The category of the dungeon to retreive
+     @return A pointer to a dictionary containing all the dungeon floors
+     */
+    std::map<size_t, std::unique_ptr<Map>> *GetDungeonByCategory(DungeonCategory category);
+    
     std::pair<size_t, size_t> GetRandomPosition(int room_number = -1);
     size_t GetRandomRoom();
     
@@ -87,6 +94,7 @@ private:
     DungeonCategory current_map_category_;      /**< Dungeon type. */
     int current_floor_;                   /**< Current floor. */
     DungeonFactory dungeon_factory_;
+    ItemsFactory items_factory_;
     std::unordered_map<DungeonCategory, std::map< size_t, std::unique_ptr<Map>> > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */
     
     bool need_refresh_;

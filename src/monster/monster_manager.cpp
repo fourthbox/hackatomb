@@ -1,20 +1,28 @@
 #include "monster_manager.hpp"
 
-void MonsterManager::Initialize(ActorManager &actor_manager, MapsManager &maps_manager) {
+void MonsterManager::Initialize(ActorManager &actor_manager) {
     assert(!initialized_);
     
     this->actor_manager_ = &actor_manager;
     
-    // Get random position in rendom room
-    auto starting_coors {maps_manager.GetRandomPosition()};
-    
-    // Generate monster
-    auto monster {monster_factory_.BuildGoblin(starting_coors.first, starting_coors.second, maps_manager)};
-
-    // Add it to the monster list
-    monster_list_.push_back(std::move(monster));
-    
     initialized_ = true;
+}
+
+void MonsterManager::PopulateMap(MapsManager &maps_manager, DungeonCategory category) {
+    assert(initialized_);
+    
+    // Generate all the monsters that this dungeon will host, based on
+    // the amount of XP that must be yold by the dungeon.
+    auto dungeon_maps {maps_manager.GetDungeonByCategory(category)};
+    
+    // Get random position in rendom room
+//    auto starting_coors {maps_manager.GetRandomPosition()};
+//
+//    // Generate monster
+//    auto monster {monster_factory_.BuildGoblin(starting_coors.first, starting_coors.second, maps_manager)};
+    
+//    // Add it to the monster list
+//    monster_list_.push_back(std::move(monster));
 }
 
 void MonsterManager::Draw(TCODConsole &console, Player const &player, MapsManager &maps_manager) {

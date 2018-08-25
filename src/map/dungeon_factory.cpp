@@ -11,7 +11,6 @@ static const size_t kMaxRoomSizeHeightNormal =                        20;
 static const size_t kMaxRoomsNormal =                                 3;
 static const libpmg::PathAlgorithm kDefaultPathAlgorithmNormal =      libpmg::PathAlgorithm::ASTAR_BFS_MIX;
 static const bool kDiagonalCorridorsNormal =                          false;
-
 static const size_t kMinUpstairsAmountNormal =                        1;
 static const size_t kMaxUpstairsAmountNormal =                        1;
 static const size_t kMinDownstairsAmountNormal =                      1;
@@ -20,7 +19,6 @@ static const bool kDigAroundStairsNormal =                            false;
 static const bool kDigStairsOnlyInRoomsNormal =                       true;
 
 DungeonFactory::DungeonFactory() {
-
     // Initialize the normal dungeon builder
     category_builders_[DungeonCategory::NORMAL_] = std::make_unique<libpmg::DungeonBuilder>();
 }

@@ -7,7 +7,7 @@ class Player;
 
 class MonsterManager : public InitiableObject {
 public:
-    void Initialize(ActorManager &actor_manager, MapsManager &maps_manager);
+    void Initialize(ActorManager &actor_manager);
     
     /**
      Draw all the monsters on the specified console.
@@ -24,6 +24,13 @@ public:
      @return Returns a pointer to the monster. nullptr if no monster is present to the specified location.
      */
     Monster *GetMonsterByCoordinates(size_t x, size_t y) const;
+    
+    /**
+     Populate the dungeon with monsters
+     @param maps_manager The Maps Manager
+     @param category The selected dungeon category to populate
+     */
+    void PopulateMap(MapsManager &maps_manager, DungeonCategory category);
 
     /**
      Toggle one or every monster to be always visible.
