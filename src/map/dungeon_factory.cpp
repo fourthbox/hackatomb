@@ -71,6 +71,6 @@ std::shared_ptr<libpmg::DungeonMap> DungeonFactory::BuildDungeon(DungeonCategory
     auto dungeon_sp {std::static_pointer_cast<libpmg::DungeonMap> (map_sp)};
     
     assert (dungeon_sp != nullptr);
-    
+        
     return dungeon_sp;
 }

@@ -72,7 +72,13 @@ public:
      */
     std::map<size_t, std::unique_ptr<Map>> *GetDungeonByCategory(DungeonCategory category);
     
-    std::pair<size_t, size_t> GetRandomPosition(int room_number = -1);
+    /**
+     Get a random position from a room.
+     @param room_number The room number from which the random position is taken. -1 (default) is random room
+     @param floor_number The floor number from which the random position is taken. -1 (default) is current floor
+     @return A randoom coordinate
+     */
+    std::pair<size_t, size_t> GetRandomPosition(int room_number = -1, int floor_number = -1);
     size_t GetRandomRoom();
     
     Tile *GetTileFromFloor(size_t x, size_t y, int floor = -1);
@@ -98,7 +104,6 @@ private:
     std::unordered_map<DungeonCategory, std::map< size_t, std::unique_ptr<Map>> > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */
     
     bool need_refresh_;
-
 };
 
 #endif /* MAPS_MANAGER_HPP_ */

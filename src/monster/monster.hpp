@@ -15,13 +15,10 @@ public:
      Initialize this instance.
      @param x The X coordinate.
      @param y The Y coordinate.
-     @param sprite The character code to represent this actor.
-     @param name The name of the actor.
-     @param color The color to represent this actor.
      @param stats The stats for this actor.
      @param maps_manager The maps manager
      */
-    void Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, MapsManager &maps_manager);
+    void Initialize(size_t x, size_t y, MonsterStats const &stats, MapsManager &maps_manager);
     
     /**
      Check if the monster is always visible.

@@ -60,7 +60,8 @@ void MapsManager::Initialize() {
     assert (!initialized_);
     
     // Initialize first dungeon map
-    LoadDungeonFloor(DungeonCategory::NORMAL_, 0);
+    for (auto i {0}; i <= kStandardDungeonDepth; i++)
+        LoadDungeonFloor(DungeonCategory::NORMAL_, i);
     
     initialized_ = true;
 }
@@ -69,11 +70,8 @@ void MapsManager::LoadDungeonFloor(DungeonCategory category, int floor) {
     assert(floor >= 0 && floor <= kStandardDungeonDepth);
     
     // Generate dungeon floor
-    auto map_p {std::make_unique<Map>(*dungeon_factory_.BuildDungeon(category, floor))};
+    auto map_p {std::make_unique<Map>(*dungeon_factory_.BuildDungeon(category, floor), category)};
     
-    // Setup dungeon category
-    map_p->SetDungeonCategory(category);
-            
     // Add to map master
     AddMapToMaster(std::move(map_p), category, floor);
 }
@@ -128,13 +126,18 @@ void MapsManager::SetAllExplored() {
     master_maps_holder_[current_map_category_][current_floor_]->SetAllExplored();
 }
 
-std::pair<size_t, size_t> MapsManager::GetRandomPosition(int room_number) {
-    assert(initialized_ && room_number < (int)master_maps_holder_[current_map_category_][current_floor_]->GetRoomList().size());
-
+std::pair<size_t, size_t> MapsManager::GetRandomPosition(int room_number, int floor_number) {
+    assert(initialized_);
+    
+    if (floor_number == -1)
+        floor_number = current_floor_;
+    cout << "rooms on second iteration " << master_maps_holder_[current_map_category_].count(floor_number) << endl;
+    assert(master_maps_holder_[current_map_category_].count(floor_number) == 1);
+    
     if (room_number == -1)
-        room_number = Engine::GetRandomUintFromRange(0, master_maps_holder_[current_map_category_][current_floor_]->GetRoomList().size()-1);
-
-    return master_maps_holder_[current_map_category_][current_floor_]->GetRoomList()[room_number]->GetRndCoords();
+        room_number = Engine::GetRandomUintFromRange(0, master_maps_holder_[current_map_category_][floor_number]->GetRoomList().size()-1);
+    
+    return master_maps_holder_[current_map_category_][floor_number]->GetRoomList()[room_number]->GetRndCoords();
 }
 
 Tile *MapsManager::GetTileFromFloor(size_t x, size_t y, int floor) {

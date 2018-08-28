@@ -43,12 +43,12 @@ bool Monster::Update(size_t speed, ActionManager &action_manager, MapsManager &m
     return false;
 }
 
-void Monster::Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats, MapsManager &maps_manager) {
+void Monster::Initialize(size_t x, size_t y, MonsterStats const &stats, MapsManager &maps_manager) {
     assert(!initialized_);
     
     is_perma_visible_ = false;
     
-    Actor::Initialize(x, y, sprite, name, color, stats);
+    Actor::Initialize(x, y, stats.sprite_, stats.name_, stats.color_, stats);
     path_finder_.Initialize(maps_manager);
 }
 

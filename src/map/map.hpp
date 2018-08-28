@@ -25,8 +25,9 @@ public:
      Initializes the Map, starting from a libpmg::DungeonMap.
      Deallocates the original vector of Tiles inside DungeonMap, and then fills map_.
      @param map A pointer to the map which parameters will be copied into this instance.
+     @param category The dungeon category for this dungeon
      */
-    Map(libpmg::DungeonMap &map);
+    Map(libpmg::DungeonMap &map, DungeonCategory category);
     
     /**
      Check if a tile is flagged as a wall.
@@ -42,9 +43,7 @@ public:
     
     inline Tile *GetEntranceTile() { return entrance_stair_; }
     inline Tile *GetExitTile() { return exit_stair_; }
-    
-    inline void SetDungeonCategory(DungeonCategory category) { dungeon_category_ = category; }
-    
+        
 private:
     std::vector<std::unique_ptr<Tile>> map_;
     std::vector<std::unique_ptr<libpmg::Room>> room_list_;

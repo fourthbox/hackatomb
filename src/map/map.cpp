@@ -16,11 +16,11 @@ struct NormalDungeonMap : public MapConfig {
     }
 };
 
-Map::Map(libpmg::DungeonMap &map) :
+Map::Map(libpmg::DungeonMap &map, DungeonCategory category) :
 TCODMap {(int)map.GetConfigs().map_width_, (int)map.GetConfigs().map_height_},
 entrance_stair_ {nullptr},
-exit_stair_ {nullptr} {
-
+exit_stair_ {nullptr},
+dungeon_category_ {category} {
     // Dig maps
     DigPmgMap(map);
     DigTcodMap();
