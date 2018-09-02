@@ -9,31 +9,12 @@ public:
     
     /**
      Creates a monster in the specified tier.
-     @param x The X coordinate.
-     @param y The Y coordinate.
+     @param map_location The map location.
      @param maps_manager The maps manager
      @param tier The selected tier
      @return A unique pointer to the generated monster.
      */
-    std::unique_ptr<Monster> BuildMonsterByTier(size_t x, size_t y, MapsManager &maps_manager, TierLevel tier);
-
-    /**
-     Creates a goblin in the specified position.
-     @param x The X coordinate.
-     @param y The Y coordinate.
-     @param maps_manager The maps manager
-     @return A unique pointer to the generated monster.
-     */
-    std::unique_ptr<Monster> BuildGoblin(size_t x, size_t y, MapsManager &maps_manager);
-    
-    /**
-     Creates a orc in the specified position.
-     @param x The X coordinate.
-     @param y The Y coordinate.
-     @param maps_manager The maps manager
-     @return A unique pointer to the generated monster.
-     */
-    std::unique_ptr<Monster> BuildOrc(size_t x, size_t y, MapsManager &maps_manager);
+    std::unique_ptr<Monster> BuildMonsterByTier(MapLocation const &map_location, MapsManager &maps_manager, TierLevel tier);
 
 private:
     std::unordered_map<TierLevel, std::vector<MonsterStats>> monster_stats_;

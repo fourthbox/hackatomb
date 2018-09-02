@@ -60,7 +60,7 @@ void MapsManager::Initialize() {
     assert (!initialized_);
     
     // Initialize first dungeon map
-    for (auto i {0}; i <= kStandardDungeonDepth; i++)
+    for (auto i {0}; i < kMinFloorsLoaded; i++)
         LoadDungeonFloor(DungeonCategory::NORMAL_, i);
     
     initialized_ = true;
@@ -76,15 +76,18 @@ void MapsManager::LoadDungeonFloor(DungeonCategory category, int floor) {
     AddMapToMaster(std::move(map_p), category, floor);
 }
 
-bool MapsManager::IsInFov(Actor const &actor, size_t x, size_t y) {
+bool MapsManager::IsInFov(Actor const &actor, MapLocation const &map_location) {
     assert(initialized_);
     
     ComputeFov(actor);
 
-    assert(master_maps_holder_.count(current_map_category_) > 0 &&
-           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
+    assert(master_maps_holder_.count(map_location.dungeon_category_) > 0 &&
+           master_maps_holder_[map_location.dungeon_category_].count(map_location.floor_) > 0);
     
-    return master_maps_holder_[current_map_category_][current_floor_]->IsInFov(x, y);
+    return master_maps_holder_
+        [map_location.dungeon_category_]
+        [map_location.floor_]
+        ->IsInFov(map_location.x_, map_location.y_);
 }
 
 bool MapsManager::IsInteractable(size_t x, size_t y) {
@@ -131,7 +134,7 @@ std::pair<size_t, size_t> MapsManager::GetRandomPosition(int room_number, int fl
     
     if (floor_number == -1)
         floor_number = current_floor_;
-    cout << "rooms on second iteration " << master_maps_holder_[current_map_category_].count(floor_number) << endl;
+
     assert(master_maps_holder_[current_map_category_].count(floor_number) == 1);
     
     if (room_number == -1)
@@ -153,7 +156,7 @@ Tile *MapsManager::GetTileFromFloor(size_t x, size_t y, int floor) {
     return master_maps_holder_[current_map_category_][floor]->GetTile(x, y);
 }
 
-CoordinateOpt_n MapsManager::MoveToFloor(bool is_upstairs) {
+Coordinate_opt MapsManager::MoveToFloor(bool is_upstairs) {
     assert(initialized_);
     
     if (is_upstairs)
@@ -180,7 +183,7 @@ CoordinateOpt_n MapsManager::MoveToFloor(bool is_upstairs) {
     return (is_upstairs ? GetExitPosition() : GetEntrancePosition());
 }
 
-CoordinateOpt_n MapsManager::GetEntrancePosition() {
+Coordinate_opt MapsManager::GetEntrancePosition() {
     assert(initialized_);
     
     assert(master_maps_holder_.count(current_map_category_) > 0 &&
@@ -194,7 +197,7 @@ CoordinateOpt_n MapsManager::GetEntrancePosition() {
     return std::experimental::make_optional(tile->GetXY());
 }
 
-CoordinateOpt_n MapsManager::GetExitPosition() {
+Coordinate_opt MapsManager::GetExitPosition() {
     assert(initialized_);
     
     assert(master_maps_holder_.count(current_map_category_) > 0 &&

@@ -37,29 +37,13 @@ MonsterFactory::MonsterFactory() {
     monster_stats_[TierLevel::TIER_5_] = tier_5;
 }
 
-std::unique_ptr<Monster> MonsterFactory::BuildMonsterByTier(size_t x, size_t y, MapsManager &maps_manager, TierLevel tier) {
+std::unique_ptr<Monster> MonsterFactory::BuildMonsterByTier(MapLocation const &map_location, MapsManager &maps_manager, TierLevel tier) {
     auto monster {std::make_unique<Monster>()};
     
     auto monstersTier {&monster_stats_[tier]};
     auto rndIndex {Engine::GetRandomUintFromRange(0, monstersTier->size()-1)};
     
-    monster->Initialize(x, y, monster_stats_[tier][rndIndex], maps_manager);
-    
-    return std::move(monster);
-}
-
-std::unique_ptr<Monster> MonsterFactory::BuildGoblin(size_t x, size_t y, MapsManager &maps_manager) {
-    auto monster {std::make_unique<Monster>()};
-    
-    monster->Initialize(x, y, kGoblinStats, maps_manager);
-    
-    return std::move(monster);
-}
-
-std::unique_ptr<Monster> MonsterFactory::BuildOrc(size_t x, size_t y, MapsManager &maps_manager) {
-    auto monster {std::make_unique<Monster>()};
-    
-    monster->Initialize(x, y, kOrcStats, maps_manager);
+    monster->Initialize(map_location, monster_stats_[tier][rndIndex], maps_manager);
     
     return std::move(monster);
 }

@@ -11,8 +11,9 @@ void PlayerManager::InitializePlayer(Coordinate start_position) {
     
     auto stats {Stats(1, 5, 5, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 3)};
     
-    player_.Initialize(start_position.first,
-                       start_position.second,
+    
+    
+    player_.Initialize(MapLocation(),
                        kCharHuman,
                        "hero",
                        TCODColor::white,

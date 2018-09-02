@@ -52,12 +52,10 @@ public:
     
     /**
      Check whether the specified position is in the field of view or not.
-     @param x The X coordinate.
-     @param y The Y coordinate.
+     @param map_location The map location.
      @return True if the specified position is in the field of view, false otherwise.
      */
-    bool IsInFov(Actor const &actor, size_t x, size_t y);
-    inline bool IsInFov(Actor const &actor, Coordinate xy) { return IsInFov(actor, xy.first, xy.second); }
+    bool IsInFov(Actor const &actor, MapLocation const &map_location);
     
     /**
      Compute the field of view of the specified actor.
@@ -90,9 +88,9 @@ public:
     bool IsInteractable(size_t x, size_t y);
     void OpenDoor(size_t x, size_t y);
     
-    CoordinateOpt_n MoveToFloor(bool is_upstairs);
-    CoordinateOpt_n GetEntrancePosition();
-    CoordinateOpt_n GetExitPosition();
+    Coordinate_opt MoveToFloor(bool is_upstairs);
+    Coordinate_opt GetEntrancePosition();
+    Coordinate_opt GetExitPosition();
     
     inline int GetCurrentFloor() const { return current_floor_; }
     

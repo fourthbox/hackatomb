@@ -12,23 +12,25 @@ bool Monster::Update(size_t speed, ActionManager &action_manager, MapsManager &m
     if (is_dead_ || !Actor::Update(speed, action_manager, maps_manager))
         return false;
     
-    auto player_position {action_manager.SeekPlayer()};
+    auto player_location {action_manager.SeekPlayer()};
     
-    if (player_position == std::experimental::nullopt)
+    if (player_location == std::experimental::nullopt)
         return false;
     
-    auto px {player_position->first};
-    auto py {player_position->second};
+    auto px {player_location->x_};
+    auto py {player_location->y_};
     
-    // Computer fov for the monster
+    // Compute fov for the monster
     // and check if the hero is not in range, don't do anything
-    if (!maps_manager.IsInFov(*this, px, py))
+    if (!maps_manager.IsInFov(*this, *player_location))
         return false;
     
     size_t dest_x, dest_y;
     
     // Calculate the next step
-    auto success {path_finder_.Walk(dest_x, dest_y, x_, y_, px, py)};
+    auto success {path_finder_.Walk(dest_x, dest_y,
+                                    map_location_.x_, map_location_.y_,
+                                    px, py)};
     
     // Check if the moster can move to the specified position
     if (success && action_manager.CanMove(dest_x, dest_y)
@@ -43,12 +45,12 @@ bool Monster::Update(size_t speed, ActionManager &action_manager, MapsManager &m
     return false;
 }
 
-void Monster::Initialize(size_t x, size_t y, MonsterStats const &stats, MapsManager &maps_manager) {
+void Monster::Initialize(MapLocation const &map_location, MonsterStats const &stats, MapsManager &maps_manager) {
     assert(!initialized_);
     
     is_perma_visible_ = false;
     
-    Actor::Initialize(x, y, stats.sprite_, stats.name_, stats.color_, stats);
+    Actor::Initialize(map_location, stats.sprite_, stats.name_, stats.color_, stats);
     path_finder_.Initialize(maps_manager);
 }
 

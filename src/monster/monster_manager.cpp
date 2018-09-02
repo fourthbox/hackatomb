@@ -71,13 +71,13 @@ void MonsterManager::PopulateMap(MapsManager &maps_manager, DungeonCategory cate
         
         // Get random position in random room
         auto starting_coors {maps_manager.GetRandomPosition(-1, rnd_floor)};
+        
+        // Configure the map location
+        MapLocation location (category, rnd_floor, starting_coors.first, starting_coors.second);
 
         // Generate monster
-        auto monster {monster_factory_.BuildMonsterByTier(starting_coors.first,
-                                                          starting_coors.second,
-                                                          maps_manager,
-                                                          tier.first)};
-        
+        auto monster {monster_factory_.BuildMonsterByTier(location, maps_manager, tier.first)};
+
         // Add it to the monster list
         monster_list_.push_back(std::move(monster));
     }
@@ -87,10 +87,9 @@ void MonsterManager::Draw(TCODConsole &console, Player const &player, MapsManage
     assert(initialized_);
     
     for (auto const &monster : monster_list_) {
-        if (monster->IsPermaVisible() || maps_manager.IsInFov((Actor&)player,
-                                                              monster->GetPosition().first,
-                                                              monster->GetPosition().second))
+        if (monster->IsPermaVisible() || maps_manager.IsInFov((Actor&)player, monster->GetMapLocation())) {
             monster->Draw(console);
+        }
     }
 }
 

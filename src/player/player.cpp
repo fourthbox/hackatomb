@@ -62,7 +62,7 @@ bool Player::Update(size_t speed, ActionManager &action_manager, MapsManager &ma
     }
     
     if (x != 0 || y != 0) {
-        auto new_x {x_ + x}, new_y {y_ + y};
+        auto new_x {map_location_.x_ + x}, new_y {map_location_.y_ + y};
         if (action_manager.CanMove(new_x, new_y)
             && !action_manager.CanAtttack(new_x, new_y)) {
             MoveToPosition(new_x, new_y);

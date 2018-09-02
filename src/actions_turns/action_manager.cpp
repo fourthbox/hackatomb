@@ -195,8 +195,8 @@ void ActionManager::CloseMenu() {
     engine_->GetTurnManager().StartTurn();
 }
 
-CoordinateOpt_n ActionManager::SeekPlayer() {
+MapLocation_opt ActionManager::SeekPlayer() {
     assert(initialized_);
 
-    return std::experimental::make_optional(engine_->GetActorManager().GetPlayer().GetPosition());
+    return std::experimental::make_optional(engine_->GetActorManager().GetPlayer().GetMapLocation());
 }

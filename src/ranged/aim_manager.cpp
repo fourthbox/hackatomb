@@ -72,9 +72,11 @@ void AimManager::Update(Player const &player, ActionManager &action_manager, Map
     
     // Move the crosshair position
     if (x != 0 || y != 0) {
+        // Pick crosshair location on map
         auto new_x {*crosshair_x_ + x}, new_y {*crosshair_y_ + y};
-        
-        if (maps_manager.IsInFov(player, new_x, new_y)
+        MapLocation location (player.GetMapLocation().dungeon_category_, player.GetMapLocation().floor_, new_x, new_y);
+
+        if (maps_manager.IsInFov(player, location)
             && action_manager.CanMove(new_x, new_y)) {
             
             // Check if it's going out of range

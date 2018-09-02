@@ -6,11 +6,10 @@
 
 using std::string;
 
-void Actor::Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats) {
+void Actor::Initialize(MapLocation const &map_location, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats) {
     assert(!initialized_);
     
-    x_ = x;
-    y_ = y;
+    map_location_ = map_location;
     sprite_ = sprite;
     name_ = name;
     color_ = color;
@@ -35,8 +34,8 @@ int Actor::GetHp() const {
 void Actor::Draw(TCODConsole &console) {
     assert(initialized_);
 
-    console.setChar(x_, y_, sprite_);
-    console.setCharForeground(x_, y_, color_);
+    console.setChar(map_location_.x_, map_location_.y_, sprite_);
+    console.setCharForeground(map_location_.x_, map_location_.y_, color_);
 }
 
 bool Actor::Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager) {
@@ -108,7 +107,7 @@ Actor *Actor::GetClosestActorInRange(std::vector<Actor*> actor_list, size_t rang
     auto shortest_dist {std::numeric_limits<float>::max()};
     Actor *target {nullptr};
     for (auto &actor : actor_list) {
-        if (maps_manager.IsInFov(*this, actor->GetPosition())) {
+        if (maps_manager.IsInFov(*this, actor->GetMapLocation())) {
             if (auto dist {distance(*actor)};
                 dist < shortest_dist
                 && dist != 0

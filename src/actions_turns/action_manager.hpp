@@ -146,12 +146,11 @@ public:
      */
     void CloseMenu();
     
-    
     /**
      Search for the player and return the position.
-     @return Player position.
+     @return Player map position.
      */
-    CoordinateOpt_n SeekPlayer();
+    MapLocation_opt SeekPlayer();
     
 private:
     Engine *engine_;

@@ -32,14 +32,13 @@ public:
 
     /**
      Initialize this instance.
-     @param x The X coordinate.
-     @param y The Y coordinate.
+     @param map_location The map location.
      @param sprite The character code to represent this actor.
      @param name The name of the actor.
      @param color The color to represent this actor.
      @param stats The stats for this actor.
      */
-    void Initialize(size_t x, size_t y, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats);
+    void Initialize(MapLocation const &map_location, int const &sprite, std::string const &name, TCODColor const &color, Stats const &stats);
     
     /**
      Inflicts the specified damage to the actor. Check if it dies afterwards.
@@ -53,7 +52,7 @@ public:
      @param x The X coordinate
      @param y The Y coordinate
      */
-    inline void MoveToPosition(size_t x, size_t y) { x_ = x; y_ = y; }
+    inline void MoveToPosition(size_t x, size_t y) { map_location_.x_ = x; map_location_.y_ = y; }
     
     /**
      Attempts to perform a dodge.

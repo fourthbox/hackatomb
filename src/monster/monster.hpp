@@ -13,12 +13,11 @@ class Monster : public Actor {
 public:
     /**
      Initialize this instance.
-     @param x The X coordinate.
-     @param y The Y coordinate.
+     @param map_location The map location.
      @param stats The stats for this actor.
      @param maps_manager The maps manager
      */
-    void Initialize(size_t x, size_t y, MonsterStats const &stats, MapsManager &maps_manager);
+    void Initialize(MapLocation const &map_location, MonsterStats const &stats, MapsManager &maps_manager);
     
     /**
      Check if the monster is always visible.

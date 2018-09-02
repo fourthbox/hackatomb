@@ -92,7 +92,8 @@ static const TCOD_keycode_t kSelectOption = TCODK_ENTER;
 static const TCOD_keycode_t kExitMenu = TCODK_ESCAPE;
 
 // Misc constants
-static const int kStandardDungeonDepth = 10;
+static const int kStandardDungeonDepth = 27;
+static const int kMinFloorsLoaded = 2;
 static const int kDefaultFrameRate = 30;
 
 // Stats constants
