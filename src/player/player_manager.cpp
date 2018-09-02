@@ -7,13 +7,11 @@ PlayerManager::PlayerManager() :
 player_initialized_ {false} {
 }
 
-void PlayerManager::InitializePlayer(Coordinate start_position) {
+void PlayerManager::InitializePlayer(MapLocation const &start_position) {
     
     auto stats {Stats(1, 5, 5, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 3)};
     
-    
-    
-    player_.Initialize(MapLocation(),
+    player_.Initialize(start_position,
                        kCharHuman,
                        "hero",
                        TCODColor::white,

@@ -49,10 +49,9 @@ public:
     
     /**
      Move the actor to the specified position
-     @param x The X coordinate
-     @param y The Y coordinate
+     @param x The map location
      */
-    inline void MoveToPosition(size_t x, size_t y) { map_location_.x_ = x; map_location_.y_ = y; }
+    inline void MoveToLocation(MapLocation const &location) { map_location_ = location; }
     
     /**
      Attempts to perform a dodge.

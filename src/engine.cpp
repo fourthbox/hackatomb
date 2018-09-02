@@ -53,27 +53,28 @@ void Engine::InitializeGame() {
     action_manager_.Initialize(*this);
     
     // Initialize the Player
-    actor_manager_.InitializePlayer(maps_manager_.GetRandomPosition(), action_manager_, maps_manager_);
+    actor_manager_.InitializePlayer(maps_manager_.GetRandomLocation(DungeonCategory::NORMAL_, 0));
     
     // Initialize the Monsters
     actor_manager_.InitializeMonsterManager(action_manager_, maps_manager_);
     
     // Populate the dungeon with Monsters
-    actor_manager_.PopulateMap(maps_manager_, DungeonCategory::NORMAL_);
+//    actor_manager_.PopulateMap(maps_manager_, DungeonCategory::NORMAL_);
     
     // Distribute Items across the dungeon
+    // TODO: finish
 //    items_manager_.PopulateMap();
     
-    auto &player {actor_manager_.GetPlayer()};
+    Actor *player {&actor_manager_.GetPlayer()};
     
     // Add Stats to Ui for the first time
     assert(ui_manager_.UpdateLabel(kHpString, std::to_string(actor_manager_.GetPlayer().GetHp())));
 
     // Compute fov the first time
-    maps_manager_.ComputeFov((Actor&)player);
+    maps_manager_.ComputeFov(*player);
     
     // Initialize Aim Manager
-    aim_manager_.Initialize(maps_manager_);
+    aim_manager_.Initialize(player->GetMapLocation().dungeon_category_, player->GetMapLocation().floor_, maps_manager_);
     
     // Everything that needs to be done when no user action has been detected
     turn_manager_.StartTurn();
@@ -138,7 +139,7 @@ void Engine::Render() {
     // Draw the crosshair's trail
     // The trail is a tile effect, and therefore must be drawn before the actual crosshair
     if (turn_phase == TurnPhase::AIM_)
-        aim_manager_.DrawTrail(*root_console_manager_.main_view_, actor_manager_.GetPlayer().GetPosition());
+        aim_manager_.DrawTrail(*root_console_manager_.main_view_, actor_manager_.GetPlayer().GetMapLocation());
 
     // ******************************************************************************
     // *** EVERY DRAW CALL ADDING EFFECTS TO THE TILES MUST BE CALLED BEFORE THIS ***
@@ -156,7 +157,7 @@ void Engine::Render() {
     // Draw the crosshair's trail
     // The trail is a tile effect, and therefore must be drawn before the actual crosshair
     if (turn_phase == TurnPhase::AIM_)
-        aim_manager_.DrawCrosshair(*root_console_manager_.main_view_, actor_manager_.GetPlayer().GetPosition());
+        aim_manager_.DrawCrosshair(*root_console_manager_.main_view_, actor_manager_.GetPlayer().GetMapLocation());
     
     // ***********************************************************
     // *** EVERY DRAW CALL TO THE UI MUST BE CALLED AFTER THIS ***
@@ -166,7 +167,7 @@ void Engine::Render() {
     ui_manager_.Draw();
     
     // Move the camera
-    root_console_manager_.UpdateCameraPosition(actor_manager_.GetPlayer().GetPosition(), is_main_game_first_update_cycle_);
+    root_console_manager_.UpdateCameraPosition(actor_manager_.GetPlayer().GetMapLocation(), is_main_game_first_update_cycle_);
     
     // Blit consoles to screen to screen
     root_console_manager_.Render(turn_phase);

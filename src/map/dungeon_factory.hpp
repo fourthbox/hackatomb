@@ -1,6 +1,7 @@
 #ifndef DUNGEON_FACTORY_HPP_
 #define DUNGEON_FACTORY_HPP_
 
+#include <ostream>
 #include <unordered_map>
 
 #include "libpmg.hpp"
@@ -15,7 +16,7 @@ enum struct DungeonCategory {
     FOREST_,
     UNDEAD_
 };
-
+    
 class DungeonFactory {
 public:
     DungeonFactory();

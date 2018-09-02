@@ -36,7 +36,7 @@ public:
      It will add the map to the map holder. There's no check for duplicates, and maps can override existing slots.
      @param map The map to store.
      @param map_category The map category this map belongs to.
-     @param floor The floor this map belongs to. If floor is -1, it will assign the map with the lowest floor, and append it to the map golder. Default value: -1.
+     @param floor The floor this map belongs to. If floor is -1, it will assign the map with the lowest floor, and append it to the map keeper. Default value: -1.
      */
     void AddMapToMaster(std::unique_ptr<Map> map, DungeonCategory map_category, int floor = -1);
     
@@ -44,11 +44,10 @@ public:
     
     /**
      Check whether the specified position is walkable or not.
-     @param x The X coordinate.
-     @param y The Y coordinate.
+     @param location The location on the map.
      @return True if the player can move to the specified position, false otherwise.
      */
-    bool IsTileWalkable(size_t x, size_t y);
+    bool IsTileWalkable(MapLocation const &location);
     
     /**
      Check whether the specified position is in the field of view or not.
@@ -72,31 +71,32 @@ public:
     
     /**
      Get a random position from a room.
+     @param category The map category.
+     @param floor The floor of the map.
      @param room_number The room number from which the random position is taken. -1 (default) is random room
-     @param floor_number The floor number from which the random position is taken. -1 (default) is current floor
-     @return A randoom coordinate
+     @return A randoom map location
      */
-    std::pair<size_t, size_t> GetRandomPosition(int room_number = -1, int floor_number = -1);
+    MapLocation GetRandomLocation(DungeonCategory const &category, std::size_t const &floor, int room_number = -1);
+    
     size_t GetRandomRoom();
     
-    Tile *GetTileFromFloor(size_t x, size_t y, int floor = -1);
+    Tile *GetTileFromFloor(MapLocation const &location);
     
-    std::unique_ptr<TCODPath> AllocatePathFromCurrentFloor(ITCODPathCallback const *callback, float diagonal_cost);
+    std::unique_ptr<TCODPath> AllocatePathFromFloor(DungeonCategory const &category, std::size_t const &floor, ITCODPathCallback const *callback, float diagonal_cost);
     
-    void SetAllExplored();
+    void SetAllExplored(DungeonCategory const &category, std::size_t const &floor);
     
-    bool IsInteractable(size_t x, size_t y);
-    void OpenDoor(size_t x, size_t y);
+    bool IsInteractable(MapLocation const &location);
+    void OpenDoor(MapLocation const &location);
     
-    Coordinate_opt MoveToFloor(bool is_upstairs);
-    Coordinate_opt GetEntrancePosition();
-    Coordinate_opt GetExitPosition();
+    MapLocation_opt MoveToFloor(Actor &actor, bool is_upstairs);
     
-    inline int GetCurrentFloor() const { return current_floor_; }
-    
+    MapLocation_opt GetEntrancePosition(Actor &actor);
+    MapLocation_opt GetEntrancePosition(DungeonCategory const &category, std::size_t const &floor);
+    MapLocation_opt GetExitPosition(Actor &actor);
+    MapLocation_opt GetExitPosition(DungeonCategory const &category, std::size_t const &floor);
+
 private:
-    DungeonCategory current_map_category_;      /**< Dungeon type. */
-    int current_floor_;                   /**< Current floor. */
     DungeonFactory dungeon_factory_;
     ItemsFactory items_factory_;
     std::unordered_map<DungeonCategory, std::map< size_t, std::unique_ptr<Map>> > master_maps_holder_;   /**< The key is the map category. the value is is an ordered Map in which the key is the floor number, and the value is the Map itself. */

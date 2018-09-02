@@ -10,29 +10,28 @@
 void MapsManager::AddMapToMaster(std::unique_ptr<Map> map, DungeonCategory map_category, int floor) {
     assert(floor >= -1);
     
-    // Set current floor and categoty
-    current_map_category_ = map_category;
+    // If -1, set to the last floor
+    if (floor == -1)
+        floor = master_maps_holder_[map_category].size();
+    
     // Insert map in maps holder
-    if (floor == -1) {
-        current_floor_ = master_maps_holder_[map_category].size();
-        master_maps_holder_[map_category][current_floor_] = std::move(map);
-    } else {
-        current_floor_ = floor;
-        master_maps_holder_[map_category][floor] = std::move(map);
-    }
+    master_maps_holder_[map_category][floor] = std::move(map);
 }
 
-bool MapsManager::IsTileWalkable(size_t x, size_t y) {
-    assert(master_maps_holder_.count(current_map_category_) > 0 &&
-           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
+bool MapsManager::IsTileWalkable(MapLocation const &location) {
+    assert(master_maps_holder_.count(location.dungeon_category_) > 0 &&
+           master_maps_holder_[location.dungeon_category_].count(location.floor_) > 0);
     
-    return master_maps_holder_[current_map_category_][current_floor_]->isWalkable(x, y);
+    return master_maps_holder_
+        [location.dungeon_category_]
+        [location.floor_]
+        ->isWalkable(location.x_, location.y_);
 }
 
 void MapsManager::Draw(TCODConsole &console, Actor const &actor) {
     assert(initialized_ &&
-           master_maps_holder_.count(current_map_category_) > 0 &&
-           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
+           master_maps_holder_.count(actor.GetMapLocation().dungeon_category_) > 0 &&
+           master_maps_holder_[actor.GetMapLocation().dungeon_category_].count(actor.GetMapLocation().floor_) > 0);
     
     // Recompute fov for hero
     ComputeFov(actor);
@@ -44,16 +43,20 @@ void MapsManager::Draw(TCODConsole &console, Actor const &actor) {
     }
     
     // Draw the current map
-    master_maps_holder_[current_map_category_][current_floor_]->Draw(console);
+    master_maps_holder_[actor.GetMapLocation().dungeon_category_][actor.GetMapLocation().floor_]->Draw(console);
 }
 
 void MapsManager::ComputeFov(Actor const &actor) {
-    assert(master_maps_holder_.count(current_map_category_) > 0 &&
-           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
+    
+    assert(master_maps_holder_.count(actor.GetMapLocation().dungeon_category_) > 0);
+    assert(master_maps_holder_[actor.GetMapLocation().dungeon_category_].count(actor.GetMapLocation().floor_) > 0);
 
-    master_maps_holder_[current_map_category_][current_floor_]->computeFov(actor.GetPosition().first,
-                                                                           actor.GetPosition().second,
-                                                                           actor.GetFovRadius());
+    master_maps_holder_
+        [actor.GetMapLocation().dungeon_category_]
+        [actor.GetMapLocation().floor_]
+        ->computeFov(actor.GetPosition().first,
+                     actor.GetPosition().second,
+                     actor.GetFovRadius());
 }
 
 void MapsManager::Initialize() {
@@ -67,7 +70,8 @@ void MapsManager::Initialize() {
 }
 
 void MapsManager::LoadDungeonFloor(DungeonCategory category, int floor) {
-    assert(floor >= 0 && floor <= kStandardDungeonDepth);
+    assert(floor >= 0);
+    assert(floor <= kStandardDungeonDepth);
     
     // Generate dungeon floor
     auto map_p {std::make_unique<Map>(*dungeon_factory_.BuildDungeon(category, floor), category)};
@@ -81,8 +85,8 @@ bool MapsManager::IsInFov(Actor const &actor, MapLocation const &map_location) {
     
     ComputeFov(actor);
 
-    assert(master_maps_holder_.count(map_location.dungeon_category_) > 0 &&
-           master_maps_holder_[map_location.dungeon_category_].count(map_location.floor_) > 0);
+    assert(master_maps_holder_.count(map_location.dungeon_category_) > 0);
+    assert(master_maps_holder_[map_location.dungeon_category_].count(map_location.floor_) > 0);
     
     return master_maps_holder_
         [map_location.dungeon_category_]
@@ -90,125 +94,149 @@ bool MapsManager::IsInFov(Actor const &actor, MapLocation const &map_location) {
         ->IsInFov(map_location.x_, map_location.y_);
 }
 
-bool MapsManager::IsInteractable(size_t x, size_t y) {
+bool MapsManager::IsInteractable(MapLocation const &location) {
     assert(initialized_);
     
-    assert(master_maps_holder_.count(current_map_category_) > 0 &&
-           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
+    assert(master_maps_holder_.count(location.dungeon_category_) > 0);
+    assert(master_maps_holder_[location.dungeon_category_].count(location.floor_) > 0);
 
-    return master_maps_holder_[current_map_category_][current_floor_]->HasDoor(x, y);
+    return master_maps_holder_[location.dungeon_category_][location.floor_]->HasDoor(location.x_, location.y_);
 }
 
-void MapsManager::OpenDoor(size_t x, size_t y) {
+void MapsManager::OpenDoor(MapLocation const &location) {
     assert(initialized_);
     
-    assert(master_maps_holder_.count(current_map_category_) > 0 &&
-           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
+    assert(master_maps_holder_.count(location.dungeon_category_) > 0);
+    assert(master_maps_holder_[location.dungeon_category_].count(location.floor_) > 0);
     
-    auto door {static_cast<DoorTile*> (master_maps_holder_[current_map_category_][current_floor_]->GetTile(x, y))};
+    auto door {static_cast<DoorTile*> (master_maps_holder_
+                                       [location.dungeon_category_]
+                                       [location.floor_]
+                                       ->GetTile(location.x_, location.y_))};
     
     assert (door != nullptr);
     
     door->Open();
-    master_maps_holder_[current_map_category_][current_floor_]->UpdateTcodProperties(door);
+    
+    master_maps_holder_
+        [location.dungeon_category_]
+        [location.floor_]
+        ->UpdateTcodProperties(door);
 }
 
-std::unique_ptr<TCODPath> MapsManager::AllocatePathFromCurrentFloor(ITCODPathCallback const *callback, float diagonal_cost) {
+std::unique_ptr<TCODPath> MapsManager::AllocatePathFromFloor(DungeonCategory const &category, std::size_t const &floor, ITCODPathCallback const *callback, float diagonal_cost) {
     assert(initialized_);
     
-    return std::make_unique<TCODPath>(master_maps_holder_[current_map_category_][current_floor_]->getWidth(),
-                                      master_maps_holder_[current_map_category_][current_floor_]->getHeight(),
+    return std::make_unique<TCODPath>(master_maps_holder_[category][floor]->getWidth(),
+                                      master_maps_holder_[category][floor]->getHeight(),
                                       callback,
-                                      master_maps_holder_[current_map_category_][current_floor_].get(),
+                                      master_maps_holder_[category][floor].get(),
                                       diagonal_cost);
 }
 
-void MapsManager::SetAllExplored() {
+void MapsManager::SetAllExplored(DungeonCategory const &category, std::size_t const &floor) {
     assert(initialized_);
 
-    master_maps_holder_[current_map_category_][current_floor_]->SetAllExplored();
+    master_maps_holder_[category][floor]->SetAllExplored();
 }
 
-std::pair<size_t, size_t> MapsManager::GetRandomPosition(int room_number, int floor_number) {
+MapLocation MapsManager::GetRandomLocation(DungeonCategory const &category, std::size_t const &floor, int room_number) {
     assert(initialized_);
-    
-    if (floor_number == -1)
-        floor_number = current_floor_;
-
-    assert(master_maps_holder_[current_map_category_].count(floor_number) == 1);
+    assert(master_maps_holder_[category].count(floor) == 1);
     
     if (room_number == -1)
-        room_number = Engine::GetRandomUintFromRange(0, master_maps_holder_[current_map_category_][floor_number]->GetRoomList().size()-1);
+        room_number = Engine::GetRandomUintFromRange(0, master_maps_holder_[category][floor]->GetRoomList().size()-1);
     
-    return master_maps_holder_[current_map_category_][floor_number]->GetRoomList()[room_number]->GetRndCoords();
+    auto rnd_coors {master_maps_holder_[category][floor]->GetRoomList()[room_number]->GetRndCoords()};
+    
+    return MapLocation(category, floor, rnd_coors.first, rnd_coors.second);
 }
 
-Tile *MapsManager::GetTileFromFloor(size_t x, size_t y, int floor) {
+Tile *MapsManager::GetTileFromFloor(MapLocation const &location) {
     assert(initialized_);
+    assert(master_maps_holder_.count(location.dungeon_category_) > 0);
+    assert(master_maps_holder_[location.dungeon_category_].count(location.floor_) > 0);
     
-    if (floor == -1)
-        floor = current_floor_;
-    
-    assert(master_maps_holder_.count(current_map_category_) > 0 &&
-           master_maps_holder_[current_map_category_].count(floor) > 0);
-
-    
-    return master_maps_holder_[current_map_category_][floor]->GetTile(x, y);
+    return master_maps_holder_
+        [location.dungeon_category_]
+        [location.floor_]
+        ->GetTile(location.x_, location.y_);
 }
 
-Coordinate_opt MapsManager::MoveToFloor(bool is_upstairs) {
+MapLocation_opt MapsManager::MoveToFloor(Actor &actor, bool is_upstairs) {
     assert(initialized_);
+    
+    auto new_location {actor.GetMapLocation()};
     
     if (is_upstairs)
-        current_floor_ --;
+        new_location.floor_ --;
     else
-        current_floor_ ++;
+        new_location.floor_ ++;
     
-    assert(current_floor_ >= 0
-           && current_floor_ <= kStandardDungeonDepth
-           && master_maps_holder_.count(current_map_category_) > 0);
+    assert(new_location.floor_ >= 0
+           && new_location.floor_ <= kStandardDungeonDepth
+           && master_maps_holder_.count(new_location.dungeon_category_) > 0);
     
-    // If the new floor has not already been explored, create it
-    if (master_maps_holder_[current_map_category_].count(current_floor_) == 0) {
+
+    // If the new floor has not already been loaded, create it
+    if (master_maps_holder_[new_location.dungeon_category_].count(new_location.floor_) == 0) {
         // Aync load new floor
-        LoadDungeonFloor(current_map_category_, current_floor_);
+        LoadDungeonFloor(new_location.dungeon_category_, new_location.floor_);
         
-        assert(master_maps_holder_[current_map_category_].count(current_floor_) > 0);
+        assert(master_maps_holder_[new_location.dungeon_category_].count(new_location.floor_) > 0);
     }
+    
+    // Move the player
+    // TODO: move this to the caller of this funciton
+    actor.MoveToLocation(new_location);
     
     // Refresh the console on the next draw itetation
     need_refresh_ = true;
     
     // Return start position on the floor
-    return (is_upstairs ? GetExitPosition() : GetEntrancePosition());
+    return (is_upstairs ? GetExitPosition(actor) : GetEntrancePosition(actor));
 }
 
-Coordinate_opt MapsManager::GetEntrancePosition() {
-    assert(initialized_);
-    
-    assert(master_maps_holder_.count(current_map_category_) > 0 &&
-           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
-    
-    auto tile {master_maps_holder_[current_map_category_][current_floor_]->GetEntranceTile()};
-    
-    if (tile == nullptr)
-        return std::experimental::nullopt;
-
-    return std::experimental::make_optional(tile->GetXY());
+MapLocation_opt MapsManager::GetEntrancePosition(Actor &actor) {
+    return GetEntrancePosition(actor.GetMapLocation().dungeon_category_, actor.GetMapLocation().floor_);
 }
 
-Coordinate_opt MapsManager::GetExitPosition() {
+MapLocation_opt MapsManager::GetEntrancePosition(DungeonCategory const &category, std::size_t const &floor) {
     assert(initialized_);
     
-    assert(master_maps_holder_.count(current_map_category_) > 0 &&
-           master_maps_holder_[current_map_category_].count(current_floor_) > 0);
-
-    auto tile {master_maps_holder_[current_map_category_][current_floor_]->GetExitTile()};
+    assert(master_maps_holder_.count(category) > 0 &&
+           master_maps_holder_[category].count(floor) > 0);
+    
+    auto tile {master_maps_holder_[category][floor]->GetEntranceTile()};
     
     if (tile == nullptr)
         return std::experimental::nullopt;
     
-    return std::experimental::make_optional(tile->GetXY());
+    // Create new location
+    MapLocation new_location (category, floor, tile->GetX(), tile->GetY());
+    
+    return std::experimental::make_optional(new_location);
+}
+
+MapLocation_opt MapsManager::GetExitPosition(Actor &actor) {
+    return GetExitPosition(actor.GetMapLocation().dungeon_category_, actor.GetMapLocation().floor_);
+}
+
+MapLocation_opt MapsManager::GetExitPosition(DungeonCategory const &category, std::size_t const &floor) {
+    assert(initialized_);
+    
+    assert(master_maps_holder_.count(category) > 0 &&
+           master_maps_holder_[category].count(floor) > 0);
+
+    auto tile {master_maps_holder_[category][floor]->GetExitTile()};
+    
+    if (tile == nullptr)
+        return std::experimental::nullopt;
+    
+    // Create new location
+    MapLocation new_location (category, floor, tile->GetX(), tile->GetY());
+    
+    return std::experimental::make_optional(new_location);
 }
 
 std::map<size_t, std::unique_ptr<Map>> *MapsManager::GetDungeonByCategory(DungeonCategory category) {

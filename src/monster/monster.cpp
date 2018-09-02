@@ -14,11 +14,8 @@ bool Monster::Update(size_t speed, ActionManager &action_manager, MapsManager &m
     
     auto player_location {action_manager.SeekPlayer()};
     
-    if (player_location == std::experimental::nullopt)
+    if (!player_location)
         return false;
-    
-    auto px {player_location->x_};
-    auto py {player_location->y_};
     
     // Compute fov for the monster
     // and check if the hero is not in range, don't do anything
@@ -29,16 +26,19 @@ bool Monster::Update(size_t speed, ActionManager &action_manager, MapsManager &m
     
     // Calculate the next step
     auto success {path_finder_.Walk(dest_x, dest_y,
-                                    map_location_.x_, map_location_.y_,
-                                    px, py)};
+                                    *map_location_,
+                                    *player_location)};
+    
+    // Create destination map location
+    MapLocation destination (map_location_->dungeon_category_, map_location_->floor_, dest_x, dest_y);
     
     // Check if the moster can move to the specified position
-    if (success && action_manager.CanMove(dest_x, dest_y)
-        && !action_manager.CanAtttack(dest_x, dest_y)) {
-        MoveToPosition(dest_x, dest_y);
+    if (success && action_manager.CanMove(destination)
+        && !action_manager.CanAtttack(destination)) {
+        MoveToLocation(destination);
         return true;
-    } else if (success && action_manager.CanAtttack(dest_x, dest_y)) {
-        action_manager.Attack(*this, dest_x, dest_y);
+    } else if (success && action_manager.CanAtttack(destination)) {
+        action_manager.Attack(*this, destination);
         return true;
     }
     
@@ -51,7 +51,7 @@ void Monster::Initialize(MapLocation const &map_location, MonsterStats const &st
     is_perma_visible_ = false;
     
     Actor::Initialize(map_location, stats.sprite_, stats.name_, stats.color_, stats);
-    path_finder_.Initialize(maps_manager);
+    path_finder_.Initialize(map_location.dungeon_category_, map_location.floor_, maps_manager);
 }
 
 bool Monster::IsPermaVisible() {

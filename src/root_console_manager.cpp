@@ -2,6 +2,7 @@
 
 #include "game_constants.hpp"
 #include "game_utils.hpp"
+#include "map_entity.hpp"
 
 RootConsoleManager::RootConsoleManager() {
     main_view_ = std::make_unique<TCODConsole>(kMapWidth, kMapHeight);
@@ -119,10 +120,10 @@ void RootConsoleManager::SetFullScreenWindow(UiWindow *window) {
     full_screen_window_ = window;
 }
 
-void RootConsoleManager::UpdateCameraPosition(Coordinate position, bool ignore_map_bounds) {
+void RootConsoleManager::UpdateCameraPosition(MapLocation const &location, bool ignore_map_bounds) {
     assert(initialized_);
     
-    auto x {(int)position.first}, y {(int)position.second};
+    auto x {(int)location.x_}, y {(int)location.y_};
     
     camera_x_ = x - kCameraWidth/2;
     camera_y_ = y - kCameraHeight/2;

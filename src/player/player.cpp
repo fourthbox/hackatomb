@@ -62,13 +62,17 @@ bool Player::Update(size_t speed, ActionManager &action_manager, MapsManager &ma
     }
     
     if (x != 0 || y != 0) {
-        auto new_x {map_location_.x_ + x}, new_y {map_location_.y_ + y};
-        if (action_manager.CanMove(new_x, new_y)
-            && !action_manager.CanAtttack(new_x, new_y)) {
-            MoveToPosition(new_x, new_y);
+        MapLocation location (map_location_->dungeon_category_,
+                              map_location_->floor_,
+                              map_location_->x_ + x,
+                              map_location_->y_ + y);
+        
+        if (action_manager.CanMove(location)
+            && !action_manager.CanAtttack(location)) {
+            MoveToLocation(location);
             action_manager.ActorMoved();
         } else {
-            if (action_manager.PerformAction(*this, new_x, new_y))
+            if (action_manager.PerformAction(*this, location))
                 action_manager.ActorMoved();
         }
     }

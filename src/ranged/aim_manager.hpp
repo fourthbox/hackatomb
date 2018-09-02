@@ -21,21 +21,21 @@ enum struct CrosshairMode {
 class AimManager : public InitiableObject {
 public:
     AimManager();
-    void Initialize(MapsManager &maps_manager);
+    void Initialize(DungeonCategory const &category, std::size_t const &floor, MapsManager &maps_manager);
     
     /**
      Draw the crosshair on position.
      @param console The player.
-     @param player_position The action manager.
+     @param player_position The player map location.
      */
-    void DrawCrosshair(TCODConsole &console, Coordinate player_position);
+    void DrawCrosshair(TCODConsole &console, MapLocation const &player_position);
 
     /**
      Draw the trail highlight of the crosshair.
      @param console The player.
-     @param player_position The action manager.
+     @param player_position The player map location.
      */
-    void DrawTrail(TCODConsole &console, Coordinate player_position);
+    void DrawTrail(TCODConsole &console, MapLocation const &player_position);
     
     /**
      Reset the crosshair, disabling it.
@@ -68,12 +68,12 @@ public:
     
     /**
      Returns the current crosshair location.
-     @return The current crosshair location coordinates.
+     @return The current crosshair location on the map.
      */
-    Coordinate GetCrosshairLocation() const;
+    MapLocation const &GetCrosshairLocation() const;
 
 private:
-    std::experimental::optional<size_t> crosshair_x_, crosshair_y_;
+    std::experimental::optional<MapLocation> crosshair_location_;
     std::experimental::optional<int> range_;
     
     Action action_;

@@ -6,7 +6,7 @@
 class PlayerManager {
 public:
     PlayerManager();
-    void InitializePlayer(std::pair<size_t, size_t> start_position);
+    void InitializePlayer(MapLocation const &start_position);
     Player &GetPlayer();
         
 private:

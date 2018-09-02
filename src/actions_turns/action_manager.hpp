@@ -49,28 +49,25 @@ public:
     /**
      The source actor performs an attack on the specified tile.
      @param source The actor that performs the action.
-     @param x The X coordinate.
-     @param y The Y coordinate.
+     @param location The location on the map.
      @param ignore_armor If true, it will ignore the defender armor.
      @return True if succesfully performed an action, false otherwise.
      */
-    bool Attack(Actor &source, size_t x, size_t y, bool ignore_armor = false);
+    bool Attack(Actor &source, MapLocation const &location, bool ignore_armor = false);
     
     /**
      Check wheter an actor can attack on the specified coordinates.
-     @param x The X coordinate.
-     @param y The Y coordinate.
+     @param location The location on the map.
      @return True if an Actor can attack there, false otherwise.
      */
-    bool CanAtttack(size_t x, size_t y);
+    bool CanAtttack(MapLocation const &location);
     
     /**
      Check wheter an actor can move to the specified coordinates.
-     @param x The X coordinate.
-     @param y The Y coordinate.
+     @param location The location on the map.
      @return True if an Actor can move there, false otherwise.
      */
-    bool CanMove(size_t x, size_t y);
+    bool CanMove(MapLocation const &location);
     
     /**
      Set the turn phase to aim mode.
@@ -83,7 +80,7 @@ public:
      Dispatch an action executed by the player.
      @param action The executed action.
      */
-    void Interact(size_t x, size_t y);
+    void Interact(MapLocation const &location);
     
     /**
      Move the player to the lower floor.
@@ -100,11 +97,10 @@ public:
      First it checks if it's attackable, and eventually triggers an attack.
      Then if it's interactable, and eventually triggers an interaction.
      @param source The actor that performs the action.
-     @param x The X coordinate.
-     @param y The Y coordinate.
+     @param location The location on the map.
      @return True if succesfully performed an action, false otherwise.
      */
-    bool PerformAction(Actor &source, size_t x, size_t y);
+    bool PerformAction(Actor &source, MapLocation const &location);
     
     /**
      Triggers an action form an actor, to the destination under the crosshair.
@@ -125,11 +121,10 @@ public:
     /**
      Set the turn phase to aim mode.
      @param source The actor that performs the action.
-     @param x The X coordinate.
-     @param y The Y coordinate.
+     @param location The location on the map.
      @return True if succesfully performed an action, false otherwise.
      */
-    bool ShootAction(Actor &source, size_t x, size_t y);
+    bool ShootAction(Actor &source, MapLocation const &location);
     
     /**
      Make all tiles explored and all actors visibles.
@@ -157,11 +152,10 @@ private:
     
     /**
      Check wheter an actor can interact with the specified coordinates.
-     @param x The X coordinate.
-     @param y The Y coordinate.
+     @param location The location on the map.
      @return True if an Actor can interact there, false otherwise.
      */
-    bool CanInteract(size_t x, size_t y);
+    bool CanInteract(MapLocation const &location);
     
     /**
      Move the player to the next flooe.

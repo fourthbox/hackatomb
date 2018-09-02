@@ -12,7 +12,7 @@ void ActorManager::Initialize() {
     initialized_ = true;
 }
 
-void ActorManager::InitializePlayer(Coordinate start_position, ActionManager &action_manager, MapsManager &maps_manager) {
+void ActorManager::InitializePlayer(MapLocation const &start_position) {
     player_manager_.InitializePlayer(start_position);
 }
 
@@ -36,16 +36,16 @@ void ActorManager::DrawPlayer(TCODConsole &console) {
     player_manager_.GetPlayer().Draw(console);
 }
 
-Actor *ActorManager::GetActorByCoordinates(size_t x, size_t y) {
+Actor *ActorManager::GetActorByCoordinates(MapLocation const &location) {
     assert(initialized_);
     
     // Check if player is there
     if (auto *player {&player_manager_.GetPlayer()};
-        player->GetPosition().first == x
-        && player->GetPosition().second == y)
+        player->GetPosition().first == location.x_
+        && player->GetPosition().second == location.y_)
         return player;
     
-    return monster_manager_.GetMonsterByCoordinates(x, y);
+    return monster_manager_.GetMonsterByCoordinates(location.x_, location.y_);
 }
 
 void ActorManager::Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager) {

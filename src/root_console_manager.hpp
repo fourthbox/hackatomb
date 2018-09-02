@@ -12,6 +12,8 @@
 #include "turn_manager.hpp"
 #include "ui_window.hpp"
 
+class MapLocation;
+
 /**
  Class that manages the initialization and rendering of the root console.
  */
@@ -58,7 +60,7 @@ public:
     
     void SetFullScreenWindow(UiWindow *window);
     
-    void UpdateCameraPosition(Coordinate position, bool ignore_map_bounds = false);
+    void UpdateCameraPosition(MapLocation const &location, bool ignore_map_bounds = false);
     
 private:
     size_t width_, height_;     /**< Size of the root console. */

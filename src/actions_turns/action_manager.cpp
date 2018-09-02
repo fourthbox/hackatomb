@@ -10,34 +10,34 @@ void ActionManager::Initialize(Engine &engine) {
     initialized_ = true;
 }
 
-bool ActionManager::CanMove(size_t x, size_t y) {
+bool ActionManager::CanMove(MapLocation const &location) {
     assert(initialized_);
     
-    return engine_->GetMapsManager().IsTileWalkable(x, y);
+    return engine_->GetMapsManager().IsTileWalkable(location);
 }
 
-bool ActionManager::CanAtttack(size_t x, size_t y) {
+bool ActionManager::CanAtttack(MapLocation const &location) {
     assert(initialized_);
     
-    return engine_->GetActorManager().GetActorByCoordinates(x, y) != nullptr;
+    return engine_->GetActorManager().GetActorByCoordinates(location) != nullptr;
 }
 
-bool ActionManager::CanInteract(size_t x, size_t y) {
+bool ActionManager::CanInteract(MapLocation const &location) {
     assert(initialized_);
     
-    return engine_->GetMapsManager().IsInteractable(x, y);
+    return engine_->GetMapsManager().IsInteractable(location);
 }
 
-void ActionManager::Interact(size_t x, size_t y) {
+void ActionManager::Interact(MapLocation const &location) {
     assert(initialized_);
     
-    engine_->GetMapsManager().OpenDoor(x, y);
+    engine_->GetMapsManager().OpenDoor(location);
 }
 
-bool ActionManager::Attack(Actor &source, size_t x, size_t y, bool ignore_armor) {
+bool ActionManager::Attack(Actor &source, MapLocation const &location, bool ignore_armor) {
     assert(initialized_);
     
-    auto target {engine_->GetActorManager().GetActorByCoordinates(x, y)};
+    auto target {engine_->GetActorManager().GetActorByCoordinates(location)};
     
     assert(target);
     
@@ -81,19 +81,19 @@ bool ActionManager::Attack(Actor &source, size_t x, size_t y, bool ignore_armor)
     return true;
 }
 
-bool ActionManager::PerformAction(Actor &source, size_t x, size_t y) {
+bool ActionManager::PerformAction(Actor &source, MapLocation const &location) {
     assert(initialized_);
     
     // If the tile is out of the map, exit
-    if (!engine_->GetMapsManager().GetTileFromFloor(x, y))
+    if (!engine_->GetMapsManager().GetTileFromFloor(location))
         return false;
     
     // Check if can be attacked
-    if (CanAtttack(x, y)) {
-        Attack(source, x, y);
+    if (CanAtttack(location)) {
+        Attack(source, location);
         return true;
-    } else if (CanInteract(x, y)) {
-        Interact(x, y);
+    } else if (CanInteract(location)) {
+        Interact(location);
         return true;
     }
     
@@ -106,8 +106,8 @@ void ActionManager::PerformActionOnCrosshair() {
     auto crosshair_position {engine_->GetAimManager().GetCrosshairLocation()};
     
     // Check if can be attacked
-    if (CanAtttack(crosshair_position.first, crosshair_position.second))
-        Attack(engine_->GetActorManager().GetPlayer(), crosshair_position.first, crosshair_position.second);
+    if (CanAtttack(crosshair_position))
+        Attack(engine_->GetActorManager().GetPlayer(), crosshair_position);
     
     // Reset the crosshair
     engine_->GetAimManager().ResetCrosshair();
@@ -122,17 +122,16 @@ void ActionManager::MoveToFloor(bool is_upstairs) {
     auto maps_manager {&engine_->GetMapsManager()};
     auto player {&engine_->GetActorManager().GetPlayer()};
 
-    auto stair_position {is_upstairs ? maps_manager->GetEntrancePosition() : maps_manager->GetExitPosition() };
+    auto stair_position {is_upstairs ? maps_manager->GetEntrancePosition(*player) : maps_manager->GetExitPosition(*player) };
 
     // Go Upstairs
-    if (stair_position && *stair_position == player->GetPosition()) {
-        if (auto new_coors {maps_manager->MoveToFloor(is_upstairs)}; new_coors != std::experimental::nullopt)
-            player->MoveToPosition(new_coors->first, new_coors->second);
+    if (stair_position && *stair_position == player->GetMapLocation()) {
+        if (auto new_location {maps_manager->MoveToFloor(*player, is_upstairs)}; new_location)
+            player->MoveToLocation(*new_location);
     }
         
     // Update UI
-    assert(engine_->GetUiManager().UpdateLabel(kFloorString,
-                                               std::to_string(maps_manager->GetCurrentFloor())));
+    assert(engine_->GetUiManager().UpdateLabel(kFloorString, std::to_string(player->GetMapLocation().floor_)));
 }
 
 void ActionManager::DoNothing() {
@@ -163,7 +162,11 @@ void ActionManager::PlayerAction(Action action) {
 void ActionManager::PerformFloorMapping() {
     assert(initialized_);
     
-    engine_->GetMapsManager().SetAllExplored();
+    auto player_location {SeekPlayer()};
+    
+    assert(player_location);
+    
+    engine_->GetMapsManager().SetAllExplored(player_location->dungeon_category_, player_location->floor_);
     engine_->GetActorManager().SetAllMonstersVisible();
 }
 

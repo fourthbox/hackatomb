@@ -34,8 +34,8 @@ int Actor::GetHp() const {
 void Actor::Draw(TCODConsole &console) {
     assert(initialized_);
 
-    console.setChar(map_location_.x_, map_location_.y_, sprite_);
-    console.setCharForeground(map_location_.x_, map_location_.y_, color_);
+    console.setChar(map_location_->x_, map_location_->y_, sprite_);
+    console.setCharForeground(map_location_->x_, map_location_->y_, color_);
 }
 
 bool Actor::Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager) {

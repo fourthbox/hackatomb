@@ -70,13 +70,10 @@ void MonsterManager::PopulateMap(MapsManager &maps_manager, DungeonCategory cate
         auto rnd_floor {Engine::GetRandomUintFromRange(min_floor_pct, max_floor_pct)};
         
         // Get random position in random room
-        auto starting_coors {maps_manager.GetRandomPosition(-1, rnd_floor)};
+        auto starting_location {maps_manager.GetRandomLocation(category, rnd_floor)};
         
-        // Configure the map location
-        MapLocation location (category, rnd_floor, starting_coors.first, starting_coors.second);
-
         // Generate monster
-        auto monster {monster_factory_.BuildMonsterByTier(location, maps_manager, tier.first)};
+        auto monster {monster_factory_.BuildMonsterByTier(starting_location, maps_manager, tier.first)};
 
         // Add it to the monster list
         monster_list_.push_back(std::move(monster));

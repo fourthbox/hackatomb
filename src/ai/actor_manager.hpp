@@ -40,20 +40,17 @@ public:
 
     /**
      Initialize the player and place it in its starting position.
-     @param start_position The start position coordinates.
-     @param action_manager The action manager.
-     @param maps_manager The maps manager.
+     @param start_position The starting position for the player
      */
-    void InitializePlayer(Coordinate start_position, ActionManager &action_manager, MapsManager &maps_manager);
+    void InitializePlayer(MapLocation const &start_position);
 
     /**
      Cycles the actor list and return the actor on the specified coordinates.
      Unless specified, it looks on the current floor only.
-     @param x The X coordinate.
-     @param y The Y coordinate.
+     @param location The location on the map.
      @return A pointer to the actor if an actor is find, nullptr otherwise.
      */
-    Actor *GetActorByCoordinates(size_t x, size_t y);
+    Actor *GetActorByCoordinates(MapLocation const &location);
     
     /**
      Gett all the actors on this floow.
