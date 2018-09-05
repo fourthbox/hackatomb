@@ -121,12 +121,15 @@ void ActionManager::MoveToFloor(bool is_upstairs) {
     
     auto maps_manager {&engine_->GetMapsManager()};
     auto player {&engine_->GetActorManager().GetPlayer()};
+    auto player_location {player->GetMapLocation()};
 
-    auto stair_position {is_upstairs ? maps_manager->GetEntrancePosition(*player) : maps_manager->GetExitPosition(*player) };
+    auto stair_position {is_upstairs ?
+        maps_manager->GetEntrancePosition(player_location) :
+        maps_manager->GetExitPosition(player_location) };
 
     // Go Upstairs
-    if (stair_position && *stair_position == player->GetMapLocation()) {
-        if (auto new_location {maps_manager->MoveToFloor(*player, is_upstairs)}; new_location)
+    if (stair_position && *stair_position == player_location) {
+        if (auto new_location {maps_manager->MoveToFloor(*stair_position, is_upstairs)}; new_location)
             player->MoveToLocation(*new_location);
     }
         

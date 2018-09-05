@@ -163,84 +163,71 @@ Tile *MapsManager::GetTileFromFloor(MapLocation const &location) {
         ->GetTile(location.x_, location.y_);
 }
 
-MapLocation_opt MapsManager::MoveToFloor(Actor &actor, bool is_upstairs) {
+MapLocation_opt MapsManager::MoveToFloor(MapLocation const &current_location, bool is_upstairs) {
     assert(initialized_);
     
-    auto new_location {actor.GetMapLocation()};
+    MapLocation new_location (current_location.dungeon_category_,
+                              (is_upstairs ? current_location.floor_-1 : current_location.floor_+1),
+                              current_location.x_,
+                              current_location.y_);
     
-    if (is_upstairs)
-        new_location.floor_ --;
-    else
-        new_location.floor_ ++;
-    
-    assert(new_location.floor_ >= 0
-           && new_location.floor_ <= kStandardDungeonDepth
-           && master_maps_holder_.count(new_location.dungeon_category_) > 0);
+    assert(new_location.floor_ >= 0);
+    assert(new_location.floor_ <= kStandardDungeonDepth);
+    assert(master_maps_holder_.count(new_location.dungeon_category_) > 0);
     
 
     // If the new floor has not already been loaded, create it
     if (master_maps_holder_[new_location.dungeon_category_].count(new_location.floor_) == 0) {
+        
+        // TODO: actually make the load procedure async
         // Aync load new floor
         LoadDungeonFloor(new_location.dungeon_category_, new_location.floor_);
         
         assert(master_maps_holder_[new_location.dungeon_category_].count(new_location.floor_) > 0);
     }
-    
-    // Move the player
-    // TODO: move this to the caller of this funciton
-    actor.MoveToLocation(new_location);
-    
+        
     // Refresh the console on the next draw itetation
     need_refresh_ = true;
     
     // Return start position on the floor
-    return (is_upstairs ? GetExitPosition(actor) : GetEntrancePosition(actor));
+    return (is_upstairs ? GetExitPosition(new_location) : GetEntrancePosition(new_location));
 }
 
-MapLocation_opt MapsManager::GetEntrancePosition(Actor &actor) {
-    return GetEntrancePosition(actor.GetMapLocation().dungeon_category_, actor.GetMapLocation().floor_);
-}
-
-MapLocation_opt MapsManager::GetEntrancePosition(DungeonCategory const &category, std::size_t const &floor) {
+MapLocation_opt MapsManager::GetEntrancePosition(MapLocation const &location) {
     assert(initialized_);
+    assert(master_maps_holder_.count(location.dungeon_category_) > 0);
+    assert(master_maps_holder_[location.dungeon_category_].count(location.floor_) > 0);
     
-    assert(master_maps_holder_.count(category) > 0 &&
-           master_maps_holder_[category].count(floor) > 0);
-    
-    auto tile {master_maps_holder_[category][floor]->GetEntranceTile()};
+    auto tile {master_maps_holder_[location.dungeon_category_][location.floor_]->GetEntranceTile()};
     
     if (tile == nullptr)
         return std::experimental::nullopt;
     
     // Create new location
-    MapLocation new_location (category, floor, tile->GetX(), tile->GetY());
+    MapLocation new_location (location.dungeon_category_, location.floor_, tile->GetX(), tile->GetY());
     
     return std::experimental::make_optional(new_location);
 }
 
-MapLocation_opt MapsManager::GetExitPosition(Actor &actor) {
-    return GetExitPosition(actor.GetMapLocation().dungeon_category_, actor.GetMapLocation().floor_);
-}
-
-MapLocation_opt MapsManager::GetExitPosition(DungeonCategory const &category, std::size_t const &floor) {
+MapLocation_opt MapsManager::GetExitPosition(MapLocation const &location) {
     assert(initialized_);
-    
-    assert(master_maps_holder_.count(category) > 0 &&
-           master_maps_holder_[category].count(floor) > 0);
+    assert(master_maps_holder_.count(location.dungeon_category_) > 0);
+    assert(master_maps_holder_[location.dungeon_category_].count(location.floor_) > 0);
 
-    auto tile {master_maps_holder_[category][floor]->GetExitTile()};
+    auto tile {master_maps_holder_[location.dungeon_category_][location.floor_]->GetExitTile()};
     
     if (tile == nullptr)
         return std::experimental::nullopt;
     
     // Create new location
-    MapLocation new_location (category, floor, tile->GetX(), tile->GetY());
+    MapLocation new_location (location.dungeon_category_, location.floor_, tile->GetX(), tile->GetY());
     
     return std::experimental::make_optional(new_location);
 }
 
 std::map<size_t, std::unique_ptr<Map>> *MapsManager::GetDungeonByCategory(DungeonCategory category) {
-    assert(initialized_ && master_maps_holder_.count(category) > 0);
+    assert(initialized_);
+    assert(master_maps_holder_.count(category) > 0);
 
     return &master_maps_holder_[category];
 }

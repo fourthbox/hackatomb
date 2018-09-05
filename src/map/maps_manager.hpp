@@ -58,7 +58,7 @@ public:
     
     /**
      Compute the field of view of the specified actor.
-     @param player The player.
+     @param actor The actor to compute.
      */
     void ComputeFov(Actor const &actor);
     
@@ -89,12 +89,15 @@ public:
     bool IsInteractable(MapLocation const &location);
     void OpenDoor(MapLocation const &location);
     
-    MapLocation_opt MoveToFloor(Actor &actor, bool is_upstairs);
+    /**
+     Setup a new floor asyncronously, if needed.
+     @param current_location The current loaded floor
+     @param is_upstairs True, if it's going upstairs, false otherwise
+     */
+    MapLocation_opt MoveToFloor(MapLocation const &current_location, bool is_upstairs);
     
-    MapLocation_opt GetEntrancePosition(Actor &actor);
-    MapLocation_opt GetEntrancePosition(DungeonCategory const &category, std::size_t const &floor);
-    MapLocation_opt GetExitPosition(Actor &actor);
-    MapLocation_opt GetExitPosition(DungeonCategory const &category, std::size_t const &floor);
+    MapLocation_opt GetEntrancePosition(MapLocation const &location);
+    MapLocation_opt GetExitPosition(MapLocation const &location);
 
 private:
     DungeonFactory dungeon_factory_;
