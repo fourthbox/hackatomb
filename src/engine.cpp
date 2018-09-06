@@ -1,8 +1,8 @@
 #include "engine.hpp"
 
 #include "game_constants.hpp"
-#include "game_strings.hpp"
 #include "game_utils.hpp"
+#include "label_constants.hpp"
 #include "monster.hpp"
 
 Engine::Engine() :
@@ -59,7 +59,7 @@ void Engine::InitializeGame() {
     actor_manager_.InitializeMonsterManager(action_manager_, maps_manager_);
     
     // Populate the dungeon with Monsters
-//    actor_manager_.PopulateMap(maps_manager_, DungeonCategory::NORMAL_);
+    actor_manager_.PopulateMap(maps_manager_, DungeonCategory::NORMAL_);
     
     // Distribute Items across the dungeon
     // TODO: finish
@@ -111,6 +111,8 @@ void Engine::Update() {
         for (auto i {kMinSpeed}; i <= kMaxSpeed; i++) {
             // Update player
             actor_manager_.GetPlayer().Update(i, action_manager_, maps_manager_);
+            
+            // Update all actors
             actor_manager_.Update(i, action_manager_, maps_manager_);
         }
         

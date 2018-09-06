@@ -48,10 +48,10 @@ public:
     bool InflictDamage(int total_damage);
     
     /**
-     Move the actor to the specified position
-     @param x The map location
+     Move the actor to the specified location.
+     @param location The map location.
      */
-    inline void MoveToLocation(MapLocation const &location) { map_location_ = location; }
+    void MoveToLocation(MapLocation const &location);
     
     /**
      Attempts to perform a dodge.

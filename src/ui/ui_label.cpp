@@ -86,13 +86,30 @@ dynamic_color_ {dynamic_color} {
 void UiLabelAndText::Draw(TCODConsole *console) {
     assert(!static_text_.empty());
     
-    console->print(x_, y_,
-                   "%c%s %c%s%c",
-                   static_color_,
-                   static_text_.c_str(),
-                   dynamic_color_,
-                   dynamic_text_.c_str(),
-                   TCOD_colctrl_t::TCOD_COLCTRL_STOP);
+    auto rc_token {"/n"};
+    
+    // If contains a return carriage, extend this to 2 lines
+    if (static_text_.find(rc_token) != std::string::npos) {
+        auto new_str {static_text_.substr(0, static_text_.size()-2)};
+        
+        console->printRect(x_, y_,
+                           new_str.size(),
+                           2,
+                           "%c%s %c%s%c",
+                           static_color_,
+                           new_str.c_str(),
+                           dynamic_color_,
+                           dynamic_text_.c_str(),
+                           TCOD_colctrl_t::TCOD_COLCTRL_STOP);
+    } else {
+        console->print(x_, y_,
+                       "%c%s %c%s%c",
+                       static_color_,
+                       static_text_.c_str(),
+                       dynamic_color_,
+                       dynamic_text_.c_str(),
+                       TCOD_colctrl_t::TCOD_COLCTRL_STOP);
+    }
 }
 
 UiCenteredLabel::UiCenteredLabel(size_t width, size_t height,

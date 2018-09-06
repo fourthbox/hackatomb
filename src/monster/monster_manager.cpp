@@ -69,8 +69,14 @@ void MonsterManager::PopulateMap(MapsManager &maps_manager, DungeonCategory cate
         // Select a random floor within range
         auto rnd_floor {Engine::GetRandomUintFromRange(min_floor_pct, max_floor_pct)};
         
-        // Get random position in random room
-        auto starting_location {maps_manager.GetRandomLocation(category, rnd_floor)};
+        // Initialize location (position not confirmed yet)
+        MapLocation starting_location (category, rnd_floor);
+        
+        // Check if the selected floor has been loaded
+        if (maps_manager.IsFloorLoaded(starting_location)) {
+            // Get random position in random room
+            starting_location = maps_manager.GetRandomLocation(category, rnd_floor);
+        }
         
         // Generate monster
         auto monster {monster_factory_.BuildMonsterByTier(starting_location, maps_manager, tier.first)};
@@ -84,7 +90,9 @@ void MonsterManager::Draw(TCODConsole &console, Player const &player, MapsManage
     assert(initialized_);
     
     for (auto const &monster : monster_list_) {
-        if (monster->IsPermaVisible() || maps_manager.IsInFov((Actor&)player, monster->GetMapLocation())) {
+        if (maps_manager.IsFloorLoaded(monster->GetMapLocation())
+            && monster->GetMapLocation().floor_ == player.GetMapLocation().floor_
+            && (monster->IsPermaVisible() || maps_manager.IsInFov((Actor&)player, monster->GetMapLocation()))) {
             monster->Draw(console);
         }
     }
@@ -94,8 +102,8 @@ void MonsterManager::TogglePermaVisible(bool is_perma_visible, Monster *monster)
     assert(initialized_);
 
     if (monster == nullptr) {
-        for (auto const &mnst : monster_list_) {
-            mnst->TogglePermaVisible(is_perma_visible);
+        for (auto const &monster : monster_list_) {
+            monster->TogglePermaVisible(is_perma_visible);
         }
     } else {
         monster->TogglePermaVisible(is_perma_visible);
@@ -106,7 +114,8 @@ void MonsterManager::Update(size_t speed, ActionManager &action_manager, MapsMan
     assert(initialized_);
     
     for (auto const &monster : monster_list_) {
-        monster->Update(speed, action_manager, maps_manager);
+        if (maps_manager.IsFloorLoaded(monster->GetMapLocation()))
+            monster->Update(speed, action_manager, maps_manager);
     }
 }
 
@@ -129,4 +138,22 @@ std::vector<Actor*> MonsterManager::GetMonsterList() const {
         new_list.push_back(monster.get());
     
     return new_list;
+}
+
+void MonsterManager::NewFloorLoaded(MapsManager &maps_manager) {
+    assert(initialized_);
+    
+    for (auto const &monster : monster_list_) {
+        if (auto location {monster->GetMapLocation()};
+            maps_manager.IsFloorLoaded(location)
+            && location.x_ == -1
+            && location.y_ == -1) {
+            
+            // Get random position in random room
+            auto starting_location {maps_manager.GetRandomLocation(location.dungeon_category_, location.floor_)};
+            
+            // Move monster to new location
+            monster->LoadIntoLocation(starting_location, maps_manager);
+        }
+    }
 }

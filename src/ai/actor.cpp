@@ -33,6 +33,7 @@ int Actor::GetHp() const {
 
 void Actor::Draw(TCODConsole &console) {
     assert(initialized_);
+    assert(map_location_);
 
     console.setChar(map_location_->x_, map_location_->y_, sprite_);
     console.setCharForeground(map_location_->x_, map_location_->y_, color_);
@@ -124,4 +125,10 @@ Actor *Actor::GetClosestActorInRange(std::vector<Actor*> actor_list, size_t rang
 
 void Actor::Die() {
     is_dead_ = true;
+}
+
+void Actor::MoveToLocation(MapLocation const &location) {
+    assert (initialized_);
+
+    map_location_ = std::experimental::make_optional(location);
 }

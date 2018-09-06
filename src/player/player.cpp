@@ -10,6 +10,7 @@ Player::Player() {
 
 bool Player::Update(size_t speed, ActionManager &action_manager, MapsManager &maps_manager) {
     assert(initialized_);
+    assert(map_location_);
     
     if (!Actor::Update(speed, action_manager, maps_manager))
         return false;

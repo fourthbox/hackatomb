@@ -82,6 +82,13 @@ public:
     
     Tile *GetTileFromFloor(MapLocation const &location);
     
+    /**
+     Check whether the selected floor has been loaded.
+     @param location The category of the dungeon.
+     @return True if has been loaded, false otherwise.
+     */
+    bool IsFloorLoaded(MapLocation const &location);
+    
     std::unique_ptr<TCODPath> AllocatePathFromFloor(DungeonCategory const &category, std::size_t const &floor, ITCODPathCallback const *callback, float diagonal_cost);
     
     void SetAllExplored(DungeonCategory const &category, std::size_t const &floor);

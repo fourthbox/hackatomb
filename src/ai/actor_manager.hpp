@@ -65,6 +65,13 @@ public:
     inline Player &GetPlayer() { return player_manager_.GetPlayer(); }
     
     /**
+     Triggered when a new floor has been loaded.
+     It forces to check every actor and get a starting position for the unpositioned ones.
+     @param maps_manager The Maps Manager
+     */
+    void NewFloorLoaded(MapsManager &maps_manager);
+    
+    /**
      Populates the dungeon map with all monsters and NPCs
      @param maps_manager The Maps Manager
      @param category The selected dungeon category to populate

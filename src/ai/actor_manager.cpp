@@ -68,3 +68,10 @@ std::vector<Actor*> ActorManager::GetAllActors() {
     
     return actor_list;
 }
+
+void ActorManager::NewFloorLoaded(MapsManager &maps_manager) {
+    assert (initialized_);
+
+    monster_manager_.NewFloorLoaded(maps_manager);
+}
+

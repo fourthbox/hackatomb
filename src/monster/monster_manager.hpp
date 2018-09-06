@@ -31,6 +31,13 @@ public:
      @param category The selected dungeon category to populate
      */
     void PopulateMap(MapsManager &maps_manager, DungeonCategory category);
+    
+    /**
+     Triggered when a new floor has been loaded.
+     It forces to check every actor and get a starting position for the unpositioned ones.
+     @param maps_manager The Maps Manager
+     */
+    void NewFloorLoaded(MapsManager &maps_manager);
 
     /**
      Toggle one or every monster to be always visible.

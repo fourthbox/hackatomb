@@ -54,11 +54,11 @@ bool UiWindow::UpdateLabelById(std::string const &label_id, std::string const &l
                              })};
     
     if (label != label_list_ids_.end()) {
-        auto label_txt {std::static_pointer_cast<UiLabelAndText>(label->second)};
+        auto new_label {std::dynamic_pointer_cast<UiLabelAndText>(label->second)};
         
-        assert(label_txt);
+        assert(new_label);
 
-        label_txt->SetDynamicText(label_text);
+        new_label->SetDynamicText(label_text);
         return true;
     }
     

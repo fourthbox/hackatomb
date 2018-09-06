@@ -88,6 +88,10 @@ bool MapsManager::IsInFov(Actor const &actor, MapLocation const &map_location) {
     assert(master_maps_holder_.count(map_location.dungeon_category_) > 0);
     assert(master_maps_holder_[map_location.dungeon_category_].count(map_location.floor_) > 0);
     
+    // If the location is on another floor, return false
+    if (actor.GetMapLocation().floor_ != map_location.floor_)
+        return false;
+    
     return master_maps_holder_
         [map_location.dungeon_category_]
         [map_location.floor_]
@@ -142,8 +146,9 @@ void MapsManager::SetAllExplored(DungeonCategory const &category, std::size_t co
 
 MapLocation MapsManager::GetRandomLocation(DungeonCategory const &category, std::size_t const &floor, int room_number) {
     assert(initialized_);
-    assert(master_maps_holder_[category].count(floor) == 1);
-    
+    assert(master_maps_holder_.count(category) > 0);
+    assert(master_maps_holder_[category].count(floor) > 0);
+
     if (room_number == -1)
         room_number = Engine::GetRandomUintFromRange(0, master_maps_holder_[category][floor]->GetRoomList().size()-1);
     
@@ -230,4 +235,11 @@ std::map<size_t, std::unique_ptr<Map>> *MapsManager::GetDungeonByCategory(Dungeo
     assert(master_maps_holder_.count(category) > 0);
 
     return &master_maps_holder_[category];
+}
+
+bool MapsManager::IsFloorLoaded(MapLocation const &location) {
+    assert(initialized_);
+    assert(master_maps_holder_.count(location.dungeon_category_) > 0);
+
+    return master_maps_holder_[location.dungeon_category_].count(location.floor_) == 1;
 }

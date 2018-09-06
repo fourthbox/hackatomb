@@ -95,8 +95,10 @@ void AimManager::DrawTrail(TCODConsole &console, MapLocation const &player_locat
     
     // Highlight tile callback
     auto callback = [=] (Tile *tile) {
+        assert (crosshair_location_->x_ >= 0 && crosshair_location_->y_ >= 0);
+        
         if (tile->GetXY() != player_location.GetPosition()
-            && tile->GetXY() != std::make_pair(crosshair_location_->x_, crosshair_location_->y_))
+            && tile->GetXY() != std::make_pair((size_t)crosshair_location_->x_, (size_t)crosshair_location_->y_))
             tile->ToggleHighlight(true);
     };
 
@@ -109,7 +111,9 @@ void AimManager::DrawCrosshair(TCODConsole &console, MapLocation const &player_l
     
     // Draw crosshair callback
     auto callback = [=, &console] (Tile *tile) {
-        if (tile->GetXY() == std::make_pair(crosshair_location_->x_, crosshair_location_->y_)) {
+        assert (crosshair_location_->x_ >= 0 && crosshair_location_->y_ >= 0);
+
+        if (tile->GetXY() == std::make_pair((size_t)crosshair_location_->x_, (size_t)crosshair_location_->y_)) {
             console.setChar(crosshair_location_->x_, crosshair_location_->y_, kCharCrosshair);
             console.setCharForeground(crosshair_location_->x_, crosshair_location_->y_, kCrosshairColor);
         }

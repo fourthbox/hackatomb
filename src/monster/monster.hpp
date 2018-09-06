@@ -26,6 +26,12 @@ public:
     bool IsPermaVisible();
     
     /**
+     Load the monster into the specified location.
+     @param location The map location.
+     */
+    void LoadIntoLocation(MapLocation const &location, MapsManager &maps_manager);
+
+    /**
      Toggle the monster to be always visible.
      @param is_perma_visible If true will be visible.
      */

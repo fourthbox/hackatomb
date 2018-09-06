@@ -5,7 +5,7 @@
 
 #include "game_constants.hpp"
 #include "game_globals.hpp"
-#include "game_strings.hpp"
+#include "label_constants.hpp"
 
 #define COLOR_WHITE_    "#1"
 #define COLOR_RED_      "#2"
@@ -49,7 +49,7 @@ void UiManager::InitializeEnvironmentWindow() {
     assert(!initialized_);
     
     // Initialize static labels
-    UiLabel_sp floor_label { std::make_shared<UiSimpleLabel>(2, 5, kFloorString)};
+    UiLabel_sp floor_label { std::make_shared<UiLabelAndText>(2, 5, kFloorString, "1", TCOD_COLCTRL_1, TCOD_COLCTRL_1, kFloorLabelId)};
     UiLabel_sp environment_label { std::make_shared<UiSimpleLabel>(2, 8, kEnvironmentString) };
     
     // Initialize the window

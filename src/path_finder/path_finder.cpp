@@ -11,7 +11,8 @@ void PathFinder::Initialize(DungeonCategory const &category, std::size_t const &
 }
 
 bool PathFinder::Walk(size_t &out_x, size_t &out_y, MapLocation const &from_location, MapLocation const &to_location, size_t steps) {
-    assert(initialized_ && current_path_ != nullptr);
+    assert(initialized_);
+    assert(current_path_ != nullptr);
     
     // If the actor is taking 0 steps, return the starting posizion
     if (steps == 0) {

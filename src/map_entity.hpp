@@ -11,10 +11,11 @@
  Struct to individually locate a position on a map, in a dungeon floor
  */
 struct MapLocation {
-    std::size_t x_, y_, floor_;
+    int x_, y_;
+    std::size_t floor_;
     DungeonCategory dungeon_category_;
     
-    MapLocation(DungeonCategory const &dungeon_category, std::size_t const &floor, std::size_t const &x, std::size_t const &y) :
+    MapLocation(DungeonCategory const &dungeon_category, std::size_t const &floor, int const &x = -1, int const &y = -1) :
     dungeon_category_ {dungeon_category},
     floor_ {floor},
     x_ {x},
@@ -28,7 +29,9 @@ struct MapLocation {
         && this->floor_ == fisrt.floor_;
     }
     
-    inline std::pair<size_t, size_t> GetPosition() const { return std::make_pair(x_, y_); }
+    inline std::pair<size_t, size_t> GetPosition() const {
+        return (x_ < 0 || y_ < 0 ? std::make_pair(1, 1) : std::make_pair(x_, y_));
+    }
 };
 
 typedef std::experimental::optional<MapLocation> MapLocation_opt;

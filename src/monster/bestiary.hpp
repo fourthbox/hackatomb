@@ -49,7 +49,7 @@ const struct WolfStats : public MonsterStats {
                   0, //stealth
                   10,//fov
                   3, //speed
-                  "golf", // name
+                  "wolf", // name
                   'w', // sprite
                   TCODColor::darkestGrey, // sprite color
                   TierLevel::TIER_1_
